@@ -8,6 +8,7 @@ import { PublicRoutingModule } from './public-routing.module';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import {CardModule} from 'compass-common-consumption';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     PublicRoutingModule,
     SlickCarouselModule
   ],
-  declarations: [LandingPageComponent,
+  declarations: [LandingPageComponent, LoginPageComponent,
     ],
   providers: [PublicPlayerService, DeviceDetectorService, LandingpageGuard, PendingchangesGuard]
 })

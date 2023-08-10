@@ -22,7 +22,7 @@ import { ContentTypeComponent } from './components/content-type/content-type.com
 import { LocationModule } from '../../plugins/location/location.module';
 import { NotificationModule } from '../notification/notification.module';
 import { TelemetryErrorModalComponent } from '../shared/components/telemetry-error-modal/telemetry-error-modal.component';
-import { CompassCourseCardComponent } from './components/compass-course-card/compass-course-card.component';
+// import { CompassCourseCardComponent } from './components/compass-course-card/compass-course-card.component';
 // import { BannerComponent } from './components/banner/banner.component';
 // import { GoalOrientedHrCardComponent } from './components/goal-oriented-hr-card/goal-oriented-hr-card.component';
 
@@ -44,9 +44,9 @@ import { CompassCourseCardComponent } from './components/compass-course-card/com
   ],
   declarations: [MainHeaderComponent, MainFooterComponent, MainMenuComponent, SearchComponent, PermissionDirective,
     BodyScrollDirective, OnlineOnlyDirective,
-    ErrorPageComponent, LanguageDropdownComponent, ContentTypeComponent, DesktopOnlyDirective, TelemetryErrorModalComponent, CompassCourseCardComponent],
+    ErrorPageComponent, LanguageDropdownComponent, ContentTypeComponent, DesktopOnlyDirective, TelemetryErrorModalComponent],
   exports: [MainHeaderComponent, MainFooterComponent, PermissionDirective, BodyScrollDirective, OnlineOnlyDirective,
-    TelemetryModule, LanguageDropdownComponent, DesktopOnlyDirective, TelemetryErrorModalComponent, CompassCourseCardComponent],
+    TelemetryModule, LanguageDropdownComponent, DesktopOnlyDirective, TelemetryErrorModalComponent],
   providers: [CacheService, AuthGuard, {
     provide: APP_BASE_HREF,
     useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),

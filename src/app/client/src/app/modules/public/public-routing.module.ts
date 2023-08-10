@@ -3,11 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './components';
 import { LandingpageGuard } from './services';
 import { OfflineApplicationDownloadComponent } from '@sunbird/shared';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 const routes: Routes = [
   {
     path: 'public', component: LandingPageComponent,
     data: { telemetry: { env: 'public', pageid: 'landing-page', type: 'edit', subtype: 'paginate' } }
+  },
+  {
+    path: 'public-login', component: LoginPageComponent,
   },
   {
     path: 'desktop', loadChildren: () => import('./module/offline/offline.module').then(m => m.OfflineModule)

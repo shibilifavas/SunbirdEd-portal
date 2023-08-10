@@ -4961,10 +4961,10 @@ compare-versions@^3.6.0:
   resolved "https://registry.npmjs.org/compare-versions/-/compare-versions-3.6.0.tgz"
   integrity sha512-W6Af2Iw1z4CB7q4uU4hv646dW9GQuBM+YpC0UvUCWSD8w90SJjp+ujJuXaEMtAXBtSqGfMPuFOVn4/+FlaqfBA==
 
-"compass-common-consumption@file:../../../../SunbirdEd-consumption-ngcomponents/compass-common-consumption-6.0.1.tgz":
-  version "6.0.1"
-  resolved "file:../../../../SunbirdEd-consumption-ngcomponents/compass-common-consumption-6.0.1.tgz"
-  integrity sha512-zjjU9UC7LwPcrd9X7+6aN01oKZ53MB65ts854oBYZWdFhvrjBL3X1lw2TIwaLEdFbxRGok5t46zHvtKkU8HgJQ==
+"compass-common-consumption@file:../../../../SunbirdEd-consumption-ngcomponents/compass-common-consumption-6.0.2.tgz":
+  version "6.0.2"
+  resolved "file:../../../../SunbirdEd-consumption-ngcomponents/compass-common-consumption-6.0.2.tgz"
+  integrity sha512-BLx0MXO/C17ZQtiriwB9qVtZWnOwXoesKbI4ccWJ52BWTtne8kJEfgS7VXOHydFapQ8B/kO8kSJFAzQlx5ZrjQ==
   dependencies:
     tslib "^2.3.0"
 
