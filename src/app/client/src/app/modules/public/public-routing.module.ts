@@ -7,7 +7,7 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 
 const routes: Routes = [
   {
-    path: 'public', component: LandingPageComponent,
+    path: '', component: LandingPageComponent, canActivate: [LandingpageGuard],
     data: { telemetry: { env: 'public', pageid: 'landing-page', type: 'edit', subtype: 'paginate' } }
   },
   {

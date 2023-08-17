@@ -100,7 +100,7 @@ export class LandingPageComponent implements OnInit {
       }
     };
     this.landingPageContentService.getCourses(requestData).subscribe(res => {
-      this.courses = res;
+      this.courses = res["result"]["content"];
       console.log('Courses', this.courses);
     })
   }
@@ -108,16 +108,16 @@ export class LandingPageComponent implements OnInit {
   slideConfig = { slidesToShow: 3, slidesToScroll: 3 };
 
   slickInit(e: any) {
-    console.log('slick initialized');
+    // console.log('slick initialized');
   }
   breakpoint(e: any) {
-    console.log('breakpoint');
+    // console.log('breakpoint');
   }
   afterChange(e: any) {
-    console.log('afterChange');
+    // console.log('afterChange');
   }
   beforeChange(e: any) {
-    console.log('beforeChange');
+    // console.log('beforeChange');
   }
 
 }
