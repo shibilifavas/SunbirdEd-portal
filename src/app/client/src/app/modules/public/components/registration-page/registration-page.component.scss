@@ -187,10 +187,18 @@ body {
                 margin-top: 20px;
             }
 
-            .login-message {
+            .register-message {
                 height: 20px;
                 margin-top: 8px;
                 color: #9f3a38;
+                font-family: 'Lato', Arial, Helvetica, sans-serif;
+                font-size: 14px;
+            }
+
+            .register-success-message {
+                height: 20px;
+                margin-top: 8px;
+                color: #26b048;
                 font-family: 'Lato', Arial, Helvetica, sans-serif;
                 font-size: 14px;
             }
@@ -201,7 +209,8 @@ body {
                 border-radius: 8px;
             }
 
-            .forgot-password {
+            .login-link {
+                display: block;
                 width: 300px;
                 font-family: 'Lato', Arial, Helvetica, sans-serif;
                 font-size: 14px;

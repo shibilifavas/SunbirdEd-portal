@@ -48,8 +48,26 @@
         <div class="column login-right ui grid middle aligned">
             <div class="login-container">
                 <div class="ui form segment error">
-                    <p class="heading">Login</p>
+                    <p class="heading">Register</p>
+                    <div class="first-name-field field" [ngClass]="{'error' : firstNameFieldError}">
+                        <label class="label">First name</label>
+                        <div class="ui input">
+                            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name here">
+                        </div>
+                    </div>
+                    <div class="last-name-field field" [ngClass]="{'error' : lastNameFieldError}">
+                        <label class="label">Last name</label>
+                        <div class="ui input">
+                            <input type="text" id="last_name" name="last_name" placeholder="Enter your last name here">
+                        </div>
+                    </div>
                     <div class="email-field field" [ngClass]="{'error' : emailFieldError}">
+                        <label class="label">Email</label>
+                        <div class="ui input">
+                            <input type="email" id="email" name="email" placeholder="Enter your email id here">
+                        </div>
+                    </div>
+                    <div class="username-field field" [ngClass]="{'error' : usernameFieldError}">
                         <label class="label">Username</label>
                         <div class="ui input">
                             <input type="text" id="username" name="username" placeholder="Enter your username here">
@@ -60,12 +78,21 @@
                         <div class="ui input">
                             <input type="password" id="password" name="password" placeholder="Enter your password here">
                         </div>
-                        <div class="login-message">
-                            <span>{{loginErrorMessage}}</span>
+                    </div>
+                    <div class="confirm-pswd-field field" [ngClass]="{'error' : confirmPasswordFieldError}">
+                        <label class="label">Confirm Password</label>
+                        <div class="ui input">
+                            <input type="password" id="confirm_password" name="confirm_password" placeholder="Enter your password here">
+                        </div>
+                        <div *ngIf="registerSuccessMessage === ''" class="register-message">
+                            <span>{{registerErrorMessage}}</span>
+                        </div>
+                        <div *ngIf="registerSuccessMessage !== ''" class="register-success-message">
+                            <span>{{registerSuccessMessage}}</span>
                         </div>
                     </div>
-                    <button (click)="login()" class="ui blue button">Login</button>
-                    <p class="forgot-password">Forgot password?</p>
+                    <button (click)="register()" class="ui blue button">Register</button>
+                    <a routerLink="/public-login" class="login-link">Login</a>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ import { LandingPageComponent } from './components';
 import { LandingpageGuard } from './services';
 import { OfflineApplicationDownloadComponent } from '@sunbird/shared';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { RegistrationPageComponent } from './components/registration-page/registration-page.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,9 @@ const routes: Routes = [
   },
   {
     path: 'public-login', component: LoginPageComponent,
+  },
+  {
+    path: 'public-registration', component: RegistrationPageComponent,
   },
   {
     path: 'desktop', loadChildren: () => import('./module/offline/offline.module').then(m => m.OfflineModule)
