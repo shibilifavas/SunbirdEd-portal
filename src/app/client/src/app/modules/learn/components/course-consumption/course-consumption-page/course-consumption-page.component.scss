@@ -1,0 +1,72 @@
+@use "compass-sb-styles/assets/mixins/mixins" as *;
+
+::ng-deep {
+    .courseTab {
+        mat-tab-group {
+            width: 100%;
+
+            mat-tab-header {
+                background-color: rgba(88, 83, 83, 0.298);
+                height: calculateRem(60px);
+                align-items: center;
+
+                .mat-tab-labels {
+                    width: 95.25rem !important;
+                    margin-left: auto !important;
+                    margin-right: auto !important;
+                    
+                    div {
+                        padding: 0;
+                        justify-content: left;
+                        color: rgba(0, 0, 0, 0.87);
+                        opacity: 1;
+                        @include typography(var(--font-com-lato), 14px, 700, 0.5px, 20px);
+                    }
+                    .mat-ripple-element {
+                        display: none !important;
+                    }
+                }
+                .mat-tab-header-pagination-before, .mat-tab-header-pagination-after {
+                    display: none !important;
+                }
+            }
+
+            &.mat-primary .mat-ink-bar {
+                background: none;
+            }
+
+            .mat-tab-body-wrapper {
+                width: 95.25rem !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+        }
+    }
+}
+// ::ng-deep {
+//     @media(min-width: 1600px) {
+//         .courseTab mat-tab-group mat-tab-header .mat-tab-labels {
+//             width: 95.25rem !important;
+//         }
+//     }
+//     @media (min-width: 1280px) {
+//         .courseTab mat-tab-group mat-tab-header .mat-tab-labels {
+//            width: 76rem !important;
+//        }
+//     }
+//     @media only screen and (min-width: 1200px) {
+//         .courseTab mat-tab-group mat-tab-header .mat-tab-labels {
+//             width: 1127px;
+//         }
+//     }
+//     @media only screen and (max-width: 1199px) and (min-width: 768px) {
+//         .courseTab mat-tab-group mat-tab-header .mat-tab-labels {
+//             width: 90%;
+//         }
+//     }
+//     @media only screen and (max-width: 767px) {
+//         .courseTab mat-tab-group mat-tab-header .mat-tab-labels {
+//             width: auto!important;
+//         }
+//     }
+// }
