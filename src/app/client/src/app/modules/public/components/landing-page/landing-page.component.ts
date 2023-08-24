@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { LayoutService } from '@sunbird/shared';
 import * as publicService from '../../services';
 import { SearchService } from './../../../core/services/search/search.service';
@@ -17,7 +18,7 @@ export class LandingPageComponent implements OnInit {
 
   layoutConfiguration;
 
-  constructor(public layoutService: LayoutService, private landingPageContentService: publicService.LandingPageContentService, public search: SearchService) { }
+  constructor(public layoutService: LayoutService, private landingPageContentService: publicService.LandingPageContentService, public search: SearchService, private router: Router) { }
 
   ngOnInit() {
     // alert()
@@ -118,6 +119,14 @@ export class LandingPageComponent implements OnInit {
   }
   beforeChange(e: any) {
     console.log('beforeChange');
+  }
+
+  loginClick = () => {
+    window.location.href = '/resources';
+  }
+
+  registerClick = () => {
+    this.router.navigateByUrl('/signup')
   }
 
 }

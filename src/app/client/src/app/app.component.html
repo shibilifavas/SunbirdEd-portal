@@ -110,8 +110,8 @@
       </ng-template>
     </app-modal-wrapper>
 
-    <!-- <app-header *ngIf="!hideHeaderNFooter" [layoutConfiguration]="layoutConfiguration" [routerEvents]="routeData$"
-      [ngClass]="{'header-block': isFullScreenView}"></app-header> -->
+    <app-header *ngIf="!hideHeaderNFooter" [layoutConfiguration]="layoutConfiguration" [routerEvents]="routeData$"
+      [ngClass]="{'header-block': isFullScreenView}"></app-header>
     <app-install-app (viewInBrowser)="viewInBrowser($event)" *ngIf="showAppPopUp && userService.loggedIn">
     </app-install-app>
     <!--<app-breadcrumbs *ngIf="userService.loggedIn"></app-breadcrumbs>-->
@@ -125,7 +125,7 @@
 <div *ngIf="isBotEnabled === 'true'" [ngClass]="{'hideBot': isBotdisplayforRoute(), 'hideBot': isFullScreenView}">
   <lib-chat-window [inputValues]="botObject"></lib-chat-window>
 </div>
-<!-- <app-footer [layoutConfiguration]="layoutConfiguration" *ngIf="!hideHeaderNFooter"></app-footer> -->
+<app-footer [layoutConfiguration]="layoutConfiguration" *ngIf="!hideHeaderNFooter"></app-footer>
 
 <!-- <app-modal-wrapper *ngIf="sessionExpiryInterceptor.sessionExpired"
   [config]="{disableClose: true, size: 'small', panelClass: 'material-modal'}">
