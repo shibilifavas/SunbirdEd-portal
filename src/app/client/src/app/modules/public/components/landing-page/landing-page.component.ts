@@ -14,7 +14,40 @@ export class LandingPageComponent implements OnInit {
   CAROUSEL_BREAKPOINT = 1400;
   carouselDisplayMode = 'multiple';
   courses: any = {};
-
+  environment = {
+    url: 'https://compass-dev.tarento.com/',
+    authToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0WEFsdFpGMFFhc1JDYlFnVXB4b2RvU2tLRUZyWmdpdCJ9.mXD7cSvv3Le6o_32lJplDck2D0IIMHnv0uJKq98YVwk',
+  }
+  taxonomyConfig = {
+        "frameworkId" :"compass_fw",
+        "config" : [
+            {   
+                "index": 1,
+                "category": "board",
+                "icon": "settings",
+                "color": "#1d2327"
+            },
+            {   
+                "index": 2,
+                "category": "medium",
+                "icon": "extension",
+                "color": "#541675"
+            },
+            {   
+                "index": 3,
+                "category": "subject",
+                "icon": "bar_chart",
+                "color": "#9a6c80"
+            },
+            {   
+                "index": 4,
+                "category": "gradeLevel",
+                "icon": "account_box",
+                "color": "#d8666a"
+            }
+        ]
+    };
+    
   layoutConfiguration;
 
   constructor(public layoutService: LayoutService, private landingPageContentService: publicService.LandingPageContentService, public search: SearchService) { }
