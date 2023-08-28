@@ -1,5 +1,6 @@
 <div
   [ngClass]="[layoutConfiguration ? 'sbt-fluid-content-bg':'', (getSelectedTab() === 'home' || getSelectedTab() === 'explore') ? '': '']">
+  <compass-banner [config]="configContent.banner"></compass-banner>
   <div class="sb-g" [ngClass]="layoutConfiguration ? 'sb-g sbt-container sbt-page-content' : 'sb-g'"
     [appTelemetryImpression]="telemetryImpression">
     <!-- Filter for web version -->
@@ -42,6 +43,7 @@
               [layoutConfiguration]="layoutConfiguration"></app-page-section>
           </div>
           <!-- Template for displaying sections based on form configuration -->
+          
           <div *ngIf="_currentPageData?.sections && _currentPageData?.isEnabled" aria-label="User Preferences">
             <div *ngIf="getSelectedTab() === 'home'" (click)="showEdit = !showEdit" class="sb-section-preference"
               tabindex="0">
