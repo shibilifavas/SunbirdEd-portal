@@ -14,3 +14,5 @@ export const WebExtensionsConfig = {
 
 export const PluginModules = [ OfflineModule ];
 
+export const TaxonomyCategories = ['board', 'medium', 'gradeLevel', 'subject'];
+
