@@ -16,6 +16,7 @@ import * as _ from 'lodash-es';
 import { CacheService } from '../../../shared/services/cache-service/cache.service';
 import { ProfileService } from '@sunbird/profile';
 import { SegmentationTagService } from '../../../core/services/segmentation-tag/segmentation-tag.service';
+import * as learnService from './../../services';
 
 @Component({
     selector: 'app-explore-page-component',
@@ -91,6 +92,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     Categorytheme: any;
     filterResponseData = {};
     refreshFilter: boolean = true;
+    configContent: any = {}
+
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
@@ -121,7 +124,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         public contentManagerService: ContentManagerService, private cacheService: CacheService,
         private browserCacheTtlService: BrowserCacheTtlService, private profileService: ProfileService,
         private segmentationTagService: SegmentationTagService, private observationUtil: ObservationUtilService,
-        private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef) {
+        private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef, private learnPageContentService: learnService.LearnPageContentService) {
         this.genericResourceService.initialize();
         this.instance = (<HTMLInputElement>document.getElementById('instance'))
             ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
@@ -245,6 +248,11 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.contentManagerService.contentDownloadStatus$.subscribe(contentDownloadStatus => {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
+        });
+
+        this.learnPageContentService.getPageContent().subscribe(res => {
+            this.configContent = res;
+            console.log('configContent', this.configContent);
         });
     }
 
@@ -451,7 +459,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
-                        _.filter(Object.keys(params),filterValue => { 
+                        _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {
                                 let param = {};
                                 param[filterValue] = (typeof (params[filterValue]) === "string") ? params[filterValue].split(',') : params[filterValue];
@@ -1334,7 +1342,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (currentPageData) {
             const filterResponseData = _.get(currentPageData, 'metaData.searchFilterConfig');
             this.filterResponseData = filterResponseData;
-            this.userSelectedPreference=_.get(this, 'userPreference.framework');
+            this.userSelectedPreference = _.get(this, 'userPreference.framework');
             this.refreshFilter = false;
             this.cdr.detectChanges();
             this.refreshFilter = true;
