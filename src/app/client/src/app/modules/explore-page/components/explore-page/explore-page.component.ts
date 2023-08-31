@@ -187,7 +187,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         });
                     }
                     this._addFiltersInTheQueryParams();
-                    return this.contentSearchService.initialize(this.channelId, this.custodianOrg, get(this.defaultFilters, [this.fwCategory[0]])[0]);
+                    return this.contentSearchService.initialize(this.channelId, this.custodianOrg, get(this.defaultFilters, [this.fwCategory[0]][0]));
                 }),
                 tap(data => {
                     this.initFilter = true;
