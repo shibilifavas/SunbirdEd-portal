@@ -3,6 +3,7 @@ import { ResourceService } from '@sunbird/shared';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash-es';
 import { ContentData } from '@sunbird/shared';
+import { TaxonomyService } from '../../../../service/Taxonomy.service';
 
 @Component({
   selector: 'app-collection-player-metadata',
@@ -17,10 +18,12 @@ export class CollectionPlayerMetadataComponent implements OnInit {
   contributions: string;
   contributionsLength: number;
   showContentCreditsModal: boolean;
+  fwCategory = [];
 
-  constructor(public resourceService: ResourceService, private activatedRoute: ActivatedRoute) { }
+  constructor(public resourceService: ResourceService, private activatedRoute: ActivatedRoute, private taxonomyService: TaxonomyService) { }
 
   ngOnInit() {
+    this.fwCategory= _.map(this.taxonomyService.getTaxonomyCategories(), category => {return category} );
     this.instance = _.upperCase(this.resourceService.instance);
     this.activatedRoute.params.subscribe((params) => {
       this.collectionId = params.collectionId;
