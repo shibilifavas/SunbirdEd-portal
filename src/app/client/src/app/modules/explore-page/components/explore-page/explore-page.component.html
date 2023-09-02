@@ -58,7 +58,7 @@
                     <span *ngIf="fwCategoryCheck(userPreference?.framework,fwCategory[0])?.length">{{resourceService?.frmelmnts?.lbl?.boards | transposeTerms: 'frmelmnts.lbl.boards': resourceService?.selectedLang}}:
                     </span>
                     <span *ngIf="fwCategoryCheck(userPreference?.framework,fwCategory[0])?.length"
-                      class="font-weight-bold">{{convertToString(userPreference?.framework?.board)}}</span>
+                      class="font-weight-bold">{{convertToString(fwCategoryCheck(userPreference?.framework,fwCategory[0]))}}</span>
                   </span>
 
                   <span class="mr-24">
