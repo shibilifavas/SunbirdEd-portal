@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TelemetryService } from '@sunbird/telemetry';
-import { TaxonomyService } from './../../../../service/Taxonomy.service';
+// import { TaxonomyService } from './../../../../service/taxonomy.service';
 
 
 @Component({
@@ -14,6 +14,7 @@ import { TaxonomyService } from './../../../../service/Taxonomy.service';
   templateUrl: './content-type.component.html',
   styleUrls: ['./content-type.component.scss'],
 })
+
 export class ContentTypeComponent implements OnInit, OnDestroy {
   @Output() closeSideMenu = new EventEmitter<any>();
   @Input() layoutConfiguration;
@@ -25,7 +26,7 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
   subscription: any;
   userType: any;
   returnTo: string;
-  taxonomyCategories:any = {};
+  taxonomyCategories:any;
 
   constructor(
     public formService: FormService,
@@ -37,7 +38,7 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService,
     private utilService: UtilService,
     public navigationhelperService: NavigationHelperService,
-    @Inject(TaxonomyService) private taxonomyService: TaxonomyService
+    // @Inject(TaxonomyService) private taxonomyService: TaxonomyService
   ) {}
 
 
@@ -48,7 +49,7 @@ export class ContentTypeComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         this.updateSelectedContentType(data);
       });
-    this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories();
+    // this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories();
   }
 
 

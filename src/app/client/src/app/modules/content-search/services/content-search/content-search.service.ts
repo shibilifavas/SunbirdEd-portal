@@ -3,7 +3,7 @@ import { FrameworkService, ChannelService } from '@sunbird/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { skipWhile, mergeMap, first, map } from 'rxjs/operators';
 import * as _ from 'lodash-es';
-import { TaxonomyService } from './../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 const requiredCategories = { categories: 'board,gradeLevel,medium,class,subject' };
 @Injectable({ providedIn: 'root' })
