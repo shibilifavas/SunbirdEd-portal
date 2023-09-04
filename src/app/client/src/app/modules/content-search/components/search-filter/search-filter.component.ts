@@ -9,7 +9,7 @@ import { ContentSearchService } from '../../services';
 import { FormService } from '@sunbird/core';
 import { IFrameworkCategoryFilterFieldTemplateConfig } from '@project-sunbird/common-form-elements-full';
 import { CacheService } from '../../../shared/services/cache-service/cache.service';
-import { TaxonomyService } from './../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-search-filter',

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { LayoutService } from '@sunbird/shared';
 import * as publicService from '../../services';
 import { SearchService } from './../../../core/services/search/search.service';
-import { TaxonomyService } from './../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-landing-page',

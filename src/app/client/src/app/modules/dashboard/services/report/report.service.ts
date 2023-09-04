@@ -11,7 +11,7 @@ import * as _ from 'lodash-es';
 import { Observable, of, forkJoin } from 'rxjs';
 import  dayjs from 'dayjs';
 import { v4 as UUID } from 'uuid';
-import { TaxonomyService } from './../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 const PRE_DEFINED_PARAMETERS = ['$slug', '$board', '$state', '$channel'];
 
