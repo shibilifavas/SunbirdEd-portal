@@ -16,7 +16,7 @@ import { PublicPlayerService } from '@sunbird/public';
 import { takeUntil, map, mergeMap, filter, catchError, tap, pluck, switchMap, delay } from 'rxjs/operators';
 import { OfflineCardService } from '@sunbird/shared';
 import { ContentManagerService } from '../../../public/module/offline/services/content-manager/content-manager.service';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   templateUrl: './course-page.component.html'

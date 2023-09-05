@@ -17,7 +17,7 @@ import { CacheService } from '../../../shared/services/cache-service/cache.servi
 import { ProfileService } from '@sunbird/profile';
 import { SegmentationTagService } from '../../../core/services/segmentation-tag/segmentation-tag.service';
 import * as publicService from '../../../public/services';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
     selector: 'app-explore-page-component',

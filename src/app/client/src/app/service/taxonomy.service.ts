@@ -1,6 +1,6 @@
 // import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TaxonomyCategories } from './../framework.config';
+import { TaxonomyCategories } from '../framework.config';
 import { find } from 'lodash';
 // import { Observable } from 'rxjs';
 
@@ -22,5 +22,4 @@ export class TaxonomyService {
     }
     return null;
   }
-
 }
