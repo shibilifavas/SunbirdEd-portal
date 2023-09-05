@@ -12,7 +12,7 @@ import { UserSearchService } from './../../services';
 import { IInteractEventEdata, IImpressionEventInput } from '@sunbird/telemetry';
 import { ProfileService } from '@sunbird/profile';
 import {takeUntil} from 'rxjs/operators';
-import { TaxonomyService } from 'src/app/service/taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-user-search',
