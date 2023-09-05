@@ -8,7 +8,7 @@ import { map, catchError } from 'rxjs/operators';
 import { of, combineLatest } from 'rxjs';
 import { UserSearchService } from './../../services';
 import { IInteractEventObject, IInteractEventEdata } from '@sunbird/telemetry';
-import { TaxonomyService } from 'src/app/service/taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-user-filter',
