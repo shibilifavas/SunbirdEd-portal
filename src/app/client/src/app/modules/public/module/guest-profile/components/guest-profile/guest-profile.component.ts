@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LayoutService } from '../../../../../shared/services/layoutconfig/layout.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TaxonomyService } from '../../../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../../../service/taxonomy.service';
 
 const USER_DETAILS_KEY = 'guestUserDetails';
 @Component({

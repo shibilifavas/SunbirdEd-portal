@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as _ from 'lodash-es';
 import { ContentData, ResourceService } from '@sunbird/shared';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-content-player-metadata',

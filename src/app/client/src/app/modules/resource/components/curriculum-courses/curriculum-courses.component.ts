@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash-es';
 import { map } from 'rxjs/operators';
 import { IImpressionEventInput, TelemetryService } from '@sunbird/telemetry';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-curriculum-courses',
