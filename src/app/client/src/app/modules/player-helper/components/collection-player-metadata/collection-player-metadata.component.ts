@@ -44,4 +44,8 @@ export class CollectionPlayerMetadataComponent implements OnInit {
     };
   }
 
+  fwCategoryCheck(obj: any, category: string) {
+    return this.taxonomyService.getCategoryforHTML(obj, category);
+  }
+
 }
