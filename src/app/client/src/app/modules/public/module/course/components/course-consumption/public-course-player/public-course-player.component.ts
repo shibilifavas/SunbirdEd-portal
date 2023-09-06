@@ -13,7 +13,7 @@ import TreeModel from 'tree-model';
 import { UserService, GeneraliseLabelService } from '@sunbird/core';
 import { TocCardType } from '@project-sunbird/common-consumption';
 import { ITelemetryShare, ContentUtilsServiceService } from '@sunbird/shared';
-import { TaxonomyService } from '../../../../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../../../../service/taxonomy.service';
 @Component({
   selector: 'app-public-course-player',
   templateUrl: './public-course-player.component.html',

@@ -10,7 +10,7 @@ import * as _ from 'lodash-es';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { ContentManagerService } from '../../../public/module/offline/services';
 import { takeUntil } from 'rxjs/operators';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-content-actions',
