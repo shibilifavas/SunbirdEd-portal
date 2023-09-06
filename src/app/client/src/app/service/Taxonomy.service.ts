@@ -1,6 +1,7 @@
 // import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TaxonomyCategories } from './../framework.config';
+import { find } from 'lodash';
 // import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,5 +14,14 @@ export class TaxonomyService {
   getTaxonomyCategories(){
     return TaxonomyCategories;
   }
+
+  getCategoryforHTML(obj: any, category: string) {
+    if(obj) {
+      let c = find(TaxonomyCategories, c => {return category == c});
+      return obj[c];      
+    }
+    return null;
+  }
+
 
 }
