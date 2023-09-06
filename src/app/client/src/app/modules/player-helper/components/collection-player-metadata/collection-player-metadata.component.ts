@@ -3,7 +3,7 @@ import { ResourceService } from '@sunbird/shared';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash-es';
 import { ContentData } from '@sunbird/shared';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-collection-player-metadata',

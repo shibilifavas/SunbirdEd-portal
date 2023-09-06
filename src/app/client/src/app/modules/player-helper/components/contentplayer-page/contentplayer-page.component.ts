@@ -9,7 +9,7 @@ import { takeUntil, filter } from 'rxjs/operators';
 import * as _ from 'lodash-es';
 import { IImpressionEventInput, TelemetryService } from '@sunbird/telemetry';
 import { PublicPlayerService } from '@sunbird/public';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   selector: 'app-contentplayer-page',
