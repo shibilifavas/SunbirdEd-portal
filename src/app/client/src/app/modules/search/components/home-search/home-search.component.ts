@@ -76,7 +76,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public allCompetencyList : Array<Competency> = [];
   public popularCompetencyList : Array<Competency> = [];
   public coursesByCompetencies:any = {}
-  taxonomyCategories:any = {};
+  taxonomyCategories:any = [];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
