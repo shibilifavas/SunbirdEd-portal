@@ -206,9 +206,11 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                   allComp.btnText="View courses";
                   allComp.expand=true;
                   for(let i of this.coursesByCompetencies.content){
-                    const lowerCaseSubject = i.subject.map(subject => subject.toLowerCase());
+                    if(i.subject){
+                      const lowerCaseSubject = i.subject.map(subject => subject.toLowerCase());
                     if(lowerCaseSubject.includes(value.name)){
                       dataList.push(i);
+                    }
                     }
                   }
                   allComp.expandData = dataList;
