@@ -29,7 +29,7 @@ import { CertificateDownloadAsPdfService } from 'sb-svg2pdf-v13';
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { FieldConfig, FieldConfigOption } from '@project-sunbird/common-form-elements-full';
 import { CsCertificateService } from '@project-sunbird/client-services/services/certificate/interface';
-import { TaxonomyService } from '../../../../service/Taxonomy.service';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 
 @Component({
   templateUrl: './profile-page.component.html',
