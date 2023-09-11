@@ -10,6 +10,7 @@ import { IInteractEventObject, IInteractEventEdata } from '@sunbird/telemetry';
 import { PopupControlService } from '../../../../service/popup-control.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ProfileService } from '@sunbird/profile';
+import { TaxonomyService } from '../../../../service/taxonomy.service';
 @Component({
   selector: 'app-popup',
   templateUrl: './profile-framework-popup.component.html',
@@ -26,7 +27,7 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<any>();
   @Input() dialogProps;
   @Input() isStepper: boolean = false;
-  public allowedFields = ['board', 'medium', 'gradeLevel', 'subject'];
+  public allowedFields = [];
   private _formFieldProperties: any;
   public formFieldOptions = [];
   private custOrgFrameworks: any;
@@ -44,15 +45,19 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   instance: string;
   dialogRef: MatDialogRef<any>;
   private boardOptions;
+  taxonomyCategories: any;
   constructor(private router: Router, private userService: UserService, private frameworkService: FrameworkService,
     private formService: FormService, public resourceService: ResourceService, private cacheService: CacheService,
     private toasterService: ToasterService, private channelService: ChannelService, private orgDetailsService: OrgDetailsService,
-    public popupControlService: PopupControlService, private matDialog: MatDialog, public profileService: ProfileService) {
+    public popupControlService: PopupControlService, private matDialog: MatDialog, public profileService: ProfileService, public taxonomyService: TaxonomyService) {
     this.instance = (<HTMLInputElement>document.getElementById('instance'))
       ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
   }
 
   ngOnInit() {
+    this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories();
+    this.allowedFields = this.taxonomyCategories;
+
     this.dialogRef = this.dialogProps && this.dialogProps.id && this.matDialog.getDialogById(this.dialogProps.id);
     this.popupControlService.changePopupStatus(false);
     this.selectedOption = _.pickBy(_.cloneDeep(this.formInput), 'length') || {}; // clone selected field inputs from parent
@@ -60,13 +65,13 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
       this.orgDetailsService.getOrgDetails(this.userService.slug).subscribe((data: any) => {
         this.guestUserHashTagId = data.hashTagId;
       });
-      this.allowedFields = ['board', 'medium', 'gradeLevel'];
+      this.allowedFields = this.taxonomyCategories.slice(0,3);
     }
     if (this.isGuestUser && this.isStepper) {
       this.orgDetailsService.getCustodianOrgDetails().subscribe((custodianOrg) => {
         this.guestUserHashTagId = custodianOrg.result.response.value;
       });
-      this.allowedFields = ['board', 'medium', 'gradeLevel'];
+      this.allowedFields = this.taxonomyCategories.slice(0,3);
     }
     this.editMode = _.some(this.selectedOption, 'length') || false;
     this.unsubscribe = this.isCustodianOrgUser().pipe(
@@ -107,9 +112,9 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
         let userType = localStorage.getItem('userType');
         userType == "administrator" ? board.required = true  : null;
         const fieldOptions = [board,
-          { code: 'medium', label: 'Medium', index: 2 },
-          { code: 'gradeLevel', label: 'Class', index: 3 },
-          { code: 'subject', label: 'Subject', index: 4 }];
+          { code: this.taxonomyCategories[1], label: 'Medium', index: 2 },
+          { code: this.taxonomyCategories[2], label: 'Class', index: 3 },
+          { code: this.taxonomyCategories[3], label: 'Subject', index: 4 }];
         return of(fieldOptions);
       }
     }));
@@ -120,8 +125,8 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
       this.custOrgFrameworks = _.sortBy(this.custOrgFrameworks, 'index');
       return {
         range: this.custOrgFrameworks,
-        label: 'Board',
-        code: 'board',
+        label: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[0]),
+        code: this.taxonomyCategories[0],
         index: 1
       };
     }));
@@ -143,9 +148,9 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
         }));
       } else {
         const fieldOptions = [board,
-          { code: 'medium', label: 'Medium', index: 2 },
-          { code: 'gradeLevel', label: 'Class', index: 3 },
-          { code: 'subject', label: 'Subject', index: 4 }];
+          { code: this.taxonomyCategories[1], label: 'Medium', index: 2 },
+          { code: this.taxonomyCategories[2], label: 'Class', index: 3 },
+          { code: this.taxonomyCategories[3], label: 'Subject', index: 4 }];
         return of(fieldOptions);
       }
     }));
@@ -153,7 +158,7 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   private getFormOptionsForOnboardedUser() {
     return this.getFormatedFilterDetails().pipe(map((formFieldProperties) => {
       this._formFieldProperties = formFieldProperties;
-      this.boardOptions = _.find(formFieldProperties, { code: 'board' });
+      this.boardOptions = _.find(formFieldProperties, { code: this.taxonomyCategories[0] });
 
       if (_.get(this.selectedOption, 'board[0]')) {
         this.selectedOption.board = _.get(this.selectedOption, 'board[0]');
@@ -225,7 +230,7 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   }
   private mergeBoard() {
     _.forEach(this._formFieldProperties, (field) => {
-      if (field.code === 'board') {
+      if (field.code === this.taxonomyCategories[0]) {
         field.range = _.unionBy(_.concat(field.range, this.custodianOrgBoard.range), 'name');
       }
     });
@@ -270,8 +275,8 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
       this.custOrgFrameworks = _.sortBy(this.custOrgFrameworks, 'index');
       return {
         range: this.custOrgFrameworks,
-        label: 'Board',
-        code: 'board',
+        label: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[0]),
+        code: this.taxonomyCategories[0],
         index: 1
       };
     }));
@@ -294,7 +299,7 @@ export class ProfileFrameworkPopupComponent implements OnInit, OnDestroy {
   }
   onSubmitForm() {
       const selectedOption = _.cloneDeep(this.selectedOption);
-      selectedOption.board = _.get(this.selectedOption, 'board') ? [this.selectedOption.board] : [];
+      selectedOption.board = _.get(this.selectedOption, this.taxonomyCategories[0]) ? [this.selectedOption.board] : [];
       selectedOption.id = this.frameWorkId;
       if (this.dialogRef && this.dialogRef.close) {
         this.dialogRef.close();
