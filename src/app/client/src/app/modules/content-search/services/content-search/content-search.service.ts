@@ -3,7 +3,7 @@ import { FrameworkService, ChannelService } from '@sunbird/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { skipWhile, mergeMap, first, map } from 'rxjs/operators';
 import * as _ from 'lodash-es';
-const requiredCategories = { categories: 'board,gradeLevel,medium,class,subject' };
+const requiredCategories = { categories: '' };
 @Injectable({ providedIn: 'root' })
 export class ContentSearchService {
   private channelId: string;
