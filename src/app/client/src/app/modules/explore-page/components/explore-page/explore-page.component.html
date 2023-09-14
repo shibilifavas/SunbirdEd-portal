@@ -1,6 +1,6 @@
 <div
   [ngClass]="[layoutConfiguration ? 'sbt-fluid-content-bg':'', (getSelectedTab() === 'home' || getSelectedTab() === 'explore') ? '': '']">
-  <div class="sb-g" [ngClass]="layoutConfiguration ? 'sb-g sbt-container sbt-page-content' : 'sb-g'"
+  <div class="sb-g ui container" [ngClass]="layoutConfiguration ? 'sb-g sbt-page-content' : 'sb-g'"
     [appTelemetryImpression]="telemetryImpression">
     <!-- Filter for web version -->
     <!-- `isFilterEnabled` reference from current page data -->
@@ -151,7 +151,7 @@
             <hr class="section-hr my-32" />
           </div>
           <div *ngIf="getSelectedTab() === 'home'">
-            <div *ngFor="let section of contentSections" class="pl-16">
+            <div *ngFor="let section of contentSections">
               <sb-content-section *ngIf="section?.isEnabled" (cardClick)="playContent($event, section?.title)"
                 [sortBy]="section?.apiConfig?.sortBy" [searchRequest]="section?.searchRequest" [title]="section?.title"
                 [layoutConfig]="layoutConfiguration" (viewMoreClick)="viewAll($event, section)"
@@ -166,7 +166,7 @@
               [showExploreContentButton]="noResultMessage?.showExploreContentButton"
               [telemetryInteractEdataObject]="exploreMoreButtonEdata"></app-no-result-found>
           </div>
-          <section class="ui container" *ngIf="configContent.browseByCardInfo">
+          <section *ngIf="configContent.browseByCardInfo">
             <p class="browseTitle">{{configContent.browseByCardInfo.title}}</p>
             <div class="cardContainer">
                 <browse-by-card
