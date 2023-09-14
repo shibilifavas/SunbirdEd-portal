@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, throwError } from 'rxjs';
-import { AuthService } from './../../../../services/login/auth.service';
+import { RegisterService } from '../../../../services/login/register.service';
 
 import {
   ResourceService,
@@ -57,7 +57,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
-    public navigationhelperService: NavigationHelperService, private router: Router, private authService: AuthService) {
+    public navigationhelperService: NavigationHelperService, private router: Router, private registerService: RegisterService) {
   }
 
   ngOnInit() {
@@ -270,7 +270,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         password: password.value
       }
     }
-    this.authService.register(data).pipe(catchError(error => {
+    this.registerService.register(data).pipe(catchError(error => {
       // const statusCode = error.status;
       this.registerErrorMessage = error.error.params.errmsg;
       return throwError(error);

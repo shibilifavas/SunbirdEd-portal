@@ -4,20 +4,9 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-
-  apiUrl = 'https://compass-dev.tarento.com';
+export class RegisterService {
 
   constructor(private http: HttpClient) { }
-
-  login(data: any) {
-    const httpHeaders: HttpHeaders = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      // 'Access-Control-Allow-Origin': '*'
-    });
-
-    return this.http.post(`${this.apiUrl}/auth/realms/sunbird/protocol/openid-connect/token`, data, { headers: httpHeaders });
-  }
 
   register(data: any) {
     const httpHeaders: HttpHeaders = new HttpHeaders({
@@ -25,7 +14,7 @@ export class AuthService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post(`${this.apiUrl}/api/user/v1/create`, data, { headers: httpHeaders });
+    return this.http.post(`api/user/v1/create`, data, { headers: httpHeaders });
   }
 
 }
