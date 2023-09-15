@@ -10,7 +10,7 @@ import { ExportToCsv } from 'export-to-csv';
 import { environment } from '@sunbird/environment';
 import { TransposeTermsPipe } from '../../pipes/transposeTerms/transposeTerms.pipe';
 // Dependency injection creates new instance each time if used in router sub-modules
-import { TaxonomyService } from '../../../../service/taxonomy.service';
+// import { TaxonomyService } from '../../../../service/taxonomy.service';
 @Injectable()
 export class UtilService {
   static singletonInstance: UtilService;
@@ -26,13 +26,13 @@ export class UtilService {
   public roleChanged = new BehaviorSubject('');
   public currentRole = this.roleChanged.asObservable();
   taxonomyCategories:any;
-  constructor(private resourceService: ResourceService, private genericResourceService: GenericResourceService, private taxonomyService: TaxonomyService) {
+  constructor(private resourceService: ResourceService, private genericResourceService: GenericResourceService) {
     if (!UtilService.singletonInstance) {
       UtilService.singletonInstance = this;
     }
     this._isDesktopApp = environment.isDesktopApp;
     return UtilService.singletonInstance;
-    this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories() 
+    this.taxonomyCategories = JSON.parse(localStorage.getItem('taxonomyCategories'));
   }
 
   get isDesktopApp() {

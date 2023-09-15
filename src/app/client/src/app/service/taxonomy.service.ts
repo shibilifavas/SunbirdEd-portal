@@ -12,6 +12,7 @@ export class TaxonomyService {
   constructor() { }
 
   getTaxonomyCategories(){
+    localStorage.setItem('taxonomyCategories', JSON.stringify(TaxonomyCategories));
     return TaxonomyCategories;
   }
 
