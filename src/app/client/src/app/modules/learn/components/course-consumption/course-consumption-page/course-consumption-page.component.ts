@@ -29,6 +29,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   selectedCourseBatches: { onGoingBatchCount: any; expiredBatchCount: any; openBatch: any; inviteOnlyBatch: any; courseId: any; };
   obs$;
   private fetchEnrolledCourses$ = new BehaviorSubject<boolean>(true);
+  config:any;
+  
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
     public toasterService: ToasterService, public courseBatchService: CourseBatchService,
@@ -47,6 +49,13 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.checkCourseStatus(courseHierarchy);
         this.updateBreadCrumbs();
         this.showLoader = false;
+        this.config = {
+          className:'dark-background',
+          title: this.courseHierarchy.name,
+          description: this.courseHierarchy.description,
+          contentType: this.courseHierarchy.contentType,
+          image:this.courseHierarchy.contentType.appIcon || 'assets/common-consumption/images/abstract_02.svg'
+        }
       }, err => {
         if (_.get(err, 'error.responseCode') && err.error.responseCode === 'RESOURCE_NOT_FOUND') {
           this.toasterService.error(this.generaliseLabelService.messages.emsg.m0002);

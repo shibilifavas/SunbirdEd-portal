@@ -16,8 +16,10 @@
 <app-batch-info *ngIf="showBatchInfo" [enrolledBatchInfo]="selectedCourseBatches"
     (routeChanged)="refreshComponent($event)">
 </app-batch-info> -->
-
-<div *ngIf="courseTabs.length>0" class="courseTab">
+<ng-container *ngIf="config">
+    <compass-banner [config]="config"></compass-banner>
+</ng-container>
+<div *ngIf="courseTabs" class="courseTab">
     <mat-tab-group animationDuration="0ms">
         <mat-tab label={{courseTabs[0]}}>
             <router-outlet *ngIf="!showLoader && !showError"></router-outlet>
