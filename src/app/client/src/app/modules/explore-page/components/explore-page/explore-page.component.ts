@@ -299,11 +299,12 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
         if (this.searchRequest) {
-            this.learnPageContentService.search(this.searchRequest).subscribe((res: any) => {
-            this.recentlyPublishedList = this.sortBy ? res.content.concat().sort(this.sort(this.sortBy)) : res.content;
+            const option = {...this.searchRequest.request};
+            const params = {orgdetails: 'orgName,email', framework: 'compass_fw'};
+            option['params']=params;
+            this.searchService.contentSearch(option).subscribe((res: any) => {
+            this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
             this.count = res.count;
-            console.log("this.contentList ",this.recentlyPublishedList);
-            console.log("this.recentlyPublishedTitle ",this.recentlyPublishedTitle);
           });
         }
       }
@@ -311,6 +312,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public sort = (key) => {
         return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
       }
+
+    
 
     public getBrowseByData(title : string){
         if(title.toLowerCase() == "competency"){
