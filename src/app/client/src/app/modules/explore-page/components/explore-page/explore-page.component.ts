@@ -300,7 +300,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         if (this.searchRequest) {
             const option = {...this.searchRequest.request};
-            const params = {orgdetails: 'orgName,email', framework: 'compass_fw'};
+            const params = {orgdetails: 'orgName,email'};
             option['params']=params;
             this.searchService.contentSearch(option).subscribe((res: any) => {
             this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
