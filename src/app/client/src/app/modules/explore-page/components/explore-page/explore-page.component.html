@@ -1,18 +1,30 @@
+<compass-banner [config]="resourceService?.frmelmnts?.llpBanner">
+</compass-banner>
+
 <div
   [ngClass]="[layoutConfiguration ? 'sbt-fluid-content-bg':'', (getSelectedTab() === 'home' || getSelectedTab() === 'explore') ? '': '']">
-  <div class="sb-g" [ngClass]="layoutConfiguration ? 'sb-g sbt-container sbt-page-content' : 'sb-g'"
-    [appTelemetryImpression]="telemetryImpression">
+  <div class="ui container featured-courses-section">
+    <p class="heading">{{resourceService?.frmelmnts?.lbl?.featuredCourses}}</p>
+    <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfigNew" (init)="slickInit($event)"
+        (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
+        <div ngxSlickItem class="slide" *ngFor='let course of courses;'>
+            <compass-course-card [data]="course"></compass-course-card>
+        </div>
+    </ngx-slick-carousel>
+  </div>
+  <!--div class="sb-g" [ngClass]="layoutConfiguration ? 'sb-g sbt-container sbt-page-content' : 'sb-g'"
+    [appTelemetryImpression]="telemetryImpression"-->
     <!-- Filter for web version -->
     <!-- `isFilterEnabled` reference from current page data -->
-    <div *ngIf="!isDesktopApp && isFilterEnabled && refreshFilter " [ngClass]="FIRST_PANEL_LAYOUT">
+    <!--div *ngIf="!isDesktopApp && isFilterEnabled && refreshFilter " [ngClass]="FIRST_PANEL_LAYOUT">
       <app-search-filter [facets$]="facets$" [layoutConfiguration]="layoutConfiguration" [isOpen]='true'
         *ngIf="initFilter" (filterChange)="getFilters($event)" [defaultTab]="defaultTab"
         [pageData]="getCurrentPageData()" [pageId]="isUserLoggedIn() ? 'resource-page' : 'explore-page'"
         [defaultFilters]="defaultFilters" [userSelectedPreference]="userSelectedPreference" [filterResponseData]="filterResponseData">
       </app-search-filter>
-    </div>
+    </div-->
     <!-- Filter for desktop version -->
-    <div *ngIf="isDesktopApp" [ngClass]="FIRST_PANEL_LAYOUT">
+    <!--div *ngIf="isDesktopApp" [ngClass]="FIRST_PANEL_LAYOUT">
       <div *ngIf="layoutConfiguration">
         <div>
           <app-network-status></app-network-status>
@@ -43,7 +55,7 @@
           </div>
 
           <!-- Template for displaying sections based on form configuration -->
-          <div *ngIf="_currentPageData?.sections && _currentPageData?.isEnabled" aria-label="User Preferences">
+          <!--div *ngIf="_currentPageData?.sections && _currentPageData?.isEnabled" aria-label="User Preferences">
             <div *ngIf="getSelectedTab() === 'home'" (click)="showEdit = !showEdit" class="sb-section-preference"
               tabindex="0">
               <div class="preference">
@@ -84,8 +96,8 @@
               <button
                 class="sb-btn sb-btn-primary sb-btn-normal sb-btn-border">{{resourceService?.frmelmnts?.lbl?.changePreferences}}</button>
             </div>
-          </div>
-          <div *ngFor="let section of facetSections">
+          </div-->
+          <!--div *ngFor="let section of facetSections">
             <div
               *ngIf="getSelectedTab() === 'home' && section?.section?.facetKey === 'ContinueLearning' && enrolledSection?.contents?.length && isUserLoggedIn()"
               class="sb-library-cards relative9">
@@ -178,10 +190,10 @@
             </div>
         </section>
 
-        </div>
+        </div-->
         <!-- Template for displaying page sections -->
 
-        <div *ngIf="!_currentPageData?.sections">
+        <!--div *ngIf="!_currentPageData?.sections">
           <div *ngFor="let section of pageSections; let last = last" [ngClass]="{'last mb-0':last}">
             <sb-library-cards-grid *ngIf="!isDesktopApp" [layoutConfig]="layoutConfiguration"
               [type]="'infinite_card_grid'" [title]="section.name"
@@ -196,13 +208,13 @@
               </sb-library-cards-grid>
             </div>
           </div>
-        </div>
-        <div *ngIf="showLoader && getSelectedTab() !== 'explore'">
+        </div-->
+        <!--div *ngIf="showLoader && getSelectedTab() !== 'explore'">
           <sb-library-cards-grid [layoutConfig]="layoutConfiguration" *ngFor="let i of numberOfSections"
             [type]="'infinite_card_grid'" [isLoading]="true" [maxCardCount]="!isUserLoggedIn() ? 4: 3">
           </sb-library-cards-grid>
-        </div>
-        <div
+        </div-->
+        <!--div
           *ngIf="apiContentList.length === 0 && !showLoader && (getSelectedTab() !== 'home' && getSelectedTab() !== 'explore')">
           <app-no-result-found (exploreMoreContent)="navigateToExploreContent()" [filters]="selectedFilters"
             [title]="noResultMessage?.title" [subTitle]="noResultMessage?.subTitle"
@@ -212,15 +224,26 @@
         </div>
       </div>
     </div>
-  </div>
+  </div-->
 
+  <section class="ui container mt-4rem" *ngIf="resourceService?.frmelmnts?.browseByCardInfo">
+      <p class="browseTitle">{{resourceService?.frmelmnts?.browseByCardInfo.title}}</p>
+      <div class="cardContainer">
+          <browse-by-card
+            *ngFor="let info of resourceService?.frmelmnts?.browseByCardInfo.cardData"
+            class="browseByCard"
+            [cardInfo]="info"
+            (click)="getBrowseByData(info.title)"
+          ></browse-by-card>
+      </div>
+  </section>
   <div class="ui container mt-32">
     <div class="popular-card">
-      <div class="popular-card-title">{{topicsData.title}}</div>
-      <div><button class="com-secondary-btn">{{topicsData.button}}</button></div>
+      <div class="popular-card-title">{{resourceService?.frmelmnts?.topicsData.title}}</div>
+      <!--div><button class="com-secondary-btn">{{topicsData.button}}</button></div-->
     </div>
     <div class="ui grid middle aligned stackable">
-      <div class="three wide column" *ngFor="let data of topicsData.data;let i=index">
+      <div class="three wide column" *ngFor="let data of resourceService?.frmelmnts?.topicsData.data;let i=index">
         <sb-popular-card [pillName]="'Topic'" [data]="data"></sb-popular-card>
       </div>
     </div>
@@ -228,11 +251,11 @@
 
   <div class="ui container mt-32">
     <div class="popular-card">
-      <div class="popular-card-title">{{competencyData.title}}</div>
-      <div><button class="com-secondary-btn">{{competencyData.button}}</button></div>
+      <div class="popular-card-title">{{resourceService?.frmelmnts?.competencyData.title}}</div>
+      <!--div><button class="com-secondary-btn">{{competencyData.button}}</button></div-->
     </div>
     <div class="ui grid middle aligned stackable">
-      <div class="three wide column" *ngFor="let data of competencyData.data;let i=index">
+      <div class="three wide column" *ngFor="let data of resourceService?.frmelmnts?.competencyData.data;let i=index">
         <sb-popular-card [pillName]="'Competency'" [data]="data"></sb-popular-card>
       </div>
     </div>

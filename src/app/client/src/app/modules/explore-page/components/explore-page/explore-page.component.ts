@@ -18,6 +18,7 @@ import { ProfileService } from '@sunbird/profile';
 import { SegmentationTagService } from '../../../core/services/segmentation-tag/segmentation-tag.service';
 import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
+import { LandingPageContentService } from './../../../public/services/landing-page-content/landing-page-content.service';
 
 @Component({
     selector: 'app-explore-page-component',
@@ -66,7 +67,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public enrolledCourses: Array<any>;
     public enrolledSection: any;
     public selectedCourseBatches: any;
-    public configContent:any = {}
+    public configContent: any = {}
     private myCoursesSearchQuery = JSON.stringify({
         'request': { 'filters': { 'contentType': ['Course'], 'objectType': ['Content'], 'status': ['Live'] }, 'sort_by': { 'lastPublishedOn': 'desc' }, 'limit': 10, 'organisationId': _.get(this.userService.userProfile, 'organisationIds') }
     });
@@ -97,6 +98,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     competencyData: any;
     topicsData: any;
     fwCategory = [];
+    courses: any = {};
+    slideConfigNew = { slidesToShow: 3, slidesToScroll: 3 };
+
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
@@ -128,7 +132,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         private browserCacheTtlService: BrowserCacheTtlService, private profileService: ProfileService,
         private segmentationTagService: SegmentationTagService, private observationUtil: ObservationUtilService,
         private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef, private taxonomyService: TaxonomyService,
-        private learnPageContentService : publicService.LearnPageContentService) {
+        private learnPageContentService: publicService.LearnPageContentService, public landingPageContentService: LandingPageContentService) {
         this.genericResourceService.initialize();
         this.instance = (<HTMLInputElement>document.getElementById('instance'))
             ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
@@ -215,7 +219,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        this.fwCategory= _.map(this.taxonomyService.getTaxonomyCategories(), category => {return category} );
+        this.fwCategory = _.map(this.taxonomyService.getTaxonomyCategories(), category => { return category });
         this.isDesktopApp = this.utilService.isDesktopApp;
         this.setUserPreferences();
         this.subscription$ = this.activatedRoute.queryParams.subscribe(queryParams => {
@@ -254,16 +258,90 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
         });
-        this.learnPageContentService.getPageContent().subscribe((res:any) => {
+        this.learnPageContentService.getPageContent().subscribe((res: any) => {
             this.competencyData = res.competencyData;
             this.topicsData = res.topicsData;
             this.configContent = res;
             console.log(this.configContent);
-          })
+        })
+        let requestData = {
+            "request": {
+                "filters": {
+                    "channel": "0138193046778920963",
+                    "primaryCategory": [
+                        "Collection",
+                        "Resource",
+                        "Content Playlist",
+                        "Course",
+                        "Course Assessment",
+                        "Digital Textbook",
+                        "eTextbook",
+                        "Explanation Content",
+                        "Learning Resource",
+                        "Lesson Plan Unit",
+                        "Practice Question Set",
+                        "Teacher Resource",
+                        "Textbook Unit",
+                        "LessonPlan",
+                        "FocusSpot",
+                        "Learning Outcome Definition",
+                        "Curiosity Questions",
+                        "MarkingSchemeRubric",
+                        "ExplanationResource",
+                        "ExperientialResource",
+                        "Practice Resource",
+                        "TVLesson",
+                        "Course Unit"
+                    ],
+                    "visibility": [
+                        "Default",
+                        "Parent"
+                    ]
+                },
+                "limit": 100,
+                "sort_by": {
+                    "lastPublishedOn": "desc"
+                },
+                "fields": [
+                    "name",
+                    "appIcon",
+                    "mimeType",
+                    "gradeLevel",
+                    "identifier",
+                    "medium",
+                    "pkgVersion",
+                    "board",
+                    "subject",
+                    "resourceType",
+                    "primaryCategory",
+                    "contentType",
+                    "channel",
+                    "organisation",
+                    "trackable"
+                ],
+                "softConstraints": {
+                    "badgeAssertions": 98,
+                    "channel": 100
+                },
+                "mode": "soft",
+                "facets": [
+                    "se_boards",
+                    "se_gradeLevels",
+                    "se_subjects",
+                    "se_mediums",
+                    "primaryCategory"
+                ],
+                "offset": 0
+            }
+        };
+        this.landingPageContentService.getCourses(requestData).subscribe(res => {
+            this.courses = res["result"]["content"];
+            // console.log('Courses', this.courses);
+        })
     }
 
-    public getBrowseByData(title : string){
-        if(title.toLowerCase() == "competency"){
+    public getBrowseByData(title: string) {
+        if (title.toLowerCase() == "competency") {
             this.router.navigate(['search/Library', 1]);
         }
     }
@@ -471,7 +549,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
-                        _.filter(Object.keys(params),filterValue => { 
+                        _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {
                                 let param = {};
                                 param[filterValue] = (typeof (params[filterValue]) === "string") ? params[filterValue].split(',') : params[filterValue];
@@ -1354,7 +1432,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (currentPageData) {
             const filterResponseData = _.get(currentPageData, 'metaData.searchFilterConfig');
             this.filterResponseData = filterResponseData;
-            this.userSelectedPreference=_.get(this, 'userPreference.framework');
+            this.userSelectedPreference = _.get(this, 'userPreference.framework');
             this.refreshFilter = false;
             this.cdr.detectChanges();
             this.refreshFilter = true;
@@ -1364,4 +1442,20 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     fwCategoryCheck(obj: any, category: string) {
         return this.taxonomyService.getCategoryforHTML(obj, category);
     }
+
+  slickInit(e: any) {
+    // console.log('slick initialized');
+  }
+
+  breakpoint(e: any) {
+    // console.log('breakpoint');
+  }
+
+  afterChange(e: any) {
+    // console.log('afterChange');
+  }
+  
+  beforeChange(e: any) {
+    // console.log('beforeChange');
+  }
 }
