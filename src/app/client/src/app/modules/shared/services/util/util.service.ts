@@ -27,12 +27,12 @@ export class UtilService {
   public currentRole = this.roleChanged.asObservable();
   taxonomyCategories:any;
   constructor(private resourceService: ResourceService, private genericResourceService: GenericResourceService) {
+     this.taxonomyCategories = JSON.parse(localStorage.getItem('taxonomyCategories'));
     if (!UtilService.singletonInstance) {
       UtilService.singletonInstance = this;
     }
     this._isDesktopApp = environment.isDesktopApp;
     return UtilService.singletonInstance;
-    this.taxonomyCategories = JSON.parse(localStorage.getItem('taxonomyCategories'));
   }
 
   get isDesktopApp() {
@@ -63,7 +63,6 @@ export class UtilService {
       downloadStatus: data.downloadStatus,
       description: data.description,
       rating: data.me_averageRating || '0',
-      [this.taxonomyCategories[3]]: data[this.taxonomyCategories[3]] ,
       [this.taxonomyCategories[1]]: data[this.taxonomyCategories[1]],
       orgDetails: data.orgDetails || {},
       [this.taxonomyCategories[2]]: '',
@@ -84,6 +83,9 @@ export class UtilService {
       primaryCategory: data.primaryCategory,
       downloadUrl: data.downloadUrl
     };
+     if(this.taxonomyCategories[3]){
+      content[this.taxonomyCategories[3]] = data[this.taxonomyCategories[3]];
+    }
     if (data.trackable) {
       data.trackable = _.isString(data.trackable) ? JSON.parse(data.trackable) : data.trackable;
       content.trackable = data.trackable;

@@ -31,7 +31,7 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     SuiSelectModule, SuiModalModule, SuiAccordionModule, SuiPopupModule, SuiDropdownModule, SuiProgressModule,
     SuiRatingModule, SuiCollapseModule, SuiDimmerModule, WebExtensionModule,
     CommonConsumptionModule, ContentSearchModule, ContentSectionModule, ObservationModule,
-    CardModule
+    CardModule, SlickCarouselModule
   ]
 })
 export class ExplorePageModule { }
