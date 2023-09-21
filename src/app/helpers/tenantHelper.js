@@ -83,7 +83,7 @@ module.exports = {
               module.exports.getImagePath(baseUrl, tenantId, 'poster.png', callback)
             },
             favicon: function (callback) {
-              module.exports.getImagePath(baseUrl, tenantId, 'favicon.ico', callback)
+              module.exports.getImagePath(baseUrl, tenantId, 'favicon.svg', callback)
             },
             appLogo: function (callback) {
               module.exports.getImagePath(baseUrl, tenantId, 'appLogo.png', callback)

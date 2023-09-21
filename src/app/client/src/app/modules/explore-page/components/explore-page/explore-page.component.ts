@@ -1458,4 +1458,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
   beforeChange(e: any) {
     // console.log('beforeChange');
   }
+  
+  doJsonDecode = (data: any) => {
+    return JSON.parse(data);
+  }
 }
