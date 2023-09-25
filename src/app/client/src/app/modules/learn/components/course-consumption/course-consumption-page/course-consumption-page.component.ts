@@ -224,10 +224,24 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           return {
             name:c.name,
             mimeType:c.contentType,
-            durations:'00m'
+            durations:'00m',
+            parent: c.parent,
+            selectedContent: c.identifier,
+            children: c
           }
         });
         this.tocList.push(toc)
     })
+  }
+
+  contentClicked(event: any) {
+    this.router.navigate(['/learn/course/play',event.content.parent], 
+    { 
+      queryParams: { 
+        courseId: this.courseHierarchy.identifier,
+        courseName: this.courseHierarchy.name,
+        selectedContent:  event.content.selectedContent
+      } 
+    });
   }
 }
