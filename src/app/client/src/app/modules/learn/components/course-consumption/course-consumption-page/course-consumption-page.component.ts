@@ -225,7 +225,6 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
             name:c.name,
             mimeType:c.contentType,
             durations:'00m',
-            parent: c.parent,
             selectedContent: c.identifier,
             children: c
           }
@@ -235,7 +234,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   }
 
   contentClicked(event: any) {
-    this.router.navigate(['/learn/course/play',event.content.parent], 
+    this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier], 
     { 
       queryParams: { 
         courseId: this.courseHierarchy.identifier,
