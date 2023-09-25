@@ -117,8 +117,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   attemptID: any;
   courseEvaluable: any;
   questionSetEvaluable: any;
-  tocList = []
-  courseHierarchyList;
+  tocList: any = [];
   @HostListener('window:beforeunload')
   canDeactivate() {
     // returning true will navigate without confirmation
@@ -163,9 +162,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.initLayout();
     this.subscribeToQueryParam();
-    this.activatedRoute.paramMap.subscribe(params => {
-      this.courseHierarchyList = history.state.data;
-    });
     this.subscribeToContentProgressEvents().subscribe(data => { });
     this.navigationHelperService.contentFullScreenEvent.
     pipe(takeUntil(this.unsubscribe)).subscribe(isFullScreen => {
@@ -175,27 +171,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.getLanguageChangeEvent();
     this.routerEventsChangeHandler().subscribe();
     this.updateCourseContent();
-  }
-
-  updateCourseContent() {
-    this.courseHierarchyList.children.forEach((resource:any) => {
-     let toc = {
-            header:{
-              title:resource.name,
-              progress:75,
-              totalDuration:'00m'
-            },
-            body: []
-          }
-        toc.body = resource.children.map((c:any) => {
-          return {
-            name:c.name,
-            mimeType:c.mimeType,
-            durations:'00m'
-          }
-        });
-        this.tocList.push(toc)
-    })
   }
 
   initLayout() {
@@ -269,6 +244,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               this.nextModule = _.get(module, 'next');
               this.prevModule = _.get(module, 'prev');
               this.getCourseCompletionStatus();
+              this.updateCourseContent();
               this.layoutService.updateSelectedContentType.emit(data.courseHierarchy.contentType);
               if (!this.isParentCourse && data.courseHierarchy.children) {
                 this.courseHierarchy = data.courseHierarchy.children.find(item => item.identifier === this.collectionId);
@@ -296,7 +272,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((data) => {
               this.courseHierarchy = data.result.content;
-              console.log("courseHierarchy",this.courseHierarchy);
+              this.updateCourseContent();
               this.layoutService.updateSelectedContentType.emit(this.courseHierarchy.contentType);
               if (this.courseHierarchy.mimeType !== 'application/vnd.ekstep.content-collection') {
                 this.activeContent = this.courseHierarchy;
@@ -984,6 +960,30 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           }
         })
       )
+  }
+
+  updateCourseContent() {
+    this.courseHierarchy.children.forEach((resource:any) => {
+      let toc = {
+             header:{
+               title:resource.name,
+               progress:75,
+               totalDuration:'00m'
+             },
+             body: []
+           }
+         toc.body = resource.children.map((c:any) => {
+           return {
+             name:c.name,
+             mimeType:c.contentType,
+             durations:'00m',
+             parent: c.parent,
+             selectedContent: c.identifier,
+             children: c
+           }
+         });
+         this.tocList.push(toc)
+     })
   }
 
 }

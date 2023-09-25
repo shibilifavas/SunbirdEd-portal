@@ -7,7 +7,7 @@
         "description": "Description",
         "authors" : "Author (s)",
         "Curator (s)" : "Curator (s)",
-        "competencyTitle":"Your competency (s)"
+        "competencyTitle":"competency (s)"
     },
     "courseAside":{
         "startCourse":"Start this course",
@@ -20,5 +20,10 @@
         "assessments":"Assessments",
         "contentType":"Content Type",
         "source": "Source"
+    },
+    "courseContent": {
+        "title":"Course Content",
+        "expandAll":"Expand all",
+        "collapseAll":"Collapse all"
     }
 }
