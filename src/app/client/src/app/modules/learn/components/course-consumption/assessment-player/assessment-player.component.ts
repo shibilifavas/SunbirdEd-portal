@@ -975,7 +975,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
          toc.body = resource.children.map((c:any) => {
            return {
              name:c.name,
-             mimeType:c.contentType,
+             mimeType:c.mimeType,
              durations:'00m',
              parent: c.parent,
              selectedContent: c.identifier,
