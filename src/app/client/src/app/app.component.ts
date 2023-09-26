@@ -231,7 +231,7 @@ export class AppComponent implements OnInit, OnDestroy {
         (this.userService.loggedIn && !_.get(user, 'userProfile.managedBy')) &&
         (_.isArray(_.get(user, 'userProfile.externalIds')) && _.get(user, 'userProfile.externalIds').length === 0)
       ) {
-        this.router.navigate(['/signup'], { queryParams: { loginMode: 'gmail' } });
+        // this.router.navigate(['/signup'], { queryParams: { loginMode: 'gmail' } });
       }
     });
   }
