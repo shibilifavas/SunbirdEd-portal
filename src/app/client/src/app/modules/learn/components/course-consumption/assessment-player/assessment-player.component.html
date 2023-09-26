@@ -18,7 +18,16 @@
     <div class="textbook__details d-flex flex-ai-center">
       <!-- Textbook image -->
       <div class="d-flex flex-ai-center w-50">
-        <div class="textbook__heading w-100">
+        <!-- Back button -->
+        <div class="w-15">
+          <button type="button" class="com-primary-btn " tabindex="0" (click)="goBack(); logTelemetry('back-track', courseHierarchy)" attr.aria-label="{{resourceService?.frmelmnts?.btn?.back}}">
+            <i class="icon-svg icon-svg--xxs icon-back mr-4"><svg class="icon icon-svg--white">
+                <use xlink:href="assets/images/sprite.svg#arrow-long-left"></use>
+              </svg></i>
+            <span>{{resourceService?.frmelmnts?.btn?.back}}</span>
+          </button>
+        </div>
+        <div class="textbook__heading w-85">
           <!-- Textbook title -->
           <h5 class="textbook__title font-weight-bold mb-0" tabindex="0">{{courseHierarchy?.name | titlecase}}
           </h5>
@@ -73,14 +82,13 @@
           </div> -->
         </div>
       </section>
-      <section class="sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4 mb-24">
+      <section class="sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4">
         <p class="title">Content</p>
         <div class="toc__item" *ngFor="let content of tocList">
-          <toc-content [courseModules]="content" (contentClicked)="contentClicked($event)"></toc-content>
+          <toc-content [courseModules]="content" (contentClicked)="contentClicked($event, 'child-item')"></toc-content>
         </div>
 
-
-        <!-- <div class="cc-player__list px-0">
+                <!-- <div class="cc-player__list px-0">
           <div class="certified-course__progress" *ngIf="totalContents > 0">
               <div class="d-flex flex-ai-center flex-jc-space-between mb-8">
                <button class="sb-btn sb-btn-link sb-btn-link-primary sb-btn-normal sb-left-icon-btn" aria-label="previous-module" *ngIf="prevModule"
