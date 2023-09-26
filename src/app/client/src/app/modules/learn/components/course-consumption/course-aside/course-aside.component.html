@@ -8,9 +8,9 @@
     <section class="aside__course-info">
         <h4 class="sub-heading-one">This course has</h4>
         <ul>
-            <li>
+            <li *ngIf="courseHierarchy.Duration">
                 <mat-icon>timer</mat-icon>
-                12 {{configContent.courseAside.durationText}}
+                {{courseHierarchy.Duration}} {{configContent.courseAside.durationText}}
                 <!-- {{ courseHierarchy.duration }} -->
             </li>
             <li *ngIf="courseHierarchy.mimeTypeObjs['application/vnd.ekstep.content-collection']">
