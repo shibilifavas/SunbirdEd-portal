@@ -216,15 +216,15 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
             header:{
               title:resource.name,
               progress:75,
-              totalDuration:'00m'
+              // totalDuration:'00m'
             },
             body: []
           }
         toc.body = resource.children.map((c:any) => {
           return {
             name:c.name,
-            mimeType:c.contentType,
-            durations:'00m',
+            mimeType:c.mimeType,
+            // duration:'00m',
             selectedContent: c.identifier,
             children: c
           }

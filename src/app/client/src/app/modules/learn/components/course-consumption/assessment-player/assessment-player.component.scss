@@ -173,4 +173,10 @@
 
 .toc__item{
   margin-bottom: 24px;
+  ::ng-deep .toc-content mat-expansion-panel .mat-expansion-panel-body {
+    padding: 0 0.5rem 0.5rem;
+    mat-card.content-details {
+      margin-top: 0.5rem;
+    }
+  }
 }
