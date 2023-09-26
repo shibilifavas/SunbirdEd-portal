@@ -15,12 +15,23 @@ import { Subject } from 'rxjs';
 export class CourseAsideComponent implements OnInit {
   @Input() courseHierarchy:any;
   @Input() configContent:any;
+  @Input() courseContent:any;
+  selectedContent;
 
   constructor(private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.selectedContent={...this.courseContent[0].body[0]};
+  }
 
   navigate() {
-    this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier]);
+    this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
+    { 
+      queryParams: { 
+        courseId: this.courseHierarchy.identifier,
+        courseName: this.courseHierarchy.name,
+        selectedContent:  this.selectedContent
+      } 
+    });
   }
 }
