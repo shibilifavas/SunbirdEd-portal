@@ -82,14 +82,13 @@
           </div> -->
         </div>
       </section>
-      <section class="sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4 mb-24">
+      <section class="sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4">
         <p class="title">Content</p>
         <div class="toc__item" *ngFor="let content of tocList">
-          <toc-content [courseModules]="content" (contentClicked)="contentClicked($event)"></toc-content>
+          <toc-content [courseModules]="content" (contentClicked)="contentClicked($event, 'child-item')"></toc-content>
         </div>
 
-
-        <!-- <div class="cc-player__list px-0">
+                <!-- <div class="cc-player__list px-0">
           <div class="certified-course__progress" *ngIf="totalContents > 0">
               <div class="d-flex flex-ai-center flex-jc-space-between mb-8">
                <button class="sb-btn sb-btn-link sb-btn-link-primary sb-btn-normal sb-left-icon-btn" aria-label="previous-module" *ngIf="prevModule"
