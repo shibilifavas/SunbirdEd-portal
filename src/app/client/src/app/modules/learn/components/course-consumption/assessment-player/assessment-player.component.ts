@@ -357,6 +357,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.showPlayer = false;
     this.previousContent = _.cloneDeep(this.activeContent);
     this.activeContent = this.navigationObj.event.data;
+    console.log("activeContent", this.activeContent);
     this.initPlayer(_.get(this.activeContent, 'identifier'));
     this.highlightContent();
     this.logTelemetry(this.navigationObj.id, this.navigationObj.event.data);
@@ -968,22 +969,30 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
              header:{
                title:resource.name,
                progress:75,
-               totalDuration:'00m'
+              //  totalDuration:'00m'
              },
              body: []
            }
          toc.body = resource.children.map((c:any) => {
            return {
-             name:c.name,
-             mimeType:c.mimeType,
-             durations:'00m',
-             parent: c.parent,
-             selectedContent: c.identifier,
-             children: c
+            name:c.name,
+            mimeType:c.mimeType,
+            // duration:'00m',
+            selectedIdentifier: c.identifier,
+            selectedContent: c
            }
          });
          this.tocList.push(toc)
      })
+  }
+  contentClicked(event: any, id: string) {
+    this.navigationObj = {
+      event: {
+        data: event.content.selectedContent,
+      },
+      id: id
+    };
+    this.onTocCardClick();
   }
 
 }
