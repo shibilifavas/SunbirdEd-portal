@@ -286,42 +286,32 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
         });
-        // this.learnPageContentService.getPageContent().subscribe((res: any) => {
-        //     this.competencyData = res.competencyData;
-        //     this.topicsData = res.topicsData;
-        //     this.configContent = res;
-        //     console.log(this.configContent);
-        // })
-        // let requestData = {
-        //     "request": {
-        //         "filters": {
-        //             "channel": this.getChannelId(),
-        //             "primaryCategory": ["Collection","Resource","Content Playlist","Course","Course Assessment","Digital Textbook","eTextbook","Explanation Content","Learning Resource","Lesson Plan Unit","Practice Question Set","Teacher Resource","Textbook Unit","LessonPlan","FocusSpot","Learning Outcome Definition","Curiosity Questions","MarkingSchemeRubric","ExplanationResource","ExperientialResource","Practice Resource","TVLesson","Course Unit"],
-        //             "visibility": ["Default","Parent"]
-        //         },
-        //         "limit": 100,
-        //         "sort_by": {
-        //             "lastPublishedOn": "desc"
-        //         },
-        //         "fields": ["name","appIcon","mimeType","gradeLevel","identifier","medium","pkgVersion","board","subject","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
-        //         "softConstraints": {
-        //             "badgeAssertions": 98,
-        //             "channel": 100
-        //         },
-        //         "mode": "soft",
-        //         "facets": ["se_boards","se_gradeLevels","se_subjects","se_mediums","primaryCategory"],
-        //         "offset": 0
-        //     }
-        // };
-        // this.coursesService.getCourses(requestData).subscribe(res => {
-        //     this.courses = res["result"]["content"];
-        //     console.log('Courses', this.courses);
-        // })
 
-        // this.coursesService.getEnrolledCourses().subscribe(res => {
-        //     // this.courses = res["result"]["content"];
-        //     console.log('Enrolled Courses', res);
-        // })
+        // Popular topics & competencies 
+        let requestData = {
+            
+                "filters": {
+                    "status": [
+                        "Live"
+                    ],
+                    "primaryCategory": [
+                        "Course"
+                    ]
+                },
+                "sort_by": {
+                    "lastUpdatedOn": "desc"
+                },
+                "facets": [
+                    "targetTaxonomyCategory1Ids",
+                    "targetTaxonomyCategory2Ids",
+                    "targetTaxonomyCategory3Ids"
+                ],
+                "limit": 0
+        };
+        this.searchService.compositePopularSearch(requestData).subscribe(res => {
+            // this.courses = res;
+            console.log('Popular data', res);
+        })
     }
 
     public fetchRequestContents() {

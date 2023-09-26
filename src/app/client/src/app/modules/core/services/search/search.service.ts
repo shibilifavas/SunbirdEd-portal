@@ -185,6 +185,29 @@ export class SearchService {
     return this.content.post(option);
   }
   /**
+   * Composite Search for popular topics & competencies.
+   *
+   * @param {SearchParam} requestParam api request data
+  */
+   compositePopularSearch(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.COMPOSITE.SEARCH,
+      param: { ...requestParam.params },
+      data: {
+        request: {
+          filters: requestParam.filters,
+          offset: requestParam.offset,
+          limit: requestParam.limit,
+          query: requestParam.query,
+          sort_by: requestParam.sort_by,
+          facets: requestParam.facets
+        }
+      }
+    };
+    const objectType = requestParam && requestParam.filters && requestParam.filters.objectType;
+    return this.publicDataService.post(option);
+  }
+  /**
    * User Search.
   */
   userSearch(requestParam: SearchParam): Observable<ServerResponse> {
