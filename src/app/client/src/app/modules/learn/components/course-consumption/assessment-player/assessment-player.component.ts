@@ -118,6 +118,9 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   courseEvaluable: any;
   questionSetEvaluable: any;
   tocList: any = [];
+  selectedContentName: any;
+  parentContentId: any;
+
   @HostListener('window:beforeunload')
   canDeactivate() {
     // returning true will navigate without confirmation
@@ -170,7 +173,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.noContentMessage = _.get(this.resourceService, 'messages.stmsg.m0121');
     this.getLanguageChangeEvent();
     this.routerEventsChangeHandler().subscribe();
-    this.updateCourseContent();
+    // this.updateCourseContent();
   }
 
   initLayout() {
@@ -217,6 +220,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .subscribe(([params, queryParams]) => {
         this.consumedContents = 0;
         this.totalContents = 0;
+        this.parentContentId = queryParams.parent;
         this.collectionId = params.collectionId;
         this.batchId = queryParams.batchId;
         this.courseId = queryParams.courseId;
@@ -244,13 +248,13 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               this.nextModule = _.get(module, 'next');
               this.prevModule = _.get(module, 'prev');
               this.getCourseCompletionStatus();
-              this.updateCourseContent();
               this.layoutService.updateSelectedContentType.emit(data.courseHierarchy.contentType);
               if (!this.isParentCourse && data.courseHierarchy.children) {
                 this.courseHierarchy = data.courseHierarchy.children.find(item => item.identifier === this.collectionId);
               } else {
                 this.courseHierarchy = data.courseHierarchy;
               }
+              this.updateCourseContent();
               console.log("courseHierarchy",this.courseHierarchy);
               if (!isSingleContent && _.get(this.courseHierarchy, 'mimeType') !==
               this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.collection) {
@@ -332,6 +336,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       this.activeContent = this.courseHierarchy;
       this.initPlayer(_.get(this.activeContent, 'identifier'));
     }
+    this.selectedContentName = this.activeContent.name;
     this.getContentState();
   }
 
@@ -358,6 +363,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.previousContent = _.cloneDeep(this.activeContent);
     this.activeContent = this.navigationObj.event.data;
     console.log("activeContent", this.activeContent);
+    this.selectedContentName = this.activeContent.name;
     this.initPlayer(_.get(this.activeContent, 'identifier'));
     this.highlightContent();
     this.logTelemetry(this.navigationObj.id, this.navigationObj.event.data);
@@ -964,34 +970,45 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   }
 
   updateCourseContent() {
-    this.courseHierarchy.children.forEach((resource:any) => {
-      let toc = {
-             header:{
-               title:resource.name,
-               progress:75,
-              //  totalDuration:'00m'
-             },
-             body: []
-           }
-         toc.body = resource.children.map((c:any) => {
-           return {
-            name:c.name,
-            mimeType:c.mimeType,
-            // duration:'00m',
-            selectedIdentifier: c.identifier,
-            selectedContent: c
-           }
-         });
-         this.tocList.push(toc)
-     })
+    let content = this.courseConsumptionService.getCourseContent();
+    this.tocList = content;
+    // if(content?.length > 0) {
+    //   if(this.batchId) {
+    //     this.tocList = content;
+    //   } else {
+    //     let filteredContent: any;
+    //     content.forEach((c)=> {
+    //       let body = c.body.find((val) => {
+    //         return val.collectionId == this.parentContentId;
+    //       });
+    //       if(body) {
+    //         c.body = [];
+    //         c.body.push(body);
+    //         filteredContent = c;
+    //       }
+    //     });
+    //     //Below condition should be removed after batch availablity functionality complete
+    //     if(filteredContent) {
+    //       this.tocList.push(filteredContent);
+    //     } else {
+    //       this.tocList = content;
+    //     }
+    //   }
+
+    //   console.log("tocList", this.tocList);
+    // }
   }
+
   contentClicked(event: any, id: string) {
     this.navigationObj = {
       event: {
-        data: event.content.selectedContent,
+        data: event.content.children,
       },
       id: id
     };
+    const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, event.content.collectionId);
+    this.nextModule = _.get(module, 'next');
+    this.prevModule = _.get(module, 'prev');
     this.onTocCardClick();
   }
 
