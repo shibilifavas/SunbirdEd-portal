@@ -92,6 +92,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.redirectUrl = this.configService.appConfig.courses.searchPageredirectUrl;
     this.sortingOptions = this.configService.dropDownConfig.FILTER.RESOURCES.sortingOptions;
     this.setTelemetryData();
+    this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories();
   }
   ngOnInit() {
     this.isDesktopApp = this.utilService.isDesktopApp;
