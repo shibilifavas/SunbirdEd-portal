@@ -288,9 +288,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // Popular topics & competencies 
-        let requestData = {
-            
+        let requestData = {"request": {
                 "filters": {
+                    "channel": this.channelId,
                     "status": [
                         "Live"
                     ],
@@ -298,16 +298,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         "Course"
                     ]
                 },
+                "fields": [
+                    "name"
+                ],
+                "facets": [
+                    "targetTaxonomyCategory4Ids"
+                ],
                 "sort_by": {
                     "lastUpdatedOn": "desc"
-                },
-                "facets": [
-                    "targetTaxonomyCategory1Ids",
-                    "targetTaxonomyCategory2Ids",
-                    "targetTaxonomyCategory3Ids"
-                ],
-                "limit": 0
-        };
+                }
+            }};
         this.searchService.compositePopularSearch(requestData).subscribe(res => {
             // this.courses = res;
             console.log('Popular data', res);
