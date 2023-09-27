@@ -3,7 +3,7 @@
     <!--Header section-->
     <header>
       <div class="sb-g">
-        <div class="sb-g-col-xs-6 sb-g-col-md-6 sb-g-col-lg-6 sb-g-col-xxxl-8 sbt-header-logo">
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-logo">
           <div [ngClass]="!userService.loggedIn ? 'flex-jc-space-between' : 'flex-jc-flex-start'"
             class="d-flex flex-ai-center w-100">
             <!--Logo-->
@@ -23,7 +23,15 @@
           </div>
 
         </div>
-        <div class="sb-g-col-xs-6 sb-g-col-md-6 sb-g-col-lg-6 sb-g-col-xxxl-8 sbt-header-tool-bar">
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-logo">
+          <div class="ui center search-container">
+            <div class="ui input">
+              <i class="search icon search-icon"></i>
+              <input type="text" id="header-search" name="search" [(ngModel)]="searchText" (keyup.enter)="searchCourses(searchText)" placeholder="Search">
+            </div>
+          </div>
+        </div>
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-tool-bar">
           <div class="d-flex flex-ai-center">
             <div class="mr-2">
               <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
@@ -37,20 +45,18 @@
                   {{resourceService.frmelmnts?.btn?.login}}
 
                 </a>
-
                 <a aria-current="page" tabindex="1" routerLink="signup" class="com-primary-btn" appTelemetryInteract
                   [telemetryInteractEdata]="signUpInteractEdata">
                   {{resourceService.frmelmnts?.lbl?.register}}
                 </a>
               </ng-container>
               <ng-container *ngIf="userService.loggedIn">
-                <a class="profile-avtar p-0 ml-16">
+                <a class="p-0 ml-16">
                   <div class="ui dropdown right top pointing">
                     <div class="sbt-guest-profile" aria-haspopup="true" aria-controls="overlaySidebarID"
-                      aria-label="Guest User" tabindex="0" name="Guest" *ngIf='!userProfile && !guestUser'
-                      (click)="toggleSideMenu(true)"><img src="./assets/images/profile-icon.svg" alt="Guest User"
-                        width="48"></div>
-                    <sb-avatar aria-haspopup="true" aria-controls="overlaySidebarID" *ngIf='!userProfile && guestUser'
+                      aria-label="Guest User" tabindex="0" name="Guest"
+                      (click)="toggleSideMenu(true)"><span class="user-avatar">{{userProfile?.firstName[0]}}</span></div>
+                    <!-- <sb-avatar aria-haspopup="true" aria-controls="overlaySidebarID" *ngIf='!userProfile && guestUser'
                       tabindex="0" (click)="toggleSideMenu(true)" [config]=avatarConfig initialsSize="2"
                       [initial]="guestUser?.formatedName[0] || 'G'"
                       [attr.aria-label]="'Welcome ' + (guestUser?.formatedName || 'Guest') + ', ' + 'Click here to continue to your profile'"
@@ -61,7 +67,7 @@
                       [initial]="userProfile?.firstName[0]"
                       title="'Welcome ' + userProfile?.firstName + ', ' + 'Click here to continue to your profile'"
                       [attr.title]="userProfile?.firstName">
-                    </sb-avatar>
+                    </sb-avatar> -->
                   </div>
                 </a>
               </ng-container>
