@@ -26,7 +26,6 @@ export class CourseAsideComponent implements OnInit {
     const firstModule = this.courseConsumptionService.getCourseContent()[0];
     this.firstContentId = firstModule.body[0].selectedContent;
     this.parentId = firstModule.body[0].collectionId;
-    console.log("firstModule", firstModule);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -36,8 +35,6 @@ export class CourseAsideComponent implements OnInit {
   }
 
   navigate() {
-    console.log("firstContentId", this.firstContentId);
-    console.log("batchId", this.batchId);
     // this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier]);
     this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
     { 
