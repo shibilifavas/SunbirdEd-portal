@@ -128,11 +128,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     return _.get(this.activeContent, 'mimeType') === 'application/vnd.sunbird.questionset' && !this.showQSExitConfirmation ? false : true;
   }
 
-  navigateToPlayerPage(collectionUnit: {}, event?) {
+  navigateToPlayerPage(collectionUnit:any, event?) {
     this.previousContent = null;
     this.lastActiveContentBeforeModuleChange = this.activeContent;
       const navigationExtras: NavigationExtras = {
-        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name },
+        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name, parent: collectionUnit?.identifier },
         state: { contentStatus: this._routerStateContentStatus }
       };
 
@@ -244,7 +244,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               const model = new TreeModel();
               this.treeModel = model.parse(data.courseHierarchy);
               this.parentCourse = data.courseHierarchy;
-              const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, this.collectionId);
+              const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, this.parentContentId);
               this.nextModule = _.get(module, 'next');
               this.prevModule = _.get(module, 'prev');
               this.getCourseCompletionStatus();
