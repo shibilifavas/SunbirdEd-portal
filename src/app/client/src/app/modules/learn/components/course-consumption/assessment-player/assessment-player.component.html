@@ -102,6 +102,11 @@
                         <use xlink:href="assets/images/sprite.svg#arrow-up"></use>
                       </svg></i>
                   </button>
+                  <ng-container *ngIf="prevModule && !nextModule">
+                    <button type="button" class="com-primary-btn finish-button" tabindex="0" (click)="goBack(); logTelemetry('back-track', courseHierarchy)" attr.aria-label="'Finish'">
+                      <span>Finish</span>
+                    </button>
+                  </ng-container>
                 </div>
               </div>
               <!-- <app-content-actions [assessmentEvents]="assessmentEvents" *ngIf="isFullScreenView" class="player-fullscreen-action-items" [isFullScreen]="true" [contentData]="activeContent" [objectRollUp]="objectRollUp">
