@@ -137,7 +137,6 @@ getAllOpenBatches(contents) {
 }
 
   setPreviousAndNextModule(courseHierarchy: {}, collectionId: string) {
-    debugger;
     if (_.get(courseHierarchy, 'children')) {
       let prev;
       let next;
