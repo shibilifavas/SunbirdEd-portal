@@ -3,7 +3,7 @@
     <!--Header section-->
     <header>
       <div class="sb-g">
-        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-logo">
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4 sbt-header-logo">
           <div [ngClass]="!userService.loggedIn ? 'flex-jc-space-between' : 'flex-jc-flex-start'"
             class="d-flex flex-ai-center w-100">
             <!--Logo-->
@@ -23,15 +23,15 @@
           </div>
 
         </div>
-        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-logo">
-          <div class="ui center search-container">
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4 sbt-header-logo">
+          <div class="ui center search-container" *ngIf="userService.loggedIn">
             <div class="ui input">
               <i class="search icon search-icon"></i>
               <input type="text" id="header-search" name="search" [(ngModel)]="searchText" (keyup.enter)="searchCourses(searchText)" placeholder="Search">
             </div>
           </div>
         </div>
-        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-8 sbt-header-tool-bar">
+        <div class="sb-g-col-xs-4 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4 sbt-header-tool-bar">
           <div class="d-flex flex-ai-center">
             <div class="mr-2">
               <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
