@@ -133,8 +133,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public getBrowseByData(title : string){
     if(title.toLowerCase() == "competency"){
         let competencyRequestData = {
-            "request": {
-                "filters": {
+               "filters": {
                     "se_boards": [
                         "general nursing midwifery"
                     ],
@@ -183,9 +182,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                   ...this.taxonomyCategories
                 ],
                 "offset": 0
-            }
-        };
-        this.learnPageContentService.getBrowseByCompetencyData(competencyRequestData).subscribe(res => {
+            };
+        this.searchService.contentSearch(competencyRequestData).subscribe(res => {
             this.coursesByCompetencies = res["result"];
             console.log("coursesByCompetencies ",this.coursesByCompetencies);
             for(let item of this.coursesByCompetencies.facets){
@@ -303,7 +301,6 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
       facets: this.taxonomyCategories,
-      params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
