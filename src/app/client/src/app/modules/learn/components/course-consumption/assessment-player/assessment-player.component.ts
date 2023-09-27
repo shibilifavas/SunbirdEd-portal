@@ -1012,4 +1012,5 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.onTocCardClick();
   }
 
+
 }
