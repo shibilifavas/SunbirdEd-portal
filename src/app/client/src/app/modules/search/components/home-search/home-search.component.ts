@@ -3,7 +3,7 @@ import {
   LayoutService, COLUMN_TYPE, OfflineCardService
 } from '@sunbird/shared';
 import { SearchService, PlayerService, CoursesService, UserService, ISort, OrgDetailsService, SchemaService } from '@sunbird/core';
-import { combineLatest, Subject, of } from 'rxjs';
+import { combineLatest, Subject, of, Observable } from 'rxjs';
 import { Component, OnInit, OnDestroy, EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash-es';
@@ -14,6 +14,8 @@ import { ContentManagerService } from '../../../public/module/offline/services/c
 import {omit, groupBy, get, uniqBy, toLower, find, map as _map, forEach, each} from 'lodash-es';
 import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
+import { FrameworkService } from '../../../core/services/framework/framework.service';
+import { ContentSearchService } from '@sunbird/content-search';
 interface Competency {
   title?: string,
   type?: string,
@@ -77,6 +79,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public popularCompetencyList : Array<Competency> = [];
   public coursesByCompetencies:any = {}
   taxonomyCategories:any = [];
+  categoryNames:any=[];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -86,7 +89,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     public browserCacheTtlService: BrowserCacheTtlService, public orgDetailsService: OrgDetailsService,
     public navigationhelperService: NavigationHelperService, public layoutService: LayoutService, private schemaService: SchemaService,
     public contentManagerService: ContentManagerService, public telemetryService: TelemetryService,
-    private offlineCardService: OfflineCardService, private taxonomyService: TaxonomyService, private learnPageContentService : publicService.LearnPageContentService) {
+    private offlineCardService: OfflineCardService, private taxonomyService: TaxonomyService, private learnPageContentService : publicService.LearnPageContentService, private contentSearchService : ContentSearchService,
+    private frameworkService: FrameworkService) {
     this.paginationDetails = this.paginationService.getPager(0, 1, this.configService.appConfig.SEARCH.PAGE_LIMIT);
     this.filterType = this.configService.appConfig.home.filterType;
     // this.redirectUrl = this.configService.appConfig.courses.searchPageredirectUrl;
@@ -127,28 +131,32 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.checkForBack();
         this.moveToTop();
-        this.getBrowseByData("competency");
+        this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
   }
 
-  public getBrowseByData(title : string){
+  public findCategory(frameworkId:any){
+    this.frameworkService.getSelectedFrameworkCategories(frameworkId)
+      .pipe(
+        mergeMap(res => {
+          res.result.framework.categories.forEach((category)=>{
+            this.categoryNames.push(category.name);
+        })
+          return this.getBrowseByData("competency");
+        })
+      )
+      .subscribe(() => {
+        this.fetchContentOnParamChange();
+      });
+  }
+
+  public getBrowseByData(title : string): Observable<any>{
     if(title.toLowerCase() == "competency"){
         let competencyRequestData = {
-               "filters": {
-                    "se_boards": [
-                        "general nursing midwifery"
-                    ],
-                    "se_mediums": [
-                        "midwifery and gynaecological nursing",
-                        "sociology"
-                    ],
-                    "se_gradeLevels": [
-                        "describes about social groups social change control stratification and social problems"
-                    ],
-                    "se_subjects": [],
+            "request": {
+                "filters": {
+                  "channel":this.activatedRoute.snapshot.queryParams.channel,
                     "primaryCategory": [
-                        "Course",
-                        "Course Assessment",
-                        "Self Assessment"
+                        "Course"
                     ],
                     "visibility": [
                         "Default",
@@ -163,12 +171,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                     "name",
                     "appIcon",
                     "mimeType",
-                    "gradeLevel",
                     "identifier",
-                    "medium",
                     "pkgVersion",
-                    "board",
-                    "subject",
                     "resourceType",
                     "primaryCategory",
                     "contentType",
@@ -176,14 +180,13 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                     "organisation",
                     "trackable",
                     "difficultyLevel",
-                    "se_difficultyLevels"
                 ],
                 "facets": [
-                  ...this.taxonomyCategories
-                ],
-                "offset": 0
-            };
-        this.searchService.contentSearch(competencyRequestData).subscribe(res => {
+                  ...this.categoryNames
+                ]
+            }
+        };
+        this.learnPageContentService.getBrowseByCompetencyData(competencyRequestData).subscribe(res => {
             this.coursesByCompetencies = res["result"];
             console.log("coursesByCompetencies ",this.coursesByCompetencies);
             for(let item of this.coursesByCompetencies.facets){
@@ -221,6 +224,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log("all comp",this.competencyInfo.data);
           })
     }
+    return new Observable<void>();
 }
 
   checkForBack() {
@@ -292,15 +296,19 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
+    filters.primaryCategory=["Course"];
     const option = {
       filters: filters,
-      fields: _.get(this.allTabData, 'search.fields'),
+      fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
+      // fields: _.get(this.allTabData, 'search.fields'),
       limit: _.get(this.allTabData, 'search.limit') ?  _.get(this.allTabData, 'search.limit')
       : this.configService.appConfig.SEARCH.PAGE_LIMIT,
       offset: (this.paginationDetails.currentPage - 1) * (this.configService.appConfig.SEARCH.PAGE_LIMIT),
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
-      facets: this.taxonomyCategories,
+      facets: [ "Positions", "Roles", "Activities", "Competencies", "Competency Levels"],
+      // facets: this.taxonomyCategories,
+      params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
