@@ -179,11 +179,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                     "se_difficultyLevels"
                 ],
                 "facets": [
-                    "se_boards",
-                    "se_gradeLevels",
-                    "se_subjects",
-                    "se_mediums",
-                    "se_difficultyLevels"
+                  ...this.taxonomyCategories
                 ],
                 "offset": 0
             }
@@ -305,7 +301,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       offset: (this.paginationDetails.currentPage - 1) * (this.configService.appConfig.SEARCH.PAGE_LIMIT),
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
-      facets: this.globalSearchFacets,
+      facets: this.taxonomyCategories,
       params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
