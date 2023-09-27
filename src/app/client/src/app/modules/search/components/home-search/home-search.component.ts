@@ -639,7 +639,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         filterData.channel = channelIds;
       }
     }
-    this.selectedFilters = filterData
+    this.selectedFilters = filterData;
     const _cacheTimeout = _.get(this.allTabData, 'metaData.cacheTimeout') || 3600000;
     /* istanbul ignore next */
     if (this.cacheService.exists('searchFiltersAll') && Object.keys(filterData).length > 0 && !_.get(filterData, 'key') 
