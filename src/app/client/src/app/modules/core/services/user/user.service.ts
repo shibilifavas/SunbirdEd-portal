@@ -433,6 +433,18 @@ export class UserService {
       }));
   }
 
+  registerExternalUser(data) {
+    const options = {
+      url: this.config.urlConFig.URLS.USER.SIGNUP,
+      data: data
+    };
+    return this.learnerService.post(options).pipe(
+      map((resp) => {
+        this.createManagedUser.emit(_.get(resp, 'result.userId'));
+        return resp;
+      }));
+  }
+
   userMigrate(requestBody) {
     const option = {
       url: this.config.urlConFig.URLS.USER.USER_MIGRATE,
