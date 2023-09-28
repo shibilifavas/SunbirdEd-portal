@@ -12,8 +12,4 @@ export class LearnPageContentService {
   getPageContent(){
     return this.http.get('/learnLandingPageContent');
   }
-
-  getBrowseByCompetencyData(data: any){
-    return this.http.post(`/api/content/v1/search`, data);
-  }
 }
