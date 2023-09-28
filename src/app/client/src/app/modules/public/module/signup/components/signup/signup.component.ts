@@ -13,6 +13,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { catchError } from 'rxjs/operators';
+import { RegisterService } from '../../../../services/login/register.service';
 
 export enum SignUpStage {
   BASIC_INFO = 'basic_info',
@@ -57,6 +58,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
     public navigationhelperService: NavigationHelperService, private router: Router, private userService: UserService,
+    private registerService: RegisterService,
     private config: ConfigService
     ) {
   }
@@ -278,7 +280,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     data.request['channel'] = this.config.appConfig.channelName;
-    this.userService.registerExternalUser(data).pipe(catchError(error => {
+    this.registerService.register(data).pipe(catchError(error => {
       // const statusCode = error.status;
       this.registerErrorMessage = error.error.params.errmsg;
       return throwError(error);
