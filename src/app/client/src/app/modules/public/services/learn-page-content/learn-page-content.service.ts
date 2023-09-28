@@ -14,6 +14,6 @@ export class LearnPageContentService {
   }
 
   getBrowseByCompetencyData(data: any){
-    return this.http.post(`/api/content/v1/search?orgdetails=orgName,email&licenseDetails=name,description,url`, data);
+    return this.http.post(`/api/content/v1/search`, data);
   }
 }
