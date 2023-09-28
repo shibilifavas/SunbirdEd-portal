@@ -13,27 +13,29 @@
      </svg></i>
    <span>{{resourceService?.frmelmnts?.btn?.back}}</span>
  </button> -->
- <div class="w-100 relative9 m-0 p-0" [ngClass]="{'header-block': isFullScreenView}">
-  <div class="textbook p-0">
-    <!-- Textbook details -->
-    <div class="textbook__details d-flex flex-ai-center">
-      <!-- Textbook image -->
-      <div class="d-flex flex-ai-center w-50">
-        <!-- Back button -->
-        <div class="w-15">
-          <button type="button" class="com-primary-btn " tabindex="0" (click)="goBack(); logTelemetry('back-track', courseHierarchy)" attr.aria-label="{{resourceService?.frmelmnts?.btn?.back}}">
-            <i class="icon-svg icon-svg--xxs icon-back mr-4"><svg class="icon icon-svg--white">
-                <use xlink:href="assets/images/sprite.svg#arrow-long-left"></use>
-              </svg></i>
-            <span>{{resourceService?.frmelmnts?.btn?.back}}</span>
-          </button>
-        </div>
-        <div class="textbook__heading w-85">
-          <!-- Textbook title -->
-          <h5 class="textbook__title font-weight-bold mb-0" tabindex="0">{{courseHierarchy?.name | titlecase}}
-          </h5>
-          <!-- Textbook Rating with share icon -->
-          <!-- <div class="textbook__rating mt-4">
+      <div class="w-100 relative9 m-0 p-0" [ngClass]="{'header-block': isFullScreenView}">
+        <div class="textbook p-0">
+          <!-- Textbook details -->
+          <div class="textbook__details d-flex flex-ai-center">
+            <!-- Textbook image -->
+            <div class="d-flex flex-ai-center w-50">
+              <!-- Back button -->
+              <div class="w-15">
+                <button type="button" class="com-primary-btn " tabindex="0"
+                  (click)="goBack(); logTelemetry('back-track', courseHierarchy)"
+                  attr.aria-label="{{resourceService?.frmelmnts?.btn?.back}}">
+                  <i class="icon-svg icon-svg--xxs icon-back mr-4"><svg class="icon icon-svg--white">
+                      <use xlink:href="assets/images/sprite.svg#arrow-long-left"></use>
+                    </svg></i>
+                  <span>{{resourceService?.frmelmnts?.btn?.back}}</span>
+                </button>
+              </div>
+              <div class="textbook__heading w-85">
+                <!-- Textbook title -->
+                <h5 class="textbook__title font-weight-bold mb-0" tabindex="0">{{courseHierarchy?.name | titlecase}}
+                </h5>
+                <!-- Textbook Rating with share icon -->
+                <!-- <div class="textbook__rating mt-4">
             <button tabindex="0" (click)="onShareLink();shareLinkModal=true;"
               class="sb-btn sb-btn-normal sb-btn-link sb-btn-link-primary sb-left-icon-btn">
               <i class="icon-svg icon-svg--xxs icon-share mr-4"><svg class="icon icon-svg--primary">
@@ -63,8 +65,8 @@
   <!-- CC-Player Video -->
   <div class="playerPageContainer">
     <div class="cc-player sb-g">
-      <section
-        class="sb-g-col-xs-12 sb-g-col-md-8 sb-g-col-lg-8 sb-g-col-xxxl-12 cc-player__video sb-toc-player-column">
+      <section class="sb-g-col-xs-12 sb-g-col-xxxl-12 cc-player__video sb-toc-player-column"
+        [ngClass]="isSectionVisible ? 'sb-g-col-md-8 sb-g-col-lg-8' : 'sb-g-col-md-12 sb-g-col-lg-12'">
 
         <div class="toc-content text-left">
           <div class="content-video">
@@ -103,7 +105,8 @@
                       </svg></i>
                   </button>
                   <ng-container *ngIf="prevModule && !nextModule">
-                    <button type="button" class="com-primary-btn finish-button" tabindex="0" (click)="goBack(); logTelemetry('back-track', courseHierarchy)" attr.aria-label="'Finish'">
+                    <button type="button" class="com-primary-btn finish-button" tabindex="0"
+                      (click)="goBack(); logTelemetry('back-track', courseHierarchy)" attr.aria-label="'Finish'">
                       <span>Finish</span>
                     </button>
                   </ng-container>
@@ -120,8 +123,16 @@
           </div> -->
         </div>
       </section>
-      <section class="sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-4">
-        <p class="title">Content</p>
+      <section [ngClass]="isSectionVisible ? 'sb-g-col-xs-12 sb-g-col-md-4 sb-g-col-lg-4 sb-g-col-xxxl-12' : 'd-none'">
+        <div class="right-side-title my-24">
+          <div class="title">Content</div>
+          <div>
+            <button class="sb-g-col-lg-4 sb-btn sb-btn-link sb-btn-normal sb-right-icon-btn close-icon  ml-auto"
+              aria-label="close-icon" tabindex="0" (click)="hideSection()">
+              <img src="assets/images/close_grey.svg" width="24px" height="24px">
+            </button>
+          </div>
+        </div>
         <div class="toc__item" *ngFor="let content of tocList">
           <toc-content [courseModules]="content" (contentClicked)="contentClicked($event, 'child-item')"></toc-content>
         </div>

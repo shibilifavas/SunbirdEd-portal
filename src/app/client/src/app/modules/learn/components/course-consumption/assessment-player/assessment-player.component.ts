@@ -120,6 +120,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   tocList: any = [];
   selectedContentName: any;
   parentContentId: any;
+  isSectionVisible: boolean = true;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -1010,6 +1011,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.nextModule = _.get(module, 'next');
     this.prevModule = _.get(module, 'prev');
     this.onTocCardClick();
+  }
+
+  hideSection() {
+    this.isSectionVisible = false;
   }
 
 
