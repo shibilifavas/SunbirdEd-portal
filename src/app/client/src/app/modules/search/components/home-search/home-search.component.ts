@@ -292,7 +292,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
-    filters.primaryCategory=["Course"];
+    filters.primaryCategory=["Collection","Resource","Content Playlist","Course","Course Assessment","Digital Textbook","eTextbook","Explanation Content","Learning Resource","Lesson Plan Unit","Practice Question Set","Teacher Resource","Textbook Unit","LessonPlan","FocusSpot","Learning Outcome Definition","Curiosity Questions","MarkingSchemeRubric","ExplanationResource","ExperientialResource","Practice Resource","TVLesson","Course Unit"];
     // delete filters.framework;
     const option = {
       filters: filters,
