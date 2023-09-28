@@ -1,42 +1,88 @@
-@use "compass-sb-styles/assets/mixins/mixins" as *;
+@use "compass-sb-styles/assets/mixins/mixins"as *;
 @use "/src/assets/styles/layout/_header.scss";
 
 .compass-header {
-    position: sticky;
-    z-index: 10;
-    left: 0;
-    width: 100%;
-    // height: 3.5rem !important;
-    // top: calculateRem(48px) !important;
-    top: 0px !important;
-    @include respond-below(sm) {
-      position: initial;
-    }
+  position: sticky;
+  z-index: 10;
+  left: 0;
+  width: 100%;
+  // height: 3.5rem !important;
+  // top: calculateRem(48px) !important;
+  top: 0px !important;
+
+  @include respond-below(sm) {
+    position: initial;
   }
-  .menuIcon{
-    cursor: pointer;
-    margin-right: 10px;
+}
+
+.menuIcon {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.bs-1:hover {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.29) !important;
+}
+
+.logo {
+  padding-left: 0;
+  width: 25%;
+
+  img {
+    width: calculateRem(98px);
   }
-  .bs-1:hover {
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.29) !important;
+}
+
+.compass-entrymenu {
+  .com-primary-btn {
+    margin-left: calculateRem(12px);
   }
 
-  .logo {
-    padding-left:0;
-    width: 25%;
-    img {
-        width: calculateRem(98px);
-    }
-  }
-  
-  .compass-entrymenu {
-    .com-primary-btn {
-      margin-left:calculateRem(12px);
-    }
 }
 
 .mr-2 {
   margin-right: 20px !important;
 }
 
-  
+.user-avatar {
+  padding: 10px 14px;
+  background-color: rgb(102, 102, 102);
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sbt-guest-profile {
+  box-shadow: unset;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.search-container {
+  margin: auto;
+
+  input::placeholder {
+    /* modern browser */
+    color: rgba(0, 0, 0, 0.4) !important;
+  }
+}
+
+#header-search {
+  width: 320px;
+  padding-left: 38px;
+  border-radius: 8px;
+  border: solid 1px rgba(0, 0, 0, 0.16);
+  color: rgba(0, 0, 0, 0.60);
+}
+
+#header-search:focus, #header-search:focus-visible{
+  border: solid 1px rgba(0, 0, 0, 0.16) !important;
+}
+
+

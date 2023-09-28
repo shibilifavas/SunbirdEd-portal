@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { first } from 'rxjs/operators';
 import {
   OrgDetailsService,
@@ -40,12 +41,20 @@ export class CompassHeaderComponent implements OnInit {
   isValidCustodianOrgUser = true;
   userListToShow = [];
   totalUsersCount: number;
+  searchText:string = '';
+  keyParam:string;
 
   constructor(private managedUserService: ManagedUserService, public orgDetailsService: OrgDetailsService,
-    public formService: FormService, public router: Router, public toasterService: ToasterService) { }
+    public formService: FormService, public router: Router, public toasterService: ToasterService, public route:ActivatedRoute) {
+
+    this.route.queryParams.subscribe((param : Params) => {
+      this.keyParam = param['key'];
+  });
+     }
 
   ngOnInit(): void {
     if (this.userService.loggedIn) {
+      this.searchText = this.keyParam ?? '';
       this.userService.userData$.subscribe((user: any) => {
         if (user && !user.err) {
           this.managedUserService.fetchManagedUserList();
@@ -136,5 +145,9 @@ export class CompassHeaderComponent implements OnInit {
       }
     }
     return showLanguageChangeDropdown;
+  }
+
+  searchCourses(text) {
+    this.router.navigateByUrl(`search/Library/1?channel=${this.userService.channel}&key=${encodeURIComponent(text)}`)
   }
 }
