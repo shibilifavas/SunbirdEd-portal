@@ -293,7 +293,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
     filters.primaryCategory=["Collection","Resource","Content Playlist","Course","Course Assessment","Digital Textbook","eTextbook","Explanation Content","Learning Resource","Lesson Plan Unit","Practice Question Set","Teacher Resource","Textbook Unit","LessonPlan","FocusSpot","Learning Outcome Definition","Curiosity Questions","MarkingSchemeRubric","ExplanationResource","ExperientialResource","Practice Resource","TVLesson","Course Unit"];
-    // delete filters.framework;
+    delete filters.framework;
     const option = {
       filters: filters,
       fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
@@ -304,7 +304,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
       facets: this.filterNames,
-      // params: this.configService.appConfig.Course.contentApiQueryParams,
+      params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
