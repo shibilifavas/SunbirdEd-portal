@@ -24,6 +24,7 @@ export class CourseConsumptionService {
   enableCourseEntrollment = new EventEmitter();
   coursePagePreviousUrl: any;
   userCreatedAnyBatch = new EventEmitter<boolean>();
+  tocList: any = [];
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -192,4 +193,32 @@ getAllOpenBatches(contents) {
       const visibility: boolean = mentorBatches ? mentorBatches.length > 0 : false;
       this.userCreatedAnyBatch.emit(visibility);
   }
+
+  getCourseContent() {
+    if(this.tocList.length === 0) {
+      this.courseHierarchy.children?.forEach((resource:any) => {
+        let toc = {
+               header:{
+                 title:resource.name,
+                 progress:75,
+                 // totalDuration:'00m'
+               },
+               body: []
+             }
+           toc.body = resource.children?.map((c:any) => {
+             return {
+               name:c.name,
+               mimeType:c.mimeType,
+               // duration:'00m',
+               selectedContent: c.identifier,
+               children: c,
+               collectionId: c.parent
+             }
+           });
+           this.tocList.push(toc)
+       });
+    }
+    return this.tocList;
+  }
+
 }

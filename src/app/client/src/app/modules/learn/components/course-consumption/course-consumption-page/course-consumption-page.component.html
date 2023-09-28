@@ -32,7 +32,7 @@
                 </div>
             </div> -->
 
-        <app-course-overview [courseDetails]="courseHierarchy" [configContent]="configContent"></app-course-overview>
+        <app-course-overview [courseDetails]="courseHierarchy" [configContent]="configContent" [params]="batchId"></app-course-overview>
         </mat-tab>
         <mat-tab label={{courseTabs[1]}}>
             <div class="ui container mt-48 course-content">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="second_pannel four wide column">
-                        <app-course-aside [courseContent] = "tocList" [courseHierarchy]="courseHierarchy" [configContent]="configContent"></app-course-aside>
+                        <app-course-aside [courseHierarchy]="courseHierarchy" [configContent]="configContent" [params]="batchId"></app-course-aside>
                     </div>
                 </div>
             </div>

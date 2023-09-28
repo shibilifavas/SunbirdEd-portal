@@ -34,7 +34,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   private fetchEnrolledCourses$ = new BehaviorSubject<boolean>(true);
   config:any;
   configContent: any;
-  tocList = []
+  tocList = [];
+  queryParams: any = {};
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -217,35 +218,20 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   }
 
   updateCourseContent() {
-    this.courseHierarchy.children.forEach((resource:any) => {
-     let toc = {
-            header:{
-              title:resource.name,
-              progress:75,
-              totalDuration:''
-            },
-            body: []
-          }
-        toc.body = resource.children.map((c:any) => {
-          return {
-            name:c.name,
-            mimeType:c.mimeType,
-            durations:'',
-            selectedContent: c.identifier,
-            children: c
-          }
-        });
-        this.tocList.push(toc)
-    })
+    if(this.courseConsumptionService.getCourseContent()?.length > 0) {
+      this.tocList = this.courseConsumptionService.getCourseContent();
+    }
   }
 
   contentClicked(event: any) {
-    this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier], 
+    this.router.navigate(['/learn/course/play',event.content.collectionId],
     { 
       queryParams: { 
+        batchId: this.batchId,
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
-        selectedContent:  event.content.selectedContent
+        selectedContent:  event.content.selectedContent,
+        parent: event.content.collectionId
       } 
     });
   }

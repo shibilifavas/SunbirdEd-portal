@@ -10,6 +10,7 @@ export class CourseOverviewComponent implements OnInit {
 
   @Input() courseDetails: any;
   @Input() configContent: any;
+  @Input() params: any
   associatedTerms = [];
 
   // levelsInfo = {
