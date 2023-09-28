@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject, Subscription, throwError } from 'rxjs';
-import { RegisterService } from '../../../../services/login/register.service';
-
 import {
   ResourceService,
-  NavigationHelperService
+  NavigationHelperService,
+  ConfigService
 } from '@sunbird/shared';
-import { TenantService } from '@sunbird/core';
+import { TenantService, UserService } from '@sunbird/core';
 import { TelemetryService } from '@sunbird/telemetry';
 import * as _ from 'lodash-es';
 import { IStartEventInput, IImpressionEventInput, IInteractEventEdata } from '@sunbird/telemetry';
@@ -57,7 +56,9 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
-    public navigationhelperService: NavigationHelperService, private router: Router, private registerService: RegisterService) {
+    public navigationhelperService: NavigationHelperService, private router: Router, private userService: UserService,
+    private config: ConfigService
+    ) {
   }
 
   ngOnInit() {
@@ -266,7 +267,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    const data = {
+    let data = {
       request: {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -276,7 +277,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
         password: password.value
       }
     }
-    this.registerService.register(data).pipe(catchError(error => {
+    data.request['channel'] = this.config.appConfig.channelName;
+    this.userService.registerExternalUser(data).pipe(catchError(error => {
       // const statusCode = error.status;
       this.registerErrorMessage = error.error.params.errmsg;
       return throwError(error);
