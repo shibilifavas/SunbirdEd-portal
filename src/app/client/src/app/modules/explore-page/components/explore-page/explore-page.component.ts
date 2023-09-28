@@ -334,21 +334,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.searchRequest) {
             let searchRequest = {
                 "request": {
+                    "fields": [
+                        "name","appIcon","mimeType","gradeLevel","identifier","medium","pkgVersion","board","subject","resourceType","contentType","channel","organisation","trackable","se_boards","se_subjects","se_mediums","se_gradeLevels","lastPublishedOn"
+                    ],
+                    "facets": [
+                        "se_subjects"
+                    ],
                     "filters": {
                         "channel": this.channelId,
                         "status": [
                             "Live"
-                        ],
-                        "contentType": [
-                            "Course"
-                        ],
-                        "batches.status": [
-                            1
-                        ],
-                        "batches.enrollmentType": "open",
-
-                        "primaryCategory": [
-                            "Course"
                         ]
                     },
                     "limit": 100,
