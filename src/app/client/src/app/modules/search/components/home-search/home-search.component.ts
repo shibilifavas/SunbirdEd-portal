@@ -80,6 +80,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public coursesByCompetencies:any = {}
   taxonomyCategories:any = [];
   categoryNames:any=[];
+  filterNames: any =[];
+  categoryDetails: any = [];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -123,7 +125,6 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((data: Array<any>) => {
         this.enrolledSection = data[0];
         this.dataDrivenFilters = data[1];
-        this.fetchContentOnParamChange();
         this.setNoResultMessage();
       },
         error => {
@@ -136,96 +137,91 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
-      .pipe(
-        mergeMap(res => {
-          res.result.framework.categories.forEach((category)=>{
-            this.categoryNames.push(category.name);
-        })
-          return this.getBrowseByData("competency");
-        })
-      )
-      .subscribe(() => {
+      .subscribe((res: any) => {
+        this.categoryDetails = [...res.result.framework.categories];
+        this.categoryNames=res.result.framework.categories.map(cat => cat.name);
+        this.filterNames=res.result.framework.categories.map(cat => cat.code);
         this.fetchContentOnParamChange();
       });
   }
 
-  public getBrowseByData(title : string): Observable<any>{
-    if(title.toLowerCase() == "competency"){
-        let competencyRequestData = {
-            "request": {
-                "filters": {
-                  "channel":this.activatedRoute.snapshot.queryParams.channel,
-                    "primaryCategory": [
-                        "Course"
-                    ],
-                    "visibility": [
-                        "Default",
-                        "Parent"
-                    ]
-                },
-                "limit": 100,
-                "sort_by": {
-                    "lastPublishedOn": "desc"
-                },
-                "fields": [
-                    "name",
-                    "appIcon",
-                    "mimeType",
-                    "identifier",
-                    "pkgVersion",
-                    "resourceType",
-                    "primaryCategory",
-                    "contentType",
-                    "channel",
-                    "organisation",
-                    "trackable",
-                    "difficultyLevel",
-                ],
-                "facets": [
-                  ...this.categoryNames
-                ]
-            }
-        };
-        this.learnPageContentService.getBrowseByCompetencyData(competencyRequestData).subscribe(res => {
-            this.coursesByCompetencies = res["result"];
-            console.log("coursesByCompetencies ",this.coursesByCompetencies);
-            for(let item of this.coursesByCompetencies.facets){
-              if(item.name.toLowerCase() == "se_subjects"){
-                for (let value of item.values){
-                  let competency : Competency = {};
-                  let dataList : any[] = [];
-                  competency.title=value.name;
-                  competency.type="type";
-                  competency.noOfCourses=value.count;
-                  competency.icon="../../../../../assets/images/courseIcon.svg";
-                  this.popularCompetencyList.push(competency);
-                  let allComp: any = {...competency};
-                  allComp.description="Planning vigilance activities in accordance with procedures that balance the needs of maintaining a fraud free environment and business objectives";
-                  allComp.btnText="View courses";
-                  allComp.expand=true;
-                  for(let i of this.coursesByCompetencies.content){
-                    if(i.subject){
-                      const lowerCaseSubject = i.subject.map(subject => subject.toLowerCase());
-                    if(lowerCaseSubject.includes(value.name)){
-                      dataList.push(i);
-                    }
-                    }
-                  }
-                  allComp.expandData = dataList;
-                  this.allCompetencyList.push(allComp);
-                }
-              }
-            }
-            this.competencyInfo.title="All competencies";
-            this.competencyInfo.popularTitle="Popular competencies";
-            this.competencyInfo.data=this.allCompetencyList;
-            this.competencyInfo.popularData=this.popularCompetencyList;
-            console.log("popular data",this.competencyInfo.popularData);
-            console.log("all comp",this.competencyInfo.data);
-          })
-    }
-    return new Observable<void>();
-}
+//   public getBrowseByData(title : string): Observable<any>{
+//     if(title.toLowerCase() == "competency"){
+//         let competencyRequestData = {
+//             "request": {
+//                 "filters": {
+//                   "channel":this.activatedRoute.snapshot.queryParams.channel,
+//                     "primaryCategory": [
+//                         "Course"
+//                     ],
+//                     "visibility": [
+//                         "Default",
+//                         "Parent"
+//                     ]
+//                 },
+//                 "limit": 100,
+//                 "sort_by": {
+//                     "lastPublishedOn": "desc"
+//                 },
+//                 "fields": [
+//                     "name",
+//                     "appIcon",
+//                     "mimeType",
+//                     "identifier",
+//                     "pkgVersion",
+//                     "resourceType",
+//                     "primaryCategory",
+//                     "contentType",
+//                     "channel",
+//                     "organisation",
+//                     "trackable",
+//                     "difficultyLevel",
+//                 ],
+//                 "facets": [
+//                   ...this.categoryNames
+//                 ]
+//             }
+//         };
+//         this.learnPageContentService.getBrowseByCompetencyData(competencyRequestData).subscribe(res => {
+//             this.coursesByCompetencies = res["result"];
+//             console.log("coursesByCompetencies ",this.coursesByCompetencies);
+//             for(let item of this.coursesByCompetencies.facets){
+//               if(item.name.toLowerCase() == "se_subjects"){
+//                 for (let value of item.values){
+//                   let competency : Competency = {};
+//                   let dataList : any[] = [];
+//                   competency.title=value.name;
+//                   competency.type="type";
+//                   competency.noOfCourses=value.count;
+//                   competency.icon="../../../../../assets/images/courseIcon.svg";
+//                   this.popularCompetencyList.push(competency);
+//                   let allComp: any = {...competency};
+//                   allComp.description="Planning vigilance activities in accordance with procedures that balance the needs of maintaining a fraud free environment and business objectives";
+//                   allComp.btnText="View courses";
+//                   allComp.expand=true;
+//                   for(let i of this.coursesByCompetencies.content){
+//                     if(i.subject){
+//                       const lowerCaseSubject = i.subject.map(subject => subject.toLowerCase());
+//                     if(lowerCaseSubject.includes(value.name)){
+//                       dataList.push(i);
+//                     }
+//                     }
+//                   }
+//                   allComp.expandData = dataList;
+//                   this.allCompetencyList.push(allComp);
+//                 }
+//               }
+//             }
+//             this.competencyInfo.title="All competencies";
+//             this.competencyInfo.popularTitle="Popular competencies";
+//             this.competencyInfo.data=this.allCompetencyList;
+//             this.competencyInfo.popularData=this.popularCompetencyList;
+//             console.log("popular data",this.competencyInfo.popularData);
+//             console.log("all comp",this.competencyInfo.data);
+//           })
+//     }
+//     return new Observable<void>();
+// }
 
   checkForBack() {
     if (_.get(this.activatedRoute, 'snapshot.queryParams["showClose"]') === 'true') {
@@ -297,6 +293,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
     filters.primaryCategory=["Course"];
+    // delete filters.framework;
     const option = {
       filters: filters,
       fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
@@ -306,9 +303,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       offset: (this.paginationDetails.currentPage - 1) * (this.configService.appConfig.SEARCH.PAGE_LIMIT),
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
-      facets: [ "Positions", "Roles", "Activities", "Competencies", "Competency Levels"],
-      // facets: this.taxonomyCategories,
-      params: this.configService.appConfig.Course.contentApiQueryParams,
+      facets: this.filterNames,
+      // params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
@@ -380,6 +376,13 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.facets = this.searchService.updateFacetsData(_.get(data, 'result.facets'));
         this.facets.forEach((facet) => {
           facet['label'] = this.utilService.transposeTerms(facet['label'], facet['label'], this.resourceService.selectedLang);
+        });
+        this.categoryDetails.forEach((cat) => {
+          this.facets.forEach((c:any)=> {
+            if(cat.code == c.name){
+              c.name = cat.name;
+            }
+          })
         });
         this.facetsList = this.searchService.processFilterData(_.get(data, 'result.facets'));
         this.paginationDetails = this.paginationService.getPager(data.result.count, this.paginationDetails.currentPage,
