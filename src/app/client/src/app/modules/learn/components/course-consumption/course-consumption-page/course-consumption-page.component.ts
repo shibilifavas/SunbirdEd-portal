@@ -5,10 +5,11 @@ import { CourseConsumptionService, CourseBatchService } from './../../../service
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash-es';
-import { CoursesService, PermissionService, GeneraliseLabelService } from '@sunbird/core';
+import { CoursesService, PermissionService, GeneraliseLabelService, UserService } from '@sunbird/core';
 import dayjs from 'dayjs';
 import { GroupsService } from '../../../../groups/services/groups/groups.service';
 import { CoursePageContentService } from "../../../services/course-page-content.service"
+
 @Component({
   templateUrl: './course-consumption-page.component.html',
   styleUrls: ['./course-consumption-page.component.scss']
@@ -26,17 +27,23 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   layoutConfiguration;
   showBatchInfo: boolean;
   courseTabs: any;
+  batchList = [];
+  showBatchList;
   selectedCourseBatches: { onGoingBatchCount: any; expiredBatchCount: any; openBatch: any; inviteOnlyBatch: any; courseId: any; };
   obs$;
   private fetchEnrolledCourses$ = new BehaviorSubject<boolean>(true);
   config:any;
   configContent: any;
+  tocList = [];
+  queryParams: any = {};
+
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
     public toasterService: ToasterService, public courseBatchService: CourseBatchService,
     private resourceService: ResourceService, public router: Router, private groupsService: GroupsService,
     public navigationHelperService: NavigationHelperService, public permissionService: PermissionService,
-    public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService, public coursePageContentService: CoursePageContentService) {
+    public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
+    public coursePageContentService: CoursePageContentService, private userService: UserService) {
   }
   ngOnInit() {
     this.initLayout();
@@ -44,21 +51,24 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .subscribe(({ courseHierarchy, enrolledBatchDetails }: any) => {
         this.enrolledBatchInfo = enrolledBatchDetails;
         this.courseHierarchy = courseHierarchy;
+        this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
         this.layoutService.updateSelectedContentType.emit(courseHierarchy.contentType);
         this.getGeneraliseResourceBundle();
         this.checkCourseStatus(courseHierarchy);
         this.updateBreadCrumbs();
+        this.updateCourseContent()
+        this.getAllBatchDetails();
         this.showLoader = false;
         this.config = {
           className:'dark-background',
           title: this.courseHierarchy.name, 
           description: this.courseHierarchy.description,
           contentType: this.courseHierarchy.contentType,
-          image:this.courseHierarchy.appIcon || 'assets/common-consumption/images/abstract_02.svg',
+          image:this.courseHierarchy.posterImage || 'assets/common-consumption/images/abstract_02.svg',
           keywords: this.courseHierarchy.keywords,
           rating:4.2,
           numberOfRating:'123 ratings',
-          duration:'12h'
+          duration:this.courseHierarchy.Duration
         };
       }, err => {
         if (_.get(err, 'error.responseCode') && err.error.responseCode === 'RESOURCE_NOT_FOUND') {
@@ -205,6 +215,81 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
 
   addWishList(){
     console.log('Add to wish list');
+  }
+
+  updateCourseContent() {
+    if(this.courseConsumptionService.getCourseContent()?.length > 0) {
+      this.tocList = this.courseConsumptionService.getCourseContent();
+    }
+  }
+
+  contentClicked(event: any) {
+    this.router.navigate(['/learn/course/play',event.content.collectionId],
+    { 
+      queryParams: { 
+        batchId: this.batchId,
+        courseId: this.courseHierarchy.identifier,
+        courseName: this.courseHierarchy.name,
+        selectedContent:  event.content.selectedContent,
+        parent: event.content.collectionId
+      } 
+    });
+  }
+  getAllBatchDetails() {
+    // this.showCreateBatchBtn = false;
+    // this.showBatchList = false;
+    // this.showError = false;
+    // this.batchList = [];
+    const searchParams: any = {
+      filters: {
+        courseId: this.courseHierarchy.identifier,
+        status: ['1']
+      },
+      offset: 0,
+      sort_by: { createdDate: 'desc' }
+    };
+    const searchParamsCreator =  _.cloneDeep(searchParams);
+    const searchParamsMentor =  _.cloneDeep(searchParams);
+
+       searchParams.filters.enrollmentType = 'open';
+       this.courseBatchService.getAllBatchDetails(searchParams).pipe(
+        takeUntil(this.unsubscribe$))
+        .subscribe((data: any) => {
+          // this.allBatchDetails.emit(_.get(data, 'result.response'));
+          if (data.result.response.content && data.result.response.content.length > 0) {
+            this.batchList = data.result.response.content;
+            } else {
+            this.showBatchList = true;
+          }
+        },
+        (err:any) => {
+         
+        });
+     
+  }
+    enrollToCourse(batchId?: any) {
+    const request = {
+      request: {
+        courseId: this.courseHierarchy.courseId,
+        userId: this.userService.userid,
+        batchId: batchId
+      }
+    };
+    this.courseBatchService.enrollToCourse(request).pipe(
+      takeUntil(this.unsubscribe$))
+      .subscribe((data) => {
+        console.log(data);
+        // this.disableSubmitBtn = true;
+        // this.toasterService.success(this.resourceService.messages.smsg.m0036);
+        // this.fetchEnrolledCourseData();
+        // this.telemetryLogEvents(true);
+      }, (err) => {
+        console.log(err);
+        // this.modalVisibility = true;
+        // this.disableSubmitBtn = false;
+        // this.toasterService.error(this.resourceService.messages.emsg.m0001);
+        // this.telemetryLogEvents(false);
+      });
   }
 
 }

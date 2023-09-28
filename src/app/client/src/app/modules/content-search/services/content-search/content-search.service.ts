@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { FrameworkService, ChannelService } from '@sunbird/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { skipWhile, mergeMap, first, map } from 'rxjs/operators';
+import { taxonomyConfig, taxonomyEnvironment } from '../../../../framework.config';
 import * as _ from 'lodash-es';
 
 const requiredCategories = { categories: '' };
@@ -34,6 +35,7 @@ export class ContentSearchService {
     return this._searchResults$.asObservable()
       .pipe(skipWhile(data => data === undefined || data === null));
   }
+  channelData:any;
 
   constructor(private frameworkService: FrameworkService, private channelService: ChannelService, @Inject(TaxonomyService) private taxonomyService: TaxonomyService) { }
 
@@ -51,7 +53,8 @@ export class ContentSearchService {
   }
   fetchChannelData() {
     return this.channelService.getFrameWork(this.channelId)
-      .pipe(mergeMap((channelDetails) => {
+      .pipe(mergeMap((channelDetails:any) => {
+        
         if (this.custodianOrg) {
           this._filters.board = _.get(channelDetails, 'result.channel.frameworks') || [{
             name: _.get(channelDetails, 'result.channel.defaultFramework'),
@@ -65,9 +68,13 @@ export class ContentSearchService {
         if (_.get(channelDetails, 'result.channel.publisher')) {
           this._filters.publisher = JSON.parse(_.get(channelDetails, 'result.channel.publisher'));
         }
+        this.updateFrameworkInfo(this._frameworkId,this.channelId);
         return this.frameworkService.getSelectedFrameworkCategories(this._frameworkId, requiredCategories);
       }), map(frameworkDetails => {
+
         const frameworkCategories: any[] = _.get(frameworkDetails, 'result.framework.categories');
+        this.channelData = frameworkCategories;
+        // console.log('frameworkCategories', frameworkCategories);
         frameworkCategories.forEach(category => {
           if ([this.taxonomyCategories[1], this.taxonomyCategories[2], this.taxonomyCategories[3]].includes(category.code)) {
             this._filters[category.code] = category.terms || [];
@@ -113,5 +120,12 @@ export class ContentSearchService {
       if (mappedValue && key !== this.taxonomyCategories[3]) { acc[mappedValue] = value; delete acc[key]; }
       return acc;
     }, filters);
+  }
+  updateFrameworkInfo(framework, identifier){
+      // let frameworkInfo = JSON.parse(localStorage.getItem('environment'));
+      taxonomyEnvironment.channelId=identifier;
+      taxonomyEnvironment.frameworkName= framework;
+      localStorage.setItem('environment', JSON.stringify(taxonomyEnvironment));
+      localStorage.setItem('taxonomyConfig',JSON.stringify(taxonomyConfig));
   }
 }

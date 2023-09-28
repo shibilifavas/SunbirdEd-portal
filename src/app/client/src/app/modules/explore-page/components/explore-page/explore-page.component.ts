@@ -129,6 +129,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     count: number;
     recentlyPublishedTitle: string;
     sliderConfig = { slidesToShow: 3, slidesToScroll: 3 };
+    popularCompetencies = [];
+    popularCompetenciesData = [];
+    popularCompetencyMapping = [];
+
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
     }
@@ -206,6 +210,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.custodianOrg = custodianOrg;
                     this.formData = formConfig;
                     if (this.isUserLoggedIn()) {
+                        this.fetchPopularCompetenciesData();
                         // this.defaultFilters = this.cacheService.exists('searchFilters') ? this.getPersistFilters(true) : this.userService.defaultFrameworkFilters;
                         this.defaultFilters = this.userService.defaultFrameworkFilters;
                         this.userProfile = this.userService.userProfile;
@@ -228,6 +233,26 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 }),
                 tap(data => {
                     this.initFilter = true;
+                    // console.log('Channel Data', this.contentSearchService.channelData);
+                    let obj = {};
+                    let tempIndex = 0;
+                    for (let i = 0; i < this.contentSearchService.channelData.length; i++) {
+                        for (let j = 0; j < this.contentSearchService.channelData[i]['terms'].length; j++) {
+                            if (this.contentSearchService.channelData[i]['terms'][j]['associations'] !== undefined) {
+                                // console.log('PPG', this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['identifier']);
+                                let index = this.popularCompetencies.indexOf(this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['identifier']);
+                                if (index != -1) {
+                                    obj['title'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['name'];
+                                    obj['noOfCourses'] = this.popularCompetenciesData[index]['count'];
+                                    obj['icon'] = '/assets/images/course-icon.png';
+                                    obj['type'] = '';
+                                    obj['associatedCoursesTxt'] = 'Associated Courses';
+                                    this.popularCompetencyMapping[tempIndex++] = obj;
+                                }
+                            }
+                        }
+                    }
+                    // console.log('Popular competencies mapping', this.popularCompetencyMapping);
                 }, err => {
                     this.toasterService.error(get(this.resourceService, 'frmelmnts.lbl.fetchingContentFailed'));
                     this.navigationhelperService.goBack();
@@ -286,32 +311,36 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
         });
+    }
 
-        // Popular topics & competencies 
-        let requestData = {"request": {
-                "filters": {
-                    "channel": this.channelId,
-                    "status": [
-                        "Live"
-                    ],
-                    "primaryCategory": [
-                        "Course"
-                    ]
-                },
-                "fields": [
-                    "name"
+    public fetchPopularCompetenciesData() {
+        let requestData = {
+            "filters": {
+                "channel": this.channelId,
+                "status": [
+                    "Live"
                 ],
-                "facets": [
-                    "targetTaxonomyCategory4Ids"
-                ],
-                "sort_by": {
-                    "lastUpdatedOn": "desc"
-                }
-            }};
+                "primaryCategory": [
+                    "Course"
+                ]
+            },
+            "fields": [
+                "name"
+            ],
+            "facets": [
+                "targetTaxonomyCategory3Ids"
+            ],
+            "sort_by": {
+                "lastUpdatedOn": "desc"
+            }
+        };
         this.searchService.compositePopularSearch(requestData).subscribe(res => {
-            // this.courses = res;
-            console.log('Popular data', res);
-        })
+            this.popularCompetenciesData = res['result']['facets'][0]['values'];
+            for (let i = 0; i < this.popularCompetenciesData.length; i++) {
+                this.popularCompetencies[i] = this.popularCompetenciesData[i]['name'];
+            }
+            // console.log('Popular competencies 1', this.popularCompetenciesData);
+        });
     }
 
     public fetchRequestContents() {
@@ -324,21 +353,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.searchRequest) {
             let searchRequest = {
                 "request": {
+                    "fields": [
+                        "name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "contentType", "channel", "organisation", "trackable", "lastPublishedOn"
+                    ],
+                    "facets": [
+                        "taxonomyCategory4Ids"
+                    ],
                     "filters": {
                         "channel": this.channelId,
                         "status": [
                             "Live"
-                        ],
-                        "contentType": [
-                            "Course"
-                        ],
-                        "batches.status": [
-                            1
-                        ],
-                        "batches.enrollmentType": "open",
-
-                        "primaryCategory": [
-                            "Course"
                         ]
                     },
                     "limit": 100,
@@ -347,7 +371,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                 }
             };
-            // const option = { ...this.searchRequest.request };
+
             const option = { ...searchRequest.request };
             const params = { orgdetails: 'orgName,email', framework: this.contentSearchService.frameworkId };
             option['params'] = params;
@@ -365,7 +389,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public getBrowseByData(title: string) {
         if (title.toLowerCase() == "competency") {
-            this.router.navigate(['search/Library', 1]);
+            // this.router.navigate(['search/Library', 1]);
+            this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}`)
         }
     }
 

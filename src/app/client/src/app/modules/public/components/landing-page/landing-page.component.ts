@@ -44,7 +44,7 @@ export class LandingPageComponent implements OnInit {
         "sort_by": {
           "lastPublishedOn": "desc"
         },
-        "fields": ["name","appIcon","mimeType","gradeLevel","identifier","medium","pkgVersion","board","subject","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
+        "fields": ["name","appIcon","posterImage","mimeType","gradeLevel","identifier","medium","pkgVersion","board","subject","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
         "softConstraints": {
           "badgeAssertions": 98,
           "channel": 100

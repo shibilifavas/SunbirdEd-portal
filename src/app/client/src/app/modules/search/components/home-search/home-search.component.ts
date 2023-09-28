@@ -92,6 +92,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.redirectUrl = this.configService.appConfig.courses.searchPageredirectUrl;
     this.sortingOptions = this.configService.dropDownConfig.FILTER.RESOURCES.sortingOptions;
     this.setTelemetryData();
+    this.taxonomyCategories = this.taxonomyService.getTaxonomyCategories();
   }
   ngOnInit() {
     this.isDesktopApp = this.utilService.isDesktopApp;
@@ -132,8 +133,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public getBrowseByData(title : string){
     if(title.toLowerCase() == "competency"){
         let competencyRequestData = {
-            "request": {
-                "filters": {
+               "filters": {
                     "se_boards": [
                         "general nursing midwifery"
                     ],
@@ -179,16 +179,11 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
                     "se_difficultyLevels"
                 ],
                 "facets": [
-                    "se_boards",
-                    "se_gradeLevels",
-                    "se_subjects",
-                    "se_mediums",
-                    "se_difficultyLevels"
+                  ...this.taxonomyCategories
                 ],
                 "offset": 0
-            }
-        };
-        this.learnPageContentService.getBrowseByCompetencyData(competencyRequestData).subscribe(res => {
+            };
+        this.searchService.contentSearch(competencyRequestData).subscribe(res => {
             this.coursesByCompetencies = res["result"];
             console.log("coursesByCompetencies ",this.coursesByCompetencies);
             for(let item of this.coursesByCompetencies.facets){
@@ -295,7 +290,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         filters[key] = el;
       }
     });
-    
+    // alert(filters.visibility);
+    filters.channel = this.queryParams.channel;
     const option = {
       filters: filters,
       fields: _.get(this.allTabData, 'search.fields'),
@@ -304,8 +300,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       offset: (this.paginationDetails.currentPage - 1) * (this.configService.appConfig.SEARCH.PAGE_LIMIT),
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
-      facets: this.globalSearchFacets,
-      params: this.configService.appConfig.Course.contentApiQueryParams,
+      facets: this.taxonomyCategories,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)

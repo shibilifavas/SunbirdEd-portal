@@ -117,6 +117,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   attemptID: any;
   courseEvaluable: any;
   questionSetEvaluable: any;
+  tocList: any = [];
+  selectedContentName: any;
+  parentContentId: any;
+  isSectionVisible: boolean = true;
+
   @HostListener('window:beforeunload')
   canDeactivate() {
     // returning true will navigate without confirmation
@@ -124,11 +129,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     return _.get(this.activeContent, 'mimeType') === 'application/vnd.sunbird.questionset' && !this.showQSExitConfirmation ? false : true;
   }
 
-  navigateToPlayerPage(collectionUnit: {}, event?) {
+  navigateToPlayerPage(collectionUnit:any, event?) {
     this.previousContent = null;
     this.lastActiveContentBeforeModuleChange = this.activeContent;
       const navigationExtras: NavigationExtras = {
-        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name },
+        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name, parent: collectionUnit?.identifier },
         state: { contentStatus: this._routerStateContentStatus }
       };
 
@@ -169,7 +174,9 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.noContentMessage = _.get(this.resourceService, 'messages.stmsg.m0121');
     this.getLanguageChangeEvent();
     this.routerEventsChangeHandler().subscribe();
+    // this.updateCourseContent();
   }
+
   initLayout() {
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.layoutService.switchableLayout().
@@ -214,6 +221,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .subscribe(([params, queryParams]) => {
         this.consumedContents = 0;
         this.totalContents = 0;
+        this.parentContentId = queryParams.parent;
         this.collectionId = params.collectionId;
         this.batchId = queryParams.batchId;
         this.courseId = queryParams.courseId;
@@ -237,7 +245,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               const model = new TreeModel();
               this.treeModel = model.parse(data.courseHierarchy);
               this.parentCourse = data.courseHierarchy;
-              const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, this.collectionId);
+              const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, this.parentContentId);
               this.nextModule = _.get(module, 'next');
               this.prevModule = _.get(module, 'prev');
               this.getCourseCompletionStatus();
@@ -247,6 +255,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               } else {
                 this.courseHierarchy = data.courseHierarchy;
               }
+              this.updateCourseContent();
+              console.log("courseHierarchy",this.courseHierarchy);
               if (!isSingleContent && _.get(this.courseHierarchy, 'mimeType') !==
               this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.collection) {
                 isSingleContent = true;
@@ -267,6 +277,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((data) => {
               this.courseHierarchy = data.result.content;
+              this.updateCourseContent();
               this.layoutService.updateSelectedContentType.emit(this.courseHierarchy.contentType);
               if (this.courseHierarchy.mimeType !== 'application/vnd.ekstep.content-collection') {
                 this.activeContent = this.courseHierarchy;
@@ -326,6 +337,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       this.activeContent = this.courseHierarchy;
       this.initPlayer(_.get(this.activeContent, 'identifier'));
     }
+    this.selectedContentName = this.activeContent.name;
     this.getContentState();
   }
 
@@ -351,6 +363,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.showPlayer = false;
     this.previousContent = _.cloneDeep(this.activeContent);
     this.activeContent = this.navigationObj.event.data;
+    console.log("activeContent", this.activeContent);
+    this.selectedContentName = this.activeContent.name;
     this.initPlayer(_.get(this.activeContent, 'identifier'));
     this.highlightContent();
     this.logTelemetry(this.navigationObj.id, this.navigationObj.event.data);
@@ -955,5 +969,53 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         })
       )
   }
+
+  updateCourseContent() {
+    let content = this.courseConsumptionService.getCourseContent();
+    this.tocList = content;
+    // if(content?.length > 0) {
+    //   if(this.batchId) {
+    //     this.tocList = content;
+    //   } else {
+    //     let filteredContent: any;
+    //     content.forEach((c)=> {
+    //       let body = c.body.find((val) => {
+    //         return val.collectionId == this.parentContentId;
+    //       });
+    //       if(body) {
+    //         c.body = [];
+    //         c.body.push(body);
+    //         filteredContent = c;
+    //       }
+    //     });
+    //     //Below condition should be removed after batch availablity functionality complete
+    //     if(filteredContent) {
+    //       this.tocList.push(filteredContent);
+    //     } else {
+    //       this.tocList = content;
+    //     }
+    //   }
+
+    //   console.log("tocList", this.tocList);
+    // }
+  }
+
+  contentClicked(event: any, id: string) {
+    this.navigationObj = {
+      event: {
+        data: event.content.children,
+      },
+      id: id
+    };
+    const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, event.content.collectionId);
+    this.nextModule = _.get(module, 'next');
+    this.prevModule = _.get(module, 'prev');
+    this.onTocCardClick();
+  }
+
+  hideSection() {
+    this.isSectionVisible = false;
+  }
+
 
 }
