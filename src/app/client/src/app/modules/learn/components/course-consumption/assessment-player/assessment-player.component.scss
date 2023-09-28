@@ -193,6 +193,17 @@
   }
 }
 
+.right-side-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  .close-icon {
+    padding: 0;
+    min-width: 2rem;
+  }
+}
+
 .playerPageContainer{
   margin: 0 24px;
 }

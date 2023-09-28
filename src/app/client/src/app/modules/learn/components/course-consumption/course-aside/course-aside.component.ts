@@ -29,7 +29,7 @@ export class CourseAsideComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes?.params.currentValue) {
+    if(changes?.params?.currentValue) {
       this.batchId = changes.params.currentValue;
     }
   }

@@ -58,8 +58,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
     public navigationhelperService: NavigationHelperService, private router: Router, private userService: UserService,
-    private registerService: RegisterService,
-    private config: ConfigService
+    private registerService: RegisterService, private config: ConfigService
     ) {
   }
 
