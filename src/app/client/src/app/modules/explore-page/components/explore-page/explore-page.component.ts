@@ -354,7 +354,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             let searchRequest = {
                 "request": {
                     "fields": [
-                        "name","appIcon","posterImage","mimeType","identifier","pkgVersion","resourceType","contentType","channel","organisation","trackable","lastPublishedOn"
+                        "name","appIcon","posterImage","mimeType","identifier","pkgVersion","resourceType","contentType","channel","organisation","trackable","lastPublishedOn","Duration"
                     ],
                     "facets": [
                         "taxonomyCategory4Ids"
