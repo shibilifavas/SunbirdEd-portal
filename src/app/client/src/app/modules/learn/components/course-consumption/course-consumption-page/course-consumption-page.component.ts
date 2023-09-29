@@ -318,50 +318,6 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  calculateProgress() {
-    /* istanbul ignore else */
-    if (_.get(this.courseHierarchy, 'children')) {
-      this.courseHierarchy.children.forEach(unit => {
-        if (unit.mimeType === 'application/vnd.ekstep.content-collection') {
-          let consumedContents = [];
-          let flattenDeepContents = [];
-
-          /* istanbul ignore else */
-          if (_.get(unit, 'children.length')) {
-            flattenDeepContents = this.courseConsumptionService.flattenDeep(unit.children).filter(item => item.mimeType !== 'application/vnd.ekstep.content-collection' && item.mimeType !== 'application/vnd.sunbird.question');
-            /* istanbul ignore else */
-            if (this.contentStatus.length) {
-              consumedContents = flattenDeepContents.filter(o => {
-                return this.contentStatus.some(({ contentId, status }) => o.identifier === contentId && status === 2);
-              });
-            }
-          }
-
-          unit.consumedContent = consumedContents.length;
-          unit.contentCount = flattenDeepContents.length;
-          unit.isUnitConsumed = consumedContents.length === flattenDeepContents.length;
-          unit.isUnitConsumptionStart = false;
-
-          if (consumedContents.length) {
-            unit.progress = Math.round((consumedContents.length / flattenDeepContents.length) * 100);
-            unit.isUnitConsumptionStart = true;
-          } else {
-            unit.progress = 0;
-            unit.isUnitConsumptionStart = false;
-          }
-
-        } else {
-          const consumedContent = this.contentStatus.filter(({ contentId, status }) => unit.identifier === contentId && status === 2);
-          unit.consumedContent = consumedContent.length;
-          unit.contentCount = 1;
-          unit.isUnitConsumed = consumedContent.length === 1;
-          unit.progress = consumedContent.length ? 100 : 0;
-          unit.isUnitConsumptionStart = Boolean(consumedContent.length);
-        }
-      });
-    }
-  }
-
 
 
 }
