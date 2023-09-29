@@ -255,6 +255,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       } 
     });
   }
+
   getAllBatchDetails() {
     // this.showCreateBatchBtn = false;
     // this.showBatchList = false;
@@ -277,40 +278,17 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         .subscribe((data: any) => {
           // this.allBatchDetails.emit(_.get(data, 'result.response'));
           if (data.result.response.content && data.result.response.content.length > 0) {
-            this.batchList = data.result.response.content;
+              this.batchList = data.result.response.content;
+              
             } else {
-            this.showBatchList = true;
+              this.showBatchList = true;
           }
         },
         (err:any) => {
          
         });
-     
-  }
-    enrollToCourse(batchId?: any) {
-    const request = {
-      request: {
-        courseId: this.courseHierarchy.courseId,
-        userId: this.userService.userid,
-        batchId: batchId
-      }
-    };
-    this.courseBatchService.enrollToCourse(request).pipe(
-      takeUntil(this.unsubscribe$))
-      .subscribe((data) => {
-        console.log(data);
-        // this.disableSubmitBtn = true;
-        // this.toasterService.success(this.resourceService.messages.smsg.m0036);
-        // this.fetchEnrolledCourseData();
-        // this.telemetryLogEvents(true);
-      }, (err) => {
-        console.log(err);
-        // this.modalVisibility = true;
-        // this.disableSubmitBtn = false;
-        // this.toasterService.error(this.resourceService.messages.emsg.m0001);
-        // this.telemetryLogEvents(false);
-      });
-  }
+}
+   
 
 
   private getContentState() {

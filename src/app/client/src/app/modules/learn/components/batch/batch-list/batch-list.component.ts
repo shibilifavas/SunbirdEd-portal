@@ -19,28 +19,33 @@ export class BatchListComponent implements OnInit {
   }
   
   getEnrollerMembers(){
-    let batchId = this.courseHierarchy.batches[0].batchId;
-    const requestBody = {
-      request: {
-          batch: {
-              "batchId": batchId
-          }
-      }
-    }
-    
-    this.courseBatchService.getParticipantList(requestBody).subscribe((res:any) => {
-     if(res.length>0){
-        res.forEach((id:any) => {
-            this.userSerivce.getUserData(id).subscribe((memResponse:any) => {
-              if(memResponse){
-                let member = memResponse.result.response;
-                member.fullName = member.firstName+' '+member.lastName;
-                member.memberRoles = member.roles.join(',');
-                this.batchList.push(member);
+        let batchId = this.courseHierarchy.batches[0].batchId;
+        const requestBody = {
+          request: {
+              batch: {
+                  "batchId": batchId
               }
+          }
+        }
+      this.courseBatchService.getParticipantList(requestBody).subscribe((res:any) => {
+        if(res.length>0){
+        const requestBody =  {
+              request: {
+                filters: {
+                    userId: [
+                        ...res
+                    ]
+                  }
+              }
+            }
+            this.userSerivce.getEnrolledUsers(requestBody).subscribe((memResponse:any) => {
+                  if(memResponse.length>0){
+                    this.batchList = memResponse.map((mem:any) =>{
+                      mem.fullName = mem.firstName+' '+mem.lastName;
+                    })
+                  }
             })
-        })
-      }
-    })
+        }
+      })
   }
 }

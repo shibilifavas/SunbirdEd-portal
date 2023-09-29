@@ -10,6 +10,7 @@ import TreeModel from 'tree-model';
 import { Router } from '@angular/router';
 import { NavigationHelperService } from '@sunbird/shared';
 import dayjs from 'dayjs';
+import { CourseBatchService } from '../course-batch/course-batch.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class CourseConsumptionService {
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
     private navigationHelperService: NavigationHelperService, private permissionService: PermissionService,
-    private userService: UserService, public generaliselabelService: GeneraliseLabelService) {
+    private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService) {
     }
 
   getCourseHierarchy(courseId, option: any = { params: {} }) {
@@ -301,5 +302,30 @@ getAllOpenBatches(contents) {
   //     this.tocList = [];
   //     this.tocList.push(toc);
   // }
+
+  enrollToCourse(courseHierarchy) {
+    debugger;
+    const request = {
+      request: {
+        courseId: courseHierarchy.identifier,
+        userId: this.userService.userid,
+        batchId: courseHierarchy.batches[0].batchId
+      }
+    };
+    this.courseBatchService.enrollToCourse(request)
+         .subscribe((data) => {
+        console.log(data);
+        // this.disableSubmitBtn = true;
+        // this.toasterService.success(this.resourceService.messages.smsg.m0036);
+        // this.fetchEnrolledCourseData();
+        // this.telemetryLogEvents(true);
+      }, (err) => {
+        console.log(err);
+        // this.modalVisibility = true;
+        // this.disableSubmitBtn = false;
+        // this.toasterService.error(this.resourceService.messages.emsg.m0001);
+        // this.telemetryLogEvents(false);
+      });
+  }
 
 }
