@@ -566,4 +566,15 @@ export class UserService {
   
     return { board: this.defaultBoard, ...userFramework };
   }
+
+  getEnrolledUsers(req:any){
+   const options = {
+      url:this.config.urlConFig.URLS.USER.USER_SEARCH,
+      data: req
+    }
+    return this.publicDataService.post(options).pipe(
+      map((res:any) => {
+      return res.result.response.content;
+    }))
+  }
 }
