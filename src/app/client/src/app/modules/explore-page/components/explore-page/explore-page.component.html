@@ -177,7 +177,7 @@
         <!-- Recently published courses -->
 
         <div *ngIf="enrolledCourses && enrolledCourses.length > 0">
-          <div class="popular-card-title d-flex flex-jc-space-between flex-ai-center mb-32">
+          <div class="popular-card-title d-flex flex-jc-space-between flex-ai-center mt-4rem mb-32">
             {{resourceService?.frmelmnts?.llp?.continueWhereYouLeft}}
             <!--span><button class="com-secondary-btn">Explore</button></span-->
           </div>
@@ -254,7 +254,7 @@
   </div>
 
   <section class="ui container mt-4rem" *ngIf="resourceService?.frmelmnts?.llp?.browseByCardInfo">
-      <p class="browseTitle">{{resourceService?.frmelmnts?.llp?.browseByCardInfo.title}}</p>
+      <p class="browseTitle mb-32">{{resourceService?.frmelmnts?.llp?.browseByCardInfo.title}}</p>
       <div class="cardContainer">
           <browse-by-card
             *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.llp?.browseByCardInfo.cards);"
@@ -264,7 +264,7 @@
           ></browse-by-card>
       </div>
   </section>
-  <div class="ui container mt-32">
+  <div class="ui container mt-4rem">
     <div class="popular-card">
       <div class="popular-card-title">{{resourceService?.frmelmnts?.llp?.topics.title}}</div>
       <!--div><button class="com-secondary-btn">{{topicsData.button}}</button></div-->
@@ -276,13 +276,13 @@
     </div>
   </div>
 
-  <div class="ui container mt-32">
+  <div class="ui container mt-4rem">
     <div class="popular-card">
       <div class="popular-card-title">{{resourceService?.frmelmnts?.llp?.competencies.title}}</div>
       <!--div><button class="com-secondary-btn">{{competencyData.button}}</button></div-->
     </div>
     <div class="ui grid middle aligned stackable">
-      <div class="three wide column" *ngFor="let data of doJsonDecode(resourceService?.frmelmnts?.llp?.competencies.data);let i=index">
+      <div class="three wide column" *ngFor="let data of popularCompetencyMapping;let i=index">
         <sb-popular-card [pillName]="'Competency'" [data]="data"></sb-popular-card>
       </div>
     </div>

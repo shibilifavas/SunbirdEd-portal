@@ -121,6 +121,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   selectedContentName: any;
   parentContentId: any;
   isSectionVisible: boolean = true;
+  completedCount: any = 0;
+  totalCount: any = 0;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -378,6 +380,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((_res) => {
         const res = this.CourseProgressService.getContentProgressState(req, _res);
+        this.completedCount = res.completedCount;
+        this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
         if (_.get(this.activeContent, 'contentType') === 'SelfAssess' && this.isRouterExtrasAvailable) {
