@@ -82,6 +82,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   categoryNames:any=[];
   filterNames: any =[];
   categoryDetails: any = [];
+  facetNames: any =[];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -278,11 +279,23 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     let filters = _.pickBy(this.queryParams, (value: Array<string> | string) => value && value.length);
     filters = this.schemaService.schemaValidator({
       inputObj: filters || {},
-      properties: _.get(this.schemaService.getSchema('content'), 'properties') || {},
-      omitKeys: ['key', 'sort_by', 'sortType', 'appliedFilters', 'selectedTab', 'mediaType', 'contentType', 'description', ...this.taxonomyCategories]
+      // properties: _.get(this.schemaService.getSchema('content'), 'properties') || {},
+      properties: this.categoryNames,
+      omitKeys: ['key', 'sort_by', 'sortType', 'appliedFilters', 'selectedTab', 'mediaType', 'contentType', 'description','framework']
+    });
+    let updatedObject={};
+    this.categoryDetails.forEach(item => {
+      if(item.name in filters){
+        updatedObject = {
+          ...filters // Copy the remaining properties from the original object
+        };
+        updatedObject[item.code] = filters[item.name];
+        delete updatedObject[item.name];
+        filters = updatedObject;
+      }
     });
     filters.primaryCategory = filters.primaryCategory || _.get(this.allTabData, 'search.filters.primaryCategory');
-    filters.mimeType = filters.mimeType || _.get(mimeType, 'values');
+    // filters.mimeType = filters.mimeType || _.get(mimeType, 'values');
 
     const _filters = _.get(this.allTabData, 'search.filters');
     _.forEach(_filters, (el, key) => {
@@ -292,8 +305,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     });
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
-    filters.primaryCategory=["Course"];
-    delete filters.framework;
+    filters.primaryCategory=["Collection","Resource","Content Playlist","Course","Course Assessment","Digital Textbook","eTextbook","Explanation Content","Learning Resource","Lesson Plan Unit","Practice Question Set","Teacher Resource","Textbook Unit","LessonPlan","FocusSpot","Learning Outcome Definition","Curiosity Questions","MarkingSchemeRubric","ExplanationResource","ExperientialResource","Practice Resource","TVLesson","Course Unit"];
     const option = {
       filters: filters,
       fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
@@ -304,7 +316,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
       facets: this.filterNames,
-      params: this.configService.appConfig.Course.contentApiQueryParams,
+      // params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
@@ -384,6 +396,23 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           })
         });
+        // this.categoryDetails.forEach((cat) => {
+        //   this.facets.forEach((c:any)=> {
+        //     if(cat.name == c.name){
+        //       let values:any = [];
+        //       cat.terms.forEach((term: any) => {
+        //         values.push(term.name);
+        //       });
+        //       c.values = [...values]
+        //     }
+        //   })
+        // });
+        let filterSelected:boolean = false;
+        this.categoryNames.forEach(cat => {
+          if((cat in this.queryParams) && this.queryParams[cat].length>0)
+          filterSelected=true;
+        });
+        if(!filterSelected){this.facetNames=[...this.facets];}
         this.facetsList = this.searchService.processFilterData(_.get(data, 'result.facets'));
         this.paginationDetails = this.paginationService.getPager(data.result.count, this.paginationDetails.currentPage,
           this.configService.appConfig.SEARCH.PAGE_LIMIT);
