@@ -282,7 +282,7 @@
       <!--div><button class="com-secondary-btn">{{competencyData.button}}</button></div-->
     </div>
     <div class="ui grid middle aligned stackable">
-      <div class="three wide column" *ngFor="let data of doJsonDecode(resourceService?.frmelmnts?.llp?.competencies.data);let i=index">
+      <div class="three wide column" *ngFor="let data of popularCompetencyMapping;let i=index">
         <sb-popular-card [pillName]="'Competency'" [data]="data"></sb-popular-card>
       </div>
     </div>

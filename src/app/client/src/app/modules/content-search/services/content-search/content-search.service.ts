@@ -35,6 +35,7 @@ export class ContentSearchService {
     return this._searchResults$.asObservable()
       .pipe(skipWhile(data => data === undefined || data === null));
   }
+  channelData:any;
 
   constructor(private frameworkService: FrameworkService, private channelService: ChannelService, @Inject(TaxonomyService) private taxonomyService: TaxonomyService) { }
 
@@ -72,6 +73,8 @@ export class ContentSearchService {
       }), map(frameworkDetails => {
 
         const frameworkCategories: any[] = _.get(frameworkDetails, 'result.framework.categories');
+        this.channelData = frameworkCategories;
+        // console.log('frameworkCategories', frameworkCategories);
         frameworkCategories.forEach(category => {
           if ([this.taxonomyCategories[1], this.taxonomyCategories[2], this.taxonomyCategories[3]].includes(category.code)) {
             this._filters[category.code] = category.terms || [];
