@@ -354,7 +354,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             let searchRequest = {
                 "request": {
                     "fields": [
-                        "name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "contentType", "channel", "organisation", "trackable", "lastPublishedOn"
+                        "name","appIcon","posterImage","mimeType","identifier","pkgVersion","resourceType","contentType","channel","organisation","trackable","lastPublishedOn","Duration"
                     ],
                     "facets": [
                         "taxonomyCategory4Ids"
@@ -390,7 +390,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public getBrowseByData(title: string) {
         if (title.toLowerCase() == "competency") {
             // this.router.navigate(['search/Library', 1]);
-            this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}`)
+            this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
     }
 
