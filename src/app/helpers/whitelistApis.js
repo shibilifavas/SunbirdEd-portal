@@ -2065,7 +2065,8 @@ const API_LIST = {
     '/assessment/users/mlcore/v1/solutions/:id',
     '/api/questionset/v2/retire/:QuestionSet_Id',
     '/action/question/v2/list',
-    '/learner/course/v1/enrol'
+    '/learner/course/v1/enrol',
+    '/learner/course/v1/batch/participants/list'
   ]
 };
 module.exports = API_LIST;
