@@ -307,7 +307,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
-        // const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
+        const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
         // this.progressToDisplay = Math.floor((_parsedResponse.completedCount / this.courseHierarchy.leafNodesCount) * 100);
         // this.contentStatus = _parsedResponse.content || [];
         // this._routerStateContentStatus = _parsedResponse;
