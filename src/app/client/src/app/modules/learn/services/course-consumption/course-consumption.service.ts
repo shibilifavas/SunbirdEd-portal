@@ -202,7 +202,7 @@ getAllOpenBatches(contents) {
         let toc = {
                header:{
                  title:resource.name,
-                 progress:75,
+                 progress: 0,
                  // totalDuration:'00m'
                },
                body: []
@@ -244,7 +244,9 @@ getAllOpenBatches(contents) {
             })
           }
         })
-        toc.header['progress'] = this.calculateProgress(count, courseProgress);
+        if(count > 0) {
+          toc.header['progress'] = this.calculateProgress(count, courseProgress);
+        }
       })
     }
     console.log("updated toc list here", this.tocList);
