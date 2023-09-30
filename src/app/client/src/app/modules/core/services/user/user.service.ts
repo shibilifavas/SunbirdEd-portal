@@ -572,7 +572,7 @@ export class UserService {
       url:this.config.urlConFig.URLS.USER.USER_SEARCH,
       data: req
     }
-    return this.publicDataService.post(options).pipe(
+    return this.learnerService.post(options).pipe(
       map((res:any) => {
       return res.result.response.content;
     }))

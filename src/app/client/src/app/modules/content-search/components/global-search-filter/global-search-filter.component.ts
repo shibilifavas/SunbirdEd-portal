@@ -29,7 +29,7 @@ import { TaxonomyService } from '../../../../service/taxonomy.service';
 export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() facets;
   @Input() queryParamsToOmit;
-  @Input() supportedFilterAttributes = ['se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'primaryCategory', 'mediaType', 'additionalCategories', 'channel'];
+  @Input() supportedFilterAttributes = ['Positions','Roles','Activities','Competencies'];
   public filterLayout = LibraryFiltersLayout;
   public selectedMediaTypeIndex = 0;
   public selectedMediaType: string;
@@ -299,7 +299,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
       queryParams: {
         ...(() => {
           const queryParams = _.cloneDeep(this.activatedRoute.snapshot.queryParams);
-          const queryFilters = [...this.supportedFilterAttributes, ...[this.taxonomyCategories[0], this.taxonomyCategories[1], this.taxonomyCategories[2], 'channel']];
+          const queryFilters = [...this.supportedFilterAttributes, ...['channel']];
           queryFilters.forEach((attr) => delete queryParams[attr]);
           return queryParams;
         })()

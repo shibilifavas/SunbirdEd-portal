@@ -113,7 +113,7 @@ export class CourseBatchService {
       url: this.configService.urlConFig.URLS.COURSE.ENROLL_USER_COURSE,
       data: data
     };
-    return this.publicService.post(options);
+    return this.learnerService.post(options);
   }
   unenrollFromCourse(data) {
     const options = {
