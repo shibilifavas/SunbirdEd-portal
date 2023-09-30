@@ -21,7 +21,7 @@ export class CourseAsideComponent implements OnInit {
   parentId: any;
   batchId: any;
 
-  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService) { }
+  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService, private userService: UserService) { }
 
   ngOnInit(): void {
     const firstModule = this.courseConsumptionService.getCourseContent()[0];
@@ -37,7 +37,9 @@ export class CourseAsideComponent implements OnInit {
 
   navigate() {
     // this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier]);
-   this.courseConsumptionService.enrollToCourse(this.courseHierarchy);
+    if(!this.courseConsumptionService.isUserExistInBatch()){
+      this.courseConsumptionService.enrollToCourse(this.courseHierarchy);
+    }
     this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
     { 
       queryParams: { 
