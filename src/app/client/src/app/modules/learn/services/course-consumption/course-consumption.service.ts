@@ -1,5 +1,5 @@
 
-import { of as observableOf } from 'rxjs';
+import { of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { PlayerService, PermissionService, UserService, GeneraliseLabelService } from '@sunbird/core';
@@ -26,6 +26,7 @@ export class CourseConsumptionService {
   coursePagePreviousUrl: any;
   userCreatedAnyBatch = new EventEmitter<boolean>();
   tocList: any = [];
+  private batchList;
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -315,17 +316,20 @@ getAllOpenBatches(contents) {
     this.courseBatchService.enrollToCourse(request)
          .subscribe((data) => {
         console.log(data);
-        // this.disableSubmitBtn = true;
-        // this.toasterService.success(this.resourceService.messages.smsg.m0036);
-        // this.fetchEnrolledCourseData();
-        // this.telemetryLogEvents(true);
       }, (err) => {
         console.log(err);
-        // this.modalVisibility = true;
-        // this.disableSubmitBtn = false;
-        // this.toasterService.error(this.resourceService.messages.emsg.m0001);
-        // this.telemetryLogEvents(false);
       });
   }
 
+  setBatchList(list) {
+    this.batchList = list;
+  }
+
+  getBatchList() {
+   return this.batchList;
+  }
+
+  isUserExistInBatch(){
+    return this.batchList.includes(this.userService.userid);
+  }
 }
