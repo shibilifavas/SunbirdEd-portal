@@ -1917,7 +1917,7 @@ const API_LIST = {
     "/keycloak/login": {
       checksNeeded: []
     },
-    "/user/v1/search": {
+    "/learner/user/v1/search": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     }
@@ -2071,7 +2071,7 @@ const API_LIST = {
     '/action/question/v2/list',
     '/learner/course/v1/enrol',
     '/learner/course/v1/batch/participants/list',
-    '/user/v1/search'
+    '/learner/user/v1/search'
   ]
 };
 module.exports = API_LIST;
