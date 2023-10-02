@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoursesService, UserService } from '@sunbird/core';
-import { CourseBatchService } from './../../../services';
+import { CourseBatchService, CourseConsumptionService } from './../../../services';
 
 @Component({
   selector: 'app-batch-list',
@@ -12,7 +12,8 @@ export class BatchListComponent implements OnInit {
   @Input() configContent:any;
   batchList = [];
   
-  constructor(private courseBatchService: CourseBatchService, private courseService: CoursesService, private userSerivce: UserService) { }
+  constructor(private courseBatchService: CourseBatchService, private courseService: CoursesService,
+    private courseConsumptionService : CourseConsumptionService, private userSerivce: UserService) { }
 
   ngOnInit(): void {
    this.getEnrollerMembers();
@@ -29,6 +30,7 @@ export class BatchListComponent implements OnInit {
         }
       this.courseBatchService.getParticipantList(requestBody).subscribe((res:any) => {
         if(res.length>0){
+          this.courseConsumptionService.setBatchList(res);
         const requestBody =  {
               request: {
                 filters: {
@@ -42,6 +44,7 @@ export class BatchListComponent implements OnInit {
                   if(memResponse.length>0){
                     this.batchList = memResponse.map((mem:any) =>{
                       mem.fullName = mem.firstName+' '+mem.lastName;
+                      return mem;
                     })
                   }
             })

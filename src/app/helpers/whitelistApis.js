@@ -418,7 +418,7 @@ const API_LIST = {
     },
     '/learner/course/v1/batch/participants/list': {
       checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.COURSE_MENTOR]
+      ROLE_CHECK: [ROLE.PUBLIC]
     },
     '/learner/course/v1/batch/list': {
       checksNeeded: ['ROLE_CHECK'],
@@ -1916,6 +1916,10 @@ const API_LIST = {
     },
     "/keycloak/login": {
       checksNeeded: []
+    },
+    "/learner/user/v1/search": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     }
   },
   URL_PATTERN: [
@@ -2065,7 +2069,9 @@ const API_LIST = {
     '/assessment/users/mlcore/v1/solutions/:id',
     '/api/questionset/v2/retire/:QuestionSet_Id',
     '/action/question/v2/list',
-    '/learner/course/v1/enrol'
+    '/learner/course/v1/enrol',
+    '/learner/course/v1/batch/participants/list',
+    '/learner/user/v1/search'
   ]
 };
 module.exports = API_LIST;
