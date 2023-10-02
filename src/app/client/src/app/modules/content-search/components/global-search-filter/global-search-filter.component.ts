@@ -29,7 +29,7 @@ import { TaxonomyService } from '../../../../service/taxonomy.service';
 export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() facets;
   @Input() queryParamsToOmit;
-  @Input() supportedFilterAttributes = ['Positions','Roles','Activities','Competencies'];
+  @Input() supportedFilterAttributes = [];
   public filterLayout = LibraryFiltersLayout;
   public selectedMediaTypeIndex = 0;
   public selectedMediaType: string;
