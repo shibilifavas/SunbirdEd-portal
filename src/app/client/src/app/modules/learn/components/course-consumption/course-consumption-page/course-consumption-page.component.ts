@@ -1,14 +1,15 @@
 import { combineLatest, Subject, throwError, BehaviorSubject } from 'rxjs';
 import { map, mergeMap, first, takeUntil, delay, switchMap } from 'rxjs/operators';
 import { ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService } from '@sunbird/shared';
-import { CourseConsumptionService, CourseBatchService } from './../../../services';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CourseConsumptionService, CourseBatchService, CourseProgressService } from './../../../services';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash-es';
 import { CoursesService, PermissionService, GeneraliseLabelService, UserService } from '@sunbird/core';
 import dayjs from 'dayjs';
 import { GroupsService } from '../../../../groups/services/groups/groups.service';
-import { CoursePageContentService } from "../../../services/course-page-content.service"
+import { CoursePageContentService } from "../../../services/course-page-content.service";
+import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 
 @Component({
   templateUrl: './course-consumption-page.component.html',
@@ -24,6 +25,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   public enrolledBatchInfo: any;
   public groupId: string;
   public showAddGroup = null;
+  public contentIds = [];
+  public contentStatus = [];
   layoutConfiguration;
   showBatchInfo: boolean;
   courseTabs: any;
@@ -36,6 +39,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   configContent: any;
   tocList = [];
   queryParams: any = {};
+  progressToDisplay = 0;
+  _routerStateContentStatus: any;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -43,7 +48,9 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     private resourceService: ResourceService, public router: Router, private groupsService: GroupsService,
     public navigationHelperService: NavigationHelperService, public permissionService: PermissionService,
     public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
-    public coursePageContentService: CoursePageContentService, private userService: UserService) {
+    public coursePageContentService: CoursePageContentService, private userService: UserService,
+    @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
+    private courseProgressService: CourseProgressService,) {
   }
   ngOnInit() {
     this.initLayout();
@@ -51,8 +58,10 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .subscribe(({ courseHierarchy, enrolledBatchDetails }: any) => {
         this.enrolledBatchInfo = enrolledBatchDetails;
         this.courseHierarchy = courseHierarchy;
+        this.contentIds = this.courseConsumptionService.parseChildren(this.courseHierarchy);
         this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
         this.layoutService.updateSelectedContentType.emit(courseHierarchy.contentType);
+        this.getContentState();
         this.getGeneraliseResourceBundle();
         this.checkCourseStatus(courseHierarchy);
         this.updateBreadCrumbs();
@@ -217,6 +226,17 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     console.log('Add to wish list');
   }
 
+  // updateCourseContent(hierarchy?: any) {
+  //   if(hierarchy) {
+  //     this.tocList = this.courseConsumptionService.getCourseContent(hierarchy);
+  //   } else {
+  //     if(this.courseConsumptionService.getCourseContent()?.length > 0) {
+  //       this.tocList = this.courseConsumptionService.getCourseContent();
+  //     }
+  //   }
+  //   console.log("tocList here",this.tocList);
+  // }
+
   updateCourseContent() {
     if(this.courseConsumptionService.getCourseContent()?.length > 0) {
       this.tocList = this.courseConsumptionService.getCourseContent();
@@ -235,6 +255,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       } 
     });
   }
+
   getAllBatchDetails() {
     // this.showCreateBatchBtn = false;
     // this.showBatchList = false;
@@ -257,39 +278,46 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         .subscribe((data: any) => {
           // this.allBatchDetails.emit(_.get(data, 'result.response'));
           if (data.result.response.content && data.result.response.content.length > 0) {
-            this.batchList = data.result.response.content;
+              this.batchList = data.result.response.content;
+              
             } else {
-            this.showBatchList = true;
+              this.showBatchList = true;
           }
         },
         (err:any) => {
          
         });
-     
-  }
-    enrollToCourse(batchId?: any) {
-    const request = {
-      request: {
-        courseId: this.courseHierarchy.courseId,
-        userId: this.userService.userid,
-        batchId: batchId
-      }
+}
+   
+
+
+  private getContentState() {
+    const fieldsArray: Array<string> = ['progress', 'score'];
+    const req: any = {
+      userId: this.userService.userid,
+      courseId: this.courseId,
+      contentIds: this.contentIds,
+      batchId: this.batchId,
+      fields: fieldsArray
     };
-    this.courseBatchService.enrollToCourse(request).pipe(
-      takeUntil(this.unsubscribe$))
-      .subscribe((data) => {
-        console.log(data);
-        // this.disableSubmitBtn = true;
-        // this.toasterService.success(this.resourceService.messages.smsg.m0036);
-        // this.fetchEnrolledCourseData();
-        // this.telemetryLogEvents(true);
-      }, (err) => {
-        console.log(err);
-        // this.modalVisibility = true;
-        // this.disableSubmitBtn = false;
-        // this.toasterService.error(this.resourceService.messages.emsg.m0001);
-        // this.telemetryLogEvents(false);
+
+    console.log("payload", req);
+    this.CsCourseService
+      .getContentState(req, { apiPath: '/content/course/v1' })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
+        // const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
+        // this.progressToDisplay = Math.floor((_parsedResponse.completedCount / this.courseHierarchy.leafNodesCount) * 100);
+        // this.contentStatus = _parsedResponse.content || [];
+        // this._routerStateContentStatus = _parsedResponse;
+        // this.calculateProgress();
+        // this.updateCourseContent(this.courseHierarchy);
+      }, error => {
+        console.log('Content state read CSL API failed ', error);
       });
   }
+
+
 
 }

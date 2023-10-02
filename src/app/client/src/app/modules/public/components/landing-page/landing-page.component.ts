@@ -36,21 +36,14 @@ export class LandingPageComponent implements OnInit {
     let requestData = {
       "request": {
         "filters": {
-          "channel": "0138193046778920963",
-          "primaryCategory": ["Collection","Resource","Content Playlist","Course","Course Assessment","Digital Textbook","eTextbook","Explanation Content","Learning Resource","Lesson Plan Unit","Practice Question Set","Teacher Resource","Textbook Unit","LessonPlan","FocusSpot","Learning Outcome Definition","Curiosity Questions","MarkingSchemeRubric","ExplanationResource","ExperientialResource","Practice Resource","TVLesson","Course Unit"],
+          "primaryCategory": ["Course"],
           "visibility": ["Default","Parent"]
         },
-        "limit": 100,
+        "limit": 12,
         "sort_by": {
           "lastPublishedOn": "desc"
         },
-        "fields": ["name","appIcon","posterImage","mimeType","gradeLevel","identifier","medium","pkgVersion","board","subject","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
-        "softConstraints": {
-          "badgeAssertions": 98,
-          "channel": 100
-        },
-        "mode": "soft",
-        "facets": ["se_boards","se_gradeLevels","se_subjects","se_mediums","primaryCategory"],
+        "fields": ["name","appIcon","posterImage","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable","Duration"],
         "offset": 0
       }
     };

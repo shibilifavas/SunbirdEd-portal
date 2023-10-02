@@ -48,8 +48,8 @@
             </div>
             <div class="d-flex flex-ai-center w-50 flex-jc-flex-end">
               <div class="w-50 text-right sb-color-gray-200">Your progress <span
-                  class="sb-color-gray-800 font-weight-bold">2 of 4 completed</span></div>
-              <div class="w-20 text-right sb-color-gray-200 d-flex w-100 flex-jc-flex-end flex-ai-center"><mat-icon
+                  class="sb-color-gray-800 font-weight-bold">{{completedCount}} of {{totalCount}} completed</span></div>
+              <div class="w-20 text-right sb-color-gray-200 d-flex w-100 flex-jc-flex-end flex-ai-center d-none"><mat-icon
                   class="mr-4">chat</mat-icon>Make notes</div>
             </div>
           </div>
@@ -287,5 +287,5 @@
 <!-- End - Modal for Assessment attempts -->
 
 <!--Rating popup -->
-<app-content-rating *ngIf="contentRatingModal && playerConfig" [contentData]="playerConfig.metadata"
-  (closeModal)="onRatingPopupClose()"></app-content-rating>
+<!-- <app-content-rating *ngIf="contentRatingModal && playerConfig" [contentData]="playerConfig.metadata"
+  (closeModal)="onRatingPopupClose()"></app-content-rating> -->

@@ -327,7 +327,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
       facets: this.categoryCodes,
-      // params: this.configService.appConfig.Course.contentApiQueryParams,
+      params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
     this.searchService.contentSearch(option)
