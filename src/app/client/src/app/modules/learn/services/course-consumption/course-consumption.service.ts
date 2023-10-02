@@ -255,8 +255,19 @@ getAllOpenBatches(contents) {
   }
 
   bestScore(response: any) {
-    if(response?.bestScore) {
+    if(response?.bestScore && response?.bestScore?.totalMaxScore !== 0) {
       return response.bestScore?.totalScore + '/' + response.bestScore?.totalMaxScore;
+    } else if(response?.bestScore && response?.bestScore?.totalMaxScore == 0) {
+      let totalMaxScore = response?.score.reduce(function(a,b) {
+        if (!a) {
+              return b;
+        }    
+        if(a.totalMaxScore < b.totalMaxScore) {
+            return b
+        }
+        return a;
+      }, undefined).totalMaxScore;
+    return response.bestScore?.totalScore + '/' + totalMaxScore;
     }
     return null
   }
