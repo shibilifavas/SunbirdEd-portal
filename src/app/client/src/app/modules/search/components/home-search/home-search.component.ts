@@ -651,15 +651,16 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /* istanbul ignore next */
   public handleFilterChange(filters) {
     const filterData = filters && filters.filters || {};
+    this.selectedFilters = filterData;
     if (filterData.channel && this.facets) {
       const channelIds = [];
-      const facetsData = _.find(this.facets, { 'name': 'channel' });
-      _.forEach(filterData.channel, (value, index) => {
-        const data = _.find(facetsData.values, { 'identifier': value });
-        if (data) {
-          channelIds.push(data.name);
-        }
-      });
+      // const facetsData = _.find(this.facets, { 'name': 'channel' });
+      // _.forEach(filterData.channel, (value, index) => {
+      //   const data = _.find(facetsData.values, { 'identifier': value });
+      //   if (data) {
+      //     channelIds.push(data.name);
+      //   }
+      // });
       if (channelIds && Array.isArray(channelIds) && channelIds.length > 0) {
         filterData.channel = channelIds;
       }
