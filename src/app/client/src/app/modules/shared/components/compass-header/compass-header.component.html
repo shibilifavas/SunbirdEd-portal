@@ -27,7 +27,7 @@
           <div class="ui center search-container" *ngIf="userService.loggedIn">
             <div class="ui input">
               <i class="search icon search-icon"></i>
-              <input type="text" id="header-search" name="search" [(ngModel)]="searchText" (keyup.enter)="searchCourses(searchText)" placeholder="Search">
+              <input type="text" id="header-search" name="search" [(ngModel)]="searchText" (keyup.enter)="searchCourses(searchText)" placeholder={{resourceService.frmelmnts?.prmpt?.search}}>
             </div>
           </div>
         </div>

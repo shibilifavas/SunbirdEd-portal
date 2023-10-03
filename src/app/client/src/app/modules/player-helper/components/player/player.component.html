@@ -61,6 +61,6 @@
 </div>
 
     <!--Rating popup -->
-<app-content-rating #modal *ngIf="contentRatingModal && playerConfig"
-    [contentData]="playerConfig.metadata" (closeModal)="closeModal()"></app-content-rating>
+<!-- <app-content-rating #modal *ngIf="contentRatingModal && playerConfig"
+    [contentData]="playerConfig.metadata" (closeModal)="closeModal()"></app-content-rating> -->
 <button *ngIf="playerType !== 'quml-player'" class="sb-btn sb-btn-primary sb-btn-normal pull-right view-fullscreen"[ngClass]="{'d-none': !viewFullscreenBtn}" tabindex="0" (click)="viewInFullscreen()" appTelemetryInteract [telemetryInteractEdata]="viewFullScreenIntractEdata" [telemetryInteractObject]="viewFullScreenIntractObject"> <i class="expand icon"></i> View Full Screen</button>

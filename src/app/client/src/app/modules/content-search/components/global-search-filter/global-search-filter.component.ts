@@ -29,7 +29,7 @@ import { TaxonomyService } from '../../../../service/taxonomy.service';
 export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() facets;
   @Input() queryParamsToOmit;
-  @Input() supportedFilterAttributes = ['se_boards', 'se_mediums', 'se_gradeLevels', 'se_subjects', 'primaryCategory', 'mediaType', 'additionalCategories', 'channel'];
+  @Input() supportedFilterAttributes = [];
   public filterLayout = LibraryFiltersLayout;
   public selectedMediaTypeIndex = 0;
   public selectedMediaType: string;
@@ -219,13 +219,13 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
   public updateRoute() {
     let queryFilters = _.get(this.activatedRoute, 'snapshot.queryParams');
     if (this?.selectedFilters?.channel) {
-      const channelIds = [];
+      // const channelIds = [];
       const facetsData = _.find(this.facets, {'name': 'channel'});
-      _.forEach(this.selectedFilters.channel, (value, index) => {
-        const data = _.find(facetsData.values, {'name': value});
-        channelIds.push(data.identifier);
-      });
-      this.selectedFilters.channel = channelIds;
+      // _.forEach(this.selectedFilters.channel, (value, index) => {
+      //   const data = _.find(facetsData.values, {'name': value});
+      //   channelIds.push(data.identifier);
+      // });
+      // this.selectedFilters.channel = channelIds;
     }
     if(this?.utilService?.isDesktopApp && queryFilters?.selectedTab === 'mydownloads' && this.isConnected) {
       this.queryParamsToOmit = this.queryParamsToOmit && this.queryParamsToOmit.length ? this.queryParamsToOmit.push('key') : ['key']
@@ -299,7 +299,7 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
       queryParams: {
         ...(() => {
           const queryParams = _.cloneDeep(this.activatedRoute.snapshot.queryParams);
-          const queryFilters = [...this.supportedFilterAttributes, ...[this.taxonomyCategories[0], this.taxonomyCategories[1], this.taxonomyCategories[2], 'channel']];
+          const queryFilters = [...this.supportedFilterAttributes, ...['channel']];
           queryFilters.forEach((attr) => delete queryParams[attr]);
           return queryParams;
         })()

@@ -1,5 +1,5 @@
 
-import { of as observableOf } from 'rxjs';
+import { of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { PlayerService, PermissionService, UserService, GeneraliseLabelService } from '@sunbird/core';
@@ -10,6 +10,7 @@ import TreeModel from 'tree-model';
 import { Router } from '@angular/router';
 import { NavigationHelperService } from '@sunbird/shared';
 import dayjs from 'dayjs';
+import { CourseBatchService } from '../course-batch/course-batch.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +26,12 @@ export class CourseConsumptionService {
   coursePagePreviousUrl: any;
   userCreatedAnyBatch = new EventEmitter<boolean>();
   tocList: any = [];
+  private batchList = [];
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
     private navigationHelperService: NavigationHelperService, private permissionService: PermissionService,
-    private userService: UserService, public generaliselabelService: GeneraliseLabelService) {
+    private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService) {
     }
 
   getCourseHierarchy(courseId, option: any = { params: {} }) {
@@ -200,7 +202,7 @@ getAllOpenBatches(contents) {
         let toc = {
                header:{
                  title:resource.name,
-                 progress:75,
+                 progress: 0,
                  // totalDuration:'00m'
                },
                body: []
@@ -220,5 +222,127 @@ getAllOpenBatches(contents) {
     }
     return this.tocList;
   }
+  
+  attachProgresstoContent(response:any) {
+    if(this.tocList.length > 0) {
+      this.tocList.forEach((toc: any) => {
+        let count = 0;
+        let courseProgress = [];
+        toc.body.forEach((body: any) => {
+          if(response?.length > 0) {
+            response.filter((res: any) => {
+              if(body.selectedContent == res.contentId) {
+                // toc.header['progress-content'] = res;
+                // toc.header['progress'] = res.progress;
+                let bestScore = this.bestScore(res);
+                if(bestScore) {
+                  body['bestScore'] = bestScore;
+                }
+                ++count;
+                courseProgress.push(res.progress);
+              }
+            })
+          }
+        })
+        if(count > 0) {
+          toc.header['progress'] = this.calculateProgress(count, courseProgress);
+        }
+      })
+    }
+    console.log("updated toc list here", this.tocList);
 
+    return this.tocList;
+  }
+
+  bestScore(response: any) {
+    if(response?.bestScore && response?.bestScore?.totalMaxScore !== 0) {
+      return response.bestScore?.totalScore + '/' + response.bestScore?.totalMaxScore;
+    } else if(response?.bestScore && response?.bestScore?.totalMaxScore == 0) {
+      let totalMaxScore = response?.score.reduce(function(a,b) {
+        if (!a) {
+              return b;
+        }    
+        if(a.totalMaxScore < b.totalMaxScore) {
+            return b
+        }
+        return a;
+      }, undefined).totalMaxScore;
+    return response.bestScore?.totalScore + '/' + totalMaxScore;
+    }
+    return null
+  }
+
+  calculateProgress(totalCount: number, allCounts:any[]) {
+    let sum = 0;
+    for(let i=0; i< allCounts.length; i++) {
+      sum = sum + allCounts[i];
+    }
+    return sum / totalCount;
+  }
+
+
+  // getCourseContent(hierarchy?: any) {
+  //   if(hierarchy) {
+  //     hierarchy?.children?.forEach((resource:any) => {
+  //       this.addContent(resource);
+  //      });
+  //   } else {
+  //     this.courseHierarchy.children?.forEach((resource:any) => {
+  //       this.addContent(resource);
+  //      });
+  //   }
+  //   return this.tocList;
+  // }
+
+  // addContent(resource: any) {
+  //     let toc = {
+  //       header:{
+  //         title:resource.name,
+  //         progress:75,
+  //         // totalDuration:'00m'
+  //       },
+  //       body: []
+  //     }
+  //     toc.body = resource.children?.map((c:any) => {
+  //       return {
+  //         name:c.name,
+  //         mimeType:c.mimeType,
+  //         // duration:'00m',
+  //         selectedContent: c.identifier,
+  //         children: c,
+  //         collectionId: c.parent
+  //       }
+  //     });
+  //     this.tocList = [];
+  //     this.tocList.push(toc);
+  // }
+
+  enrollToCourse(courseHierarchy) {
+    debugger;
+    const request = {
+      request: {
+        courseId: courseHierarchy.identifier,
+        userId: this.userService.userid,
+        batchId: courseHierarchy.batches[0].batchId
+      }
+    };
+    this.courseBatchService.enrollToCourse(request)
+         .subscribe((data) => {
+        console.log(data);
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+  setBatchList(list) {
+    this.batchList = list;
+  }
+
+  getBatchList() {
+   return this.batchList;
+  }
+
+  isUserExistInBatch(){
+    return this.batchList.includes(this.userService.userid);
+  }
 }

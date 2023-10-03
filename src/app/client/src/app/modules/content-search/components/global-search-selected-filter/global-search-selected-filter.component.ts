@@ -30,6 +30,7 @@ export class GlobalSearchSelectedFilterComponent implements OnInit {
   }
 
   removeFilterSelection(data) {
+    this.queryParamsToOmit = data;
     _.map(this.selectedFilters, (value, key) => {
       if (this.selectedFilters[data.type] && !_.isEmpty(this.selectedFilters[data.type])) {
         _.remove(value, (n) => {
@@ -46,18 +47,19 @@ export class GlobalSearchSelectedFilterComponent implements OnInit {
     let queryFilters = _.get(this.activatedRoute, 'snapshot.queryParams');
     if (this?.selectedFilters?.channel) {
       const channelIds = [];
-      const facetsData = _.find(this.facets, {'name': 'channel'});
-      _.forEach(this.selectedFilters.channel, (value, index) => {
-        const data = _.find(facetsData.values, {'name': value});
-        channelIds.push(data.identifier);
-      });
-      this.selectedFilters.channel = channelIds;
+      // const facetsData = _.find(this.facets, {'name': 'channel'});
+      // _.forEach(this.selectedFilters.channel, (value, index) => {
+      //   const data = _.find(facetsData.values, {'name': value});
+      //   channelIds.push(data.identifier);
+      // });
+      // this.selectedFilters.channel = channelIds;
     }
     if (!_.get(this.selectedFilters, 'selectedTab') && _.get(queryFilters, 'selectedTab')) {
       this.selectedFilters['selectedTab'] = _.get(queryFilters, 'selectedTab');
     }
     if (this.queryParamsToOmit) {
-      queryFilters = _.omit(_.get(this.activatedRoute, 'snapshot.queryParams'), this.queryParamsToOmit);
+      // queryFilters = _.omit(_.get(this.activatedRoute, 'snapshot.queryParams'), this.queryParamsToOmit);
+      queryFilters = _.omit(queryFilters, [this.queryParamsToOmit.type]);
     }
     queryFilters = {...queryFilters, ...this.selectedFilters};
     this.router.navigate([], {

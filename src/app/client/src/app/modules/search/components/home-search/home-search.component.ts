@@ -80,8 +80,9 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   public coursesByCompetencies:any = {}
   taxonomyCategories:any = [];
   categoryNames:any=[];
-  filterNames: any =[];
+  categoryCodes: any =[];
   categoryDetails: any = [];
+  facetNames: any =[];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -133,15 +134,23 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkForBack();
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
-        console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
+        // console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
   }
 
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
         this.categoryDetails = [...res.result.framework.categories];
+        const facetList: any =  res.result.framework.categories.map(category => {
+          const val = category.terms.map(term => ({ name: term.name }));
+          return {
+            name: category.name,
+            values: val,
+          };
+        });
+        this.facets = [...facetList];
         this.categoryNames=res.result.framework.categories.map(cat => cat.name);
-        this.filterNames=res.result.framework.categories.map(cat => cat.code);
+         this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
         this.fetchContentOnParamChange();
       });
   }
@@ -248,6 +257,9 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       this.FIRST_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
       this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(1, null, COLUMN_TYPE.fullLayout);
     }
+    if (this.activatedRoute.snapshot.queryParams.hideFilter == 'true') {
+      this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
+    }
   }
   private fetchContentOnParamChange() {
     combineLatest(this.activatedRoute.params, this.activatedRoute.queryParams, this.schemaService.fetchSchemas())
@@ -279,11 +291,26 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     let filters = _.pickBy(this.queryParams, (value: Array<string> | string) => value && value.length);
     filters = this.schemaService.schemaValidator({
       inputObj: filters || {},
-      properties: _.get(this.schemaService.getSchema('content'), 'properties') || {},
-      omitKeys: ['key', 'sort_by', 'sortType', 'appliedFilters', 'selectedTab', 'mediaType', 'contentType', 'description', ...this.taxonomyCategories]
+      // properties: _.get(this.schemaService.getSchema('content'), 'properties') || {},
+      properties: this.categoryNames,
+      omitKeys: ['key', 'sort_by', 'sortType', 'appliedFilters', 'selectedTab', 'mediaType', 'contentType', 'description','framework']
+    });
+    let updatedObject={};
+    this.categoryDetails.forEach(item => {
+      if(item.name in filters){
+        updatedObject = {...filters };
+        item.terms.forEach((term: any, index)=>{
+          if(term.name == updatedObject[item.name]){
+            const newId = `target${item.code.replace(/^./, item.code[0].toUpperCase())}Ids`
+            updatedObject[newId] = term.identifier;
+          }
+        })
+        delete updatedObject[item.name];
+        filters = updatedObject;
+      }
     });
     filters.primaryCategory = filters.primaryCategory || _.get(this.allTabData, 'search.filters.primaryCategory');
-    filters.mimeType = filters.mimeType || _.get(mimeType, 'values');
+    // filters.mimeType = filters.mimeType || _.get(mimeType, 'values');
 
     const _filters = _.get(this.allTabData, 'search.filters');
     _.forEach(_filters, (el, key) => {
@@ -294,7 +321,6 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     // alert(filters.visibility);
     filters.channel = this.queryParams.channel;
     filters.primaryCategory=["Course"];
-    delete filters.framework;
     const option = {
       filters: filters,
       fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
@@ -304,7 +330,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       offset: (this.paginationDetails.currentPage - 1) * (this.configService.appConfig.SEARCH.PAGE_LIMIT),
       query: this.queryParams.key,
       sort_by: { lastPublishedOn: 'desc' },
-      facets: this.filterNames,
+      facets: this.categoryCodes,
       params: this.configService.appConfig.Course.contentApiQueryParams,
       pageNumber: this.paginationDetails.currentPage
     };
@@ -374,17 +400,10 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe(data => {
         this.showLoader = false;
-        this.facets = this.searchService.updateFacetsData(_.get(data, 'result.facets'));
-        this.facets.forEach((facet) => {
-          facet['label'] = this.utilService.transposeTerms(facet['label'], facet['label'], this.resourceService.selectedLang);
-        });
-        this.categoryDetails.forEach((cat) => {
-          this.facets.forEach((c:any)=> {
-            if(cat.code == c.name){
-              c.name = cat.name;
-            }
-          })
-        });
+        // this.facets = this.searchService.updateFacetsData(_.get(data, 'result.facets'));
+          this.facets.forEach((facet) => {
+            facet['label'] = this.utilService.transposeTerms(facet['label'], facet['label'], this.resourceService.selectedLang);
+          });
         this.facetsList = this.searchService.processFilterData(_.get(data, 'result.facets'));
         this.paginationDetails = this.paginationService.getPager(data.result.count, this.paginationDetails.currentPage,
           this.configService.appConfig.SEARCH.PAGE_LIMIT);
@@ -636,15 +655,16 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   /* istanbul ignore next */
   public handleFilterChange(filters) {
     const filterData = filters && filters.filters || {};
+    this.selectedFilters = filterData;
     if (filterData.channel && this.facets) {
       const channelIds = [];
-      const facetsData = _.find(this.facets, { 'name': 'channel' });
-      _.forEach(filterData.channel, (value, index) => {
-        const data = _.find(facetsData.values, { 'identifier': value });
-        if (data) {
-          channelIds.push(data.name);
-        }
-      });
+      // const facetsData = _.find(this.facets, { 'name': 'channel' });
+      // _.forEach(filterData.channel, (value, index) => {
+      //   const data = _.find(facetsData.values, { 'identifier': value });
+      //   if (data) {
+      //     channelIds.push(data.name);
+      //   }
+      // });
       if (channelIds && Array.isArray(channelIds) && channelIds.length > 0) {
         filterData.channel = channelIds;
       }
