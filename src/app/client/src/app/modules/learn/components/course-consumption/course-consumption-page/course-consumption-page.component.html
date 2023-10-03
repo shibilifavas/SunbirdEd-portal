@@ -22,8 +22,8 @@
 </ng-container>
 <div *ngIf="courseTabs&&courseHierarchy" class="courseTab">
     <mat-tab-group animationDuration="0ms">
-        <mat-tab label={{courseTabs[0]}}>
-            <!-- <router-outlet *ngIf="!showLoader && !showError"></router-outlet>
+        <mat-tab label={{resourceService.frmelmnts.toc.tab.overview}}>
+           <!-- <router-outlet *ngIf="!showLoader && !showError"></router-outlet>
             <div *ngIf="showLoader" class="ui container">
                 <div class="ui grid">
                     <div class="twelve wide column">
@@ -32,18 +32,18 @@
                 </div>
             </div> -->
 
-        <app-course-overview [courseDetails]="courseHierarchy" [configContent]="configContent" [params]="batchId"></app-course-overview>
+        <app-course-overview [courseDetails]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc" [params]="batchId"></app-course-overview>
         </mat-tab>
-        <mat-tab label={{courseTabs[1]}}>
+        <mat-tab label={{resourceService.frmelmnts.toc.tab.content}}>
             <div class="ui container mt-48 course-content">
                 <div class="ui grid w-100 padded">
                     <div class="first_panel eight wide column pl-0 pt-0">
                         <div class="headline">
-                            Course content
+                            {{resourceService.frmelmnts.toc.tab.content}}
                         </div>
                         <p>
-                            <button class="com-basic-btn">Expand all</button>
-                            <!-- <button class="com-basic-btn" hide>Collapse all</button> -->
+                            <button class="com-basic-btn"> {{resourceService.frmelmnts.toc.courseContent.expandAll}}</button>
+                            <!-- <button class="com-basic-btn" hide>{{resourceService.frmelmnts.toc.courseContent.collapseAll}}</button> -->
                         </p>
                         <div class="toc__container">
                             <div class="toc__item" *ngFor="let content of tocList">
@@ -57,9 +57,9 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label={{courseTabs[2]}}>{{courseTabs[2]}}</mat-tab>
-        <mat-tab label={{courseTabs[3]}}>
-            <app-batch-list [courseHierarchy]="courseHierarchy" [configContent]="configContent"></app-batch-list>
+        <mat-tab label={{resourceService.frmelmnts.toc.tab.discussion}}>{{resourceService.frmelmnts.toc.tab.discussion}}</mat-tab>
+        <mat-tab label={{resourceService.frmelmnts.toc.tab.members}}>
+            <app-batch-list [courseHierarchy]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc"></app-batch-list>
         </mat-tab>
     </mat-tab-group>
 </div>
