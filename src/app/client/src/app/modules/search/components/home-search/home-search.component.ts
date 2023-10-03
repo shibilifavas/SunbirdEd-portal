@@ -133,6 +133,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkForBack();
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
+        console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
   }
 
   public findCategory(frameworkId:any){
