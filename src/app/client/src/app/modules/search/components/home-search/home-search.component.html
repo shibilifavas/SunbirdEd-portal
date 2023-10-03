@@ -50,8 +50,11 @@
       <div [appTelemetryImpression]="telemetryImpression"  *ngIf="!showLoader && contentList?.length"
         class="dynamic-section-card">
         <ng-container>
+          <div class="courseContainer d-flex">
+            <compass-course-card *ngFor="let content of contentList;let i = index;" [routerLink]="['/learn/course', content['identifier']]" class="course" [data]="content"></compass-course-card>
+          </div>
           <!-- <ng-container *ngFor="let data of contentList;let i = index;"> -->
-            <div class="sb-grid mb-16">
+            <!-- <div class="sb-grid mb-16">
               <div *ngFor="let content of contentList;let i = index;" [id]="i" [data]="content" class="sb-grid--item"
                 [ngClass]="{'last mb-0':last}">
                 <sb-library-card *ngIf="!isDesktopApp;else desktopCard" [indexToDisplay]="i"
@@ -76,7 +79,7 @@
                   </div>
                 </ng-template>
               </div>
-            </div>
+            </div> -->
           <!-- </ng-container> -->
         </ng-container>
         <!-- <div *ngFor="let section of contentList; let last = last" [ngClass]="{'last mb-0':last}">
