@@ -1920,6 +1920,10 @@ const API_LIST = {
     "/learner/user/v1/search": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/course/batch/cert/v1/template/add": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     }
   },
   URL_PATTERN: [
@@ -2071,7 +2075,8 @@ const API_LIST = {
     '/action/question/v2/list',
     '/learner/course/v1/enrol',
     '/learner/course/v1/batch/participants/list',
-    '/learner/user/v1/search'
+    '/learner/user/v1/search',
+    '/course/batch/cert/v1/template/add'
   ]
 };
 module.exports = API_LIST;
