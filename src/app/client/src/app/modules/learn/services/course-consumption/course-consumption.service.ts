@@ -26,7 +26,7 @@ export class CourseConsumptionService {
   coursePagePreviousUrl: any;
   userCreatedAnyBatch = new EventEmitter<boolean>();
   tocList: any = [];
-  private batchList;
+  private batchList = [];
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
