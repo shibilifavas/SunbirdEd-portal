@@ -29,7 +29,7 @@ import { TaxonomyService } from '../../../../service/taxonomy.service';
 export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() facets;
   @Input() queryParamsToOmit;
-  @Input() supportedFilterAttributes = ['Positions','Roles','Activities','Competencies'];
+  @Input() supportedFilterAttributes = [];
   public filterLayout = LibraryFiltersLayout;
   public selectedMediaTypeIndex = 0;
   public selectedMediaType: string;
@@ -219,13 +219,13 @@ export class GlobalSearchFilterComponent implements OnInit, OnChanges, OnDestroy
   public updateRoute() {
     let queryFilters = _.get(this.activatedRoute, 'snapshot.queryParams');
     if (this?.selectedFilters?.channel) {
-      const channelIds = [];
+      // const channelIds = [];
       const facetsData = _.find(this.facets, {'name': 'channel'});
-      _.forEach(this.selectedFilters.channel, (value, index) => {
-        const data = _.find(facetsData.values, {'name': value});
-        channelIds.push(data.identifier);
-      });
-      this.selectedFilters.channel = channelIds;
+      // _.forEach(this.selectedFilters.channel, (value, index) => {
+      //   const data = _.find(facetsData.values, {'name': value});
+      //   channelIds.push(data.identifier);
+      // });
+      // this.selectedFilters.channel = channelIds;
     }
     if(this?.utilService?.isDesktopApp && queryFilters?.selectedTab === 'mydownloads' && this.isConnected) {
       this.queryParamsToOmit = this.queryParamsToOmit && this.queryParamsToOmit.length ? this.queryParamsToOmit.push('key') : ['key']
