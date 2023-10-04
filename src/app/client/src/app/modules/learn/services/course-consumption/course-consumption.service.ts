@@ -27,6 +27,9 @@ export class CourseConsumptionService {
   userCreatedAnyBatch = new EventEmitter<boolean>();
   tocList: any = [];
   private batchList = [];
+  completedPercentage: any = 0;
+  progressdetails: any = {};
+  mimeType: string = '';
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -239,7 +242,11 @@ getAllOpenBatches(contents) {
                   body['bestScore'] = bestScore;
                 }
                 ++count;
-                courseProgress.push(res.progress);
+                if(body.mimeType == 'application/vnd.sunbird.questionset') {
+                  courseProgress.push(res.progress);
+                } else {
+                  courseProgress.push(res.completionPercentage);
+                }
               }
             })
           }
@@ -345,4 +352,9 @@ getAllOpenBatches(contents) {
   isUserExistInBatch(){
     return this.batchList.includes(this.userService.userid);
   }
+
+  getBatchId() {
+    return this.courseHierarchy.batches[0].batchId;
+  }
+
 }

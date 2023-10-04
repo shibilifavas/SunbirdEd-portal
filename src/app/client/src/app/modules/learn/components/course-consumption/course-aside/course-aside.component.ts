@@ -43,7 +43,7 @@ export class CourseAsideComponent implements OnInit {
     this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
     { 
       queryParams: { 
-        batchId: this.batchId,
+        batchId: this.batchId || this.courseConsumptionService.getBatchId(),
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
         selectedContent: this.firstContentId,
