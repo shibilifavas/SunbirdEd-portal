@@ -134,6 +134,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkForBack();
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
+        // console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
   }
 
   public findCategory(frameworkId:any){
@@ -256,6 +257,9 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
       this.FIRST_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
       this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(1, null, COLUMN_TYPE.fullLayout);
     }
+    if (this.activatedRoute.snapshot.queryParams.hideFilter == 'true') {
+      this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
+    }
   }
   private fetchContentOnParamChange() {
     combineLatest(this.activatedRoute.params, this.activatedRoute.queryParams, this.schemaService.fetchSchemas())
@@ -319,7 +323,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     filters.primaryCategory=["Course"];
     const option = {
       filters: filters,
-      fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
+      fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable","posterImage"],
       // fields: _.get(this.allTabData, 'search.fields'),
       limit: _.get(this.allTabData, 'search.limit') ?  _.get(this.allTabData, 'search.limit')
       : this.configService.appConfig.SEARCH.PAGE_LIMIT,
