@@ -11,7 +11,7 @@
       </div>
       <div [ngClass]="isDesktopApp ? 'sb-desktop-filter-section' : ''">
         <ng-container>
-          <app-global-search-filter [layoutConfiguration]="layoutConfiguration" [facets]="facets" [isOpen]='true'
+          <app-global-search-filter [layoutConfiguration]="layoutConfiguration" [facets]="facets" [isOpen]='true' [supportedFilterAttributes]="categoryNames"
             *ngIf="initFilters && allTabData" (filterChange)="handleFilterChange($event)" [cachedFilters]="selectedFilters">
           </app-global-search-filter>
         </ng-container>

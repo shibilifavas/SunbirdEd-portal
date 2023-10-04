@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash-es';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ResourceService, UtilService } from '@sunbird/shared';
@@ -30,21 +30,29 @@ export class GlobalSearchSelectedFilterComponent implements OnInit {
   }
 
   removeFilterSelection(data) {
-    this.queryParamsToOmit = data;
-    _.map(this.selectedFilters, (value, key) => {
-      if (this.selectedFilters[data.type] && !_.isEmpty(this.selectedFilters[data.type])) {
-        _.remove(value, (n) => {
-          return n === data.value && data.type === key;
-        });
-      }
-      if (_.isEmpty(value)) { delete this.selectedFilters[key]; }
-    });
+    // _.map(this.selectedFilters, (value, key) => {
+    //   if (this.selectedFilters[data.type] && !_.isEmpty(this.selectedFilters[data.type])) {
+    //     _.remove(value, (n) => {
+    //       return n === data.value && data.type === key;
+    //     });
+    //   }
+    //   // if (_.isEmpty(value)) { delete this.selectedFilters[key]; }
+    // });
+    if (
+      this.selectedFilters.hasOwnProperty(data.type) &&
+      Array.isArray(this.selectedFilters[data.type])
+    ) {
+      this.selectedFilters[data.type] = this.selectedFilters[data.type].filter(
+        value => value !== data.value
+      );
+    }
+    this.updateRoute(data);
     this.filterChange.emit({ status: 'FETCHED', filters: this.selectedFilters });
-    this.updateRoute();
+    
   }
 
-  public updateRoute() {
-    let queryFilters = _.get(this.activatedRoute, 'snapshot.queryParams');
+  public updateRoute(data: any) {
+    let queryFilters = _.cloneDeep(this.activatedRoute.snapshot.queryParams);
     if (this?.selectedFilters?.channel) {
       const channelIds = [];
       // const facetsData = _.find(this.facets, {'name': 'channel'});
@@ -61,9 +69,21 @@ export class GlobalSearchSelectedFilterComponent implements OnInit {
       // queryFilters = _.omit(_.get(this.activatedRoute, 'snapshot.queryParams'), this.queryParamsToOmit);
       queryFilters = _.omit(queryFilters, [this.queryParamsToOmit.type]);
     }
-    queryFilters = {...queryFilters, ...this.selectedFilters};
+    const queryParams = _.cloneDeep(this.activatedRoute.snapshot.queryParams);
     this.router.navigate([], {
-      queryParams: queryFilters,
+      queryParams: {
+        ...(() => {
+          if (
+            queryParams.hasOwnProperty(data.type) &&
+            Array.isArray(queryParams[data.type])
+          ) {
+            queryParams[data.type] = queryParams[data.type].filter(
+              value => value !== data.value
+            );
+          }
+          return queryParams;
+        })()
+      },
       relativeTo: this.activatedRoute.parent
     });
   }

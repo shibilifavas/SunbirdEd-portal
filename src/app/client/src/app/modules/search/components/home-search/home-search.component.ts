@@ -104,6 +104,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.isDesktopApp = this.utilService.isDesktopApp;
     this.listenLanguageChange();
+    this.fetchContentOnParamChange();
     this.contentManagerService.contentDownloadStatus$
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(contentDownloadStatus => {
@@ -149,9 +150,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
           };
         });
         this.facets = [...facetList];
-        this.categoryNames=res.result.framework.categories.map(cat => cat.name);
+        this.categoryNames=res.result.framework.categories.filter(category => category.name === "Competencies").map(cat => cat.name);
          this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
-        this.fetchContentOnParamChange();
       });
   }
 
