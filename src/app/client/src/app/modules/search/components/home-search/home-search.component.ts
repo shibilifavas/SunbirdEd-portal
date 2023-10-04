@@ -135,6 +135,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkForBack();
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
+        // console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
   }
 
   public findCategory(frameworkId:any){
@@ -256,6 +257,9 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.FIRST_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
       this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(1, null, COLUMN_TYPE.fullLayout);
+    }
+    if (this.activatedRoute.snapshot.queryParams.hideFilter == 'true') {
+      this.SECOND_PANEL_LAYOUT = this.layoutService.redoLayoutCSS(0, null, COLUMN_TYPE.fullLayout);
     }
   }
   private fetchContentOnParamChange() {

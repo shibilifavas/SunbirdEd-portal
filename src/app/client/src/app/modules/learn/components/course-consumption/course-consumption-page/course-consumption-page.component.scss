@@ -1,6 +1,9 @@
 @use "compass-sb-styles/assets/mixins/mixins" as *;
 
 ::ng-deep {
+    .rating-keyworks__stars, .rating-keyworks__wishList{
+        opacity: 0.5;
+    }
     .courseTab {
         mat-tab-group {
             width: 100%;
