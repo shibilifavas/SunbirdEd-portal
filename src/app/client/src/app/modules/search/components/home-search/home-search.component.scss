@@ -12,3 +12,16 @@
 .hidden{
     display: none;
 }
+.courseContainer{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.course{
+    flex: 1;
+    min-width: calc(33% - 20px);
+    margin: calculateRem(10px);
+    padding: calculateRem(10px);
+    box-sizing: border-box;
+    cursor: pointer;
+}

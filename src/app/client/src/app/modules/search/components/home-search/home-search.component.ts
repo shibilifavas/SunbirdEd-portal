@@ -323,7 +323,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     filters.primaryCategory=["Course"];
     const option = {
       filters: filters,
-      fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable"],
+      fields: ["name","appIcon","mimeType","identifier","pkgVersion","resourceType","primaryCategory","contentType","channel","organisation","trackable","posterImage"],
       // fields: _.get(this.allTabData, 'search.fields'),
       limit: _.get(this.allTabData, 'search.limit') ?  _.get(this.allTabData, 'search.limit')
       : this.configService.appConfig.SEARCH.PAGE_LIMIT,
