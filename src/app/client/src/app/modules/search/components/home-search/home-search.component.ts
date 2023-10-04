@@ -141,7 +141,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
         this.categoryDetails = [...res.result.framework.categories];
-        const facetList: any =  res.result.framework.categories.map(category => {
+        const facetList: any =  res.result.framework.categories.filter(category => category.name === "Competencies")
+        .map(category => {
           const val = category.terms.map(term => ({ name: term.name }));
           return {
             name: category.name,
