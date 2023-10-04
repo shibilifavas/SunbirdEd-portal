@@ -123,6 +123,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isSectionVisible: boolean = true;
   completedCount: any = 0;
   totalCount: any = 0;
+  pagesVisited: any = [];
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -381,6 +382,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .subscribe((_res) => {
         const res = this.CourseProgressService.getContentProgressState(req, _res);
         this.completedCount = res.completedCount;
+        //need to check if user manually selects course, read api should pick selected content
+        this.pagesVisited = res.content[0].progressdetails?.current;
         this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
@@ -934,6 +937,9 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
+          if(this.pagesVisited && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = this.pagesVisited;
+          }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');
           const _currentAttempt = _contentIndex > 0 ? _.get(this.contentStatus[_contentIndex], 'score.length') : 0;
