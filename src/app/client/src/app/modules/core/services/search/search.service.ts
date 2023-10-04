@@ -191,7 +191,7 @@ export class SearchService {
   */
    compositePopularSearch(requestParam: SearchParam): Observable<ServerResponse> {
     const option = {
-      url: this.config.urlConFig.URLS.COMPOSITE.SEARCH,
+      url: this.config.urlConFig.URLS.CONTENT.SEARCH,
       param: { ...requestParam.params },
       data: {
         request: {
