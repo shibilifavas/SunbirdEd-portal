@@ -53,6 +53,7 @@ import { CommonConsumptionModule } from 'compass-common-consumption';
 import { CompassHeaderComponent } from './components/compass-header/compass-header.component'
 // import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { LanguageDropdownComponent } from './components/language-dropdown/language-dropdown.component';
+import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/compass-breadcrumb.component';
 
 
 @NgModule({
@@ -77,7 +78,7 @@ import { LanguageDropdownComponent } from './components/language-dropdown/langua
         SbDatatableComponent, OnDemandReportsComponent, SbDataTablePipe, NetworkStatusComponent, LoadOfflineContentComponent,
         TelemetryEventsDirective, DesktopAppUpdateComponent, AlertModalComponent, SystemWarningComponent, FullPageLoaderComponent, ModalWrapperComponent, ModalContentDirective,
       AutocompletePipe, MaterialAutoCompleteComponent, TransposeTermsPipe, SlickComponent, SummaryCardComponent, SummaryCardContainerComponent,
-                   CompassHeaderComponent, LanguageDropdownComponent
+                   CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent
     ],
     exports: [AppLoaderComponent, DateFormatPipe, TranslateModule,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe,
@@ -89,7 +90,7 @@ import { LanguageDropdownComponent } from './components/language-dropdown/langua
         InterpolatePipe, NetworkStatusComponent, LoadOfflineContentComponent, DesktopAppUpdateComponent, SystemWarningComponent, TelemetryEventsDirective,
         AlertModalComponent, FullPageLoaderComponent, MatTooltipModule, MatTabsModule, MatDialogModule, ModalWrapperComponent, ModalContentDirective,
       AutocompletePipe, MaterialAutoCompleteComponent, MaterialModule, TransposeTermsPipe, SlickComponent,
-      SummaryCardComponent, SummaryCardContainerComponent, CompassHeaderComponent, LanguageDropdownComponent
+      SummaryCardComponent, SummaryCardContainerComponent, CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent
     ]
 })
 export class SharedModule {

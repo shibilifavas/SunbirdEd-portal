@@ -83,6 +83,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   categoryCodes: any =[];
   categoryDetails: any = [];
   facetNames: any =[];
+  breadCrumbData = [];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -135,6 +136,20 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
         // console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
+        this.breadCrumbData = [
+          {
+              "label": "Learn",
+              "status": "inactive",
+              "link": "resources",
+              "showIcon": true
+          },
+          {
+            "label": "All competencies",
+            "status": "active",
+            "link": "",
+            "showIcon": false
+        }
+      ];
   }
 
   public findCategory(frameworkId:any){
@@ -149,7 +164,9 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
             values: val,
           };
         });
-        this.facets = [...facetList];
+        if (this.activatedRoute.snapshot.queryParams.hideFilter !== 'true') {
+          this.facets = [...facetList];
+        }
         this.categoryNames=res.result.framework.categories.map(cat => cat.name);
          this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
         this.fetchContentOnParamChange();
