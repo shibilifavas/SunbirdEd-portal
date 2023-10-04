@@ -26,7 +26,6 @@ import { MatStepperModule} from '@angular/material/stepper';
 import { CdkStepperModule} from '@angular/cdk/stepper';
 import { FooterModule } from 'compass-common-consumption';
 import { CommonConsumptionModule } from 'compass-common-consumption';
-import { SbTaxonomyEditorModule } from 'sb-taxonomy-editor';
 
 @NgModule({
     declarations: [
@@ -59,7 +58,7 @@ import { SbTaxonomyEditorModule } from 'sb-taxonomy-editor';
         HttpClientModule,
       FooterModule,
       CommonConsumptionModule,
-        AppRoutingModule // don't add any module below this because it contains wildcard route
+      AppRoutingModule // don't add any module below this because it contains wildcard route,
     ],
     bootstrap: [AppComponent],
     providers: [

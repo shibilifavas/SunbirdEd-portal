@@ -83,6 +83,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   categoryCodes: any =[];
   categoryDetails: any = [];
   facetNames: any =[];
+  breadCrumbData = [];
 
   constructor(public searchService: SearchService, public router: Router,
     public activatedRoute: ActivatedRoute, public paginationService: PaginationService,
@@ -135,20 +136,37 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         this.moveToTop();
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
         // console.log('HIDE PARAMS', this.activatedRoute.snapshot.queryParams.hideFilter);
+        this.breadCrumbData = [
+          {
+              "label": "Learn",
+              "status": "inactive",
+              "link": "resources",
+              "showIcon": true
+          },
+          {
+            "label": "All competencies",
+            "status": "active",
+            "link": "",
+            "showIcon": false
+        }
+      ];
   }
 
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
         this.categoryDetails = [...res.result.framework.categories];
-        const facetList: any =  res.result.framework.categories.map(category => {
+        const facetList: any =  res.result.framework.categories.filter(category => category.name === "Competencies")
+        .map(category => {
           const val = category.terms.map(term => ({ name: term.name }));
           return {
             name: category.name,
             values: val,
           };
         });
-        this.facets = [...facetList];
+        if (this.activatedRoute.snapshot.queryParams.hideFilter !== 'true') {
+          this.facets = [...facetList];
+        }
         this.categoryNames=res.result.framework.categories.map(cat => cat.name);
          this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
         this.fetchContentOnParamChange();

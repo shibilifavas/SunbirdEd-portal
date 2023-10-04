@@ -242,7 +242,7 @@
 
   &-bar {
     background: var(--sbt-filter-bar-bg);
-    box-shadow: var(--sbt-box-shadow-6px);
+    // box-shadow: var(--sbt-box-shadow-6px);
     min-width: calculateRem(232px);
     padding: calculateRem(32px) calculateRem(0px) calculateRem(16px) calculateRem(24px);
     position: fixed;
@@ -253,6 +253,8 @@
     height: 100%;
     z-index: 9999;
     margin: 0;
+    border: solid 1px #d6d6d6;
+    border-radius: 8px!important;
 
     @include respond-above(sm) {
       border-radius: calculateRem(24px);
