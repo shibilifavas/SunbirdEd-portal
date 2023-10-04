@@ -413,6 +413,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     }
     const telObject = _.get(event, 'detail.telemetryData');
     const eid = _.get(telObject, 'eid');
+    this.CourseProgressService.setmimeType(_.get(this.activeContent, 'mimeType'));
     const isMimeTypeH5P = _.get(this.activeContent, 'mimeType') === 'application/vnd.ekstep.h5p-archive';
 
     /* istanbul ignore else */
@@ -595,6 +596,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   private subscribeToContentProgressEvents() {
     return this.contentProgressEvents$.pipe(
       map(event => {
+        // this.CourseProgressService.endEventData(event);
         this.contentProgressEvent(event);
         return {
           contentProgressEvent: event
@@ -602,6 +604,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }),
       takeUntil(this.unsubscribe)
     );
+  }
+
+  endEventReached(event: any) {
+    this.CourseProgressService.endEventData(event);
   }
 
   logTelemetry(id, content?: {}, rollup?) {
@@ -709,8 +715,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    setTimeout(() => {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+    }, 1000)
   }
 
   onShareLink() {
@@ -1020,6 +1028,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   hideSection() {
     this.isSectionVisible = false;
   }
+
+  // mimeType(type: string) {
+  //   this.courseConsumptionService.setmimeType(type)
+  // }
 
 
 }

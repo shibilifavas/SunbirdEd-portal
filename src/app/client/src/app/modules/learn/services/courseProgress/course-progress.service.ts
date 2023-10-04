@@ -23,6 +23,9 @@ export class CourseProgressService {
   public courseProgress: any = {};
 
   public userService: UserService;
+  completionPercentage: any = 0;
+  progressdetails: any = {};
+  mimeType: string = '';
 
   /**
   * An event emitter to emit course progress data from a service.
@@ -163,13 +166,26 @@ export class CourseProgressService {
    * to make api call to server
    */
   updateContentStateToServer(data) {
-    const req = {
-      contentId: data.contentId,
-      batchId: data.batchId,
-      status: data.status,
-      courseId: data.courseId,
-      lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
-    };
+    let req;
+    if(this.mimeType !== 'application/vnd.sunbird.questionset') {
+      req = {
+        contentId: data.contentId,
+        batchId: data.batchId,
+        status: data.status,
+        courseId: data.courseId,
+        lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
+      };
+      req['completionPercentage'] = this.completionPercentage;
+      req['progressdetails'] = this.progressdetails;
+    } else {
+      req = {
+        contentId: data.contentId,
+        batchId: data.batchId,
+        status: data.status,
+        courseId: data.courseId,
+        lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
+      };
+    }
     const channelOptions = {
       url: this.configService.urlConFig.URLS.COURSE.USER_CONTENT_STATE_UPDATE,
       data: {
@@ -180,7 +196,7 @@ export class CourseProgressService {
       }
     };
     return this.contentService.patch(channelOptions)
-      .pipe(map((updateCourseStatesData: ServerResponse) => ({ updateCourseStatesData })));
+      .pipe(map((updateCourseStatesData: any) => ({ updateCourseStatesData })));
   }
 
   sendAssessment(data): Observable<any> {
@@ -196,4 +212,72 @@ export class CourseProgressService {
       })
     );
   }
+
+  setmimeType(type) {
+    this.mimeType = type;
+  }
+
+  // endEventData(event: any) {
+  //   let telemetryEvent = _.get(event, 'detail.telemetryData');
+  //   if(telemetryEvent?.eid == "END") {
+  //     let edata = telemetryEvent?.edata;
+  //     edata?.summary?.forEach((val: any) => {
+  //       if(val?.progress) {
+  //         this.completionPercentage = val.progress
+  //       }
+  //       if(val?.totallength) {
+  //         this.progressdetails['max_size'] = val.totallength;
+  //       }
+  //       if(val?.visitedlength) {
+  //         this.progressdetails['current'] = [];
+  //         if(this.mimeType == 'application/pdf') {
+  //           let count = 1;
+  //           while(val.visitedlength > 0) {
+  //             this.progressdetails['current'].push(count)
+  //             count++;
+  //             val.visitedlength--;
+  //           }
+  //         } else {
+  //           this.progressdetails['current'].push(val.visitedlength);
+  //         }
+  //       }
+  //     });
+
+  //     console.log("progressdetails", this.progressdetails);
+  //   }
+  // }
+
+
+    endEventData(event: any) {
+      if(this.mimeType !== 'application/vnd.sunbird.questionset') {
+        if(event?.eid == "END") {
+          let edata = _.get(event, 'edata');
+          if(edata?.currentPage && edata?.totalPages) {
+            this.completionPercentage = this.calculateCompletedPercentage(edata.currentPage, edata.totalPages);
+            this.progressdetails['max_size'] = edata.totalPages;
+            let count = 1;
+            this.progressdetails['current'] = [];
+            while(edata.currentPage > 0) {
+              this.progressdetails['current'].push(count)
+              count++;
+              edata.currentPage--;
+            }
+          } else if(edata?.currentTime && edata?.totalTime) {
+            this.completionPercentage = this.calculateCompletedPercentage(edata.currentTime, edata.totalTime);
+            this.progressdetails['max_size'] = edata.totalTime;
+            this.progressdetails['current'] = [];
+            this.progressdetails['current'].push(edata.currentTime);
+          }
+          console.log("progressdetails", this.progressdetails);
+        }
+      }
+    }
+
+    calculateCompletedPercentage(completed: any, total: any) {
+      let percentage: any;
+
+      percentage = (completed / total) * 100
+
+      return Math.ceil(percentage) > 98 ? 100 : Math.ceil(percentage);
+    }
 }
