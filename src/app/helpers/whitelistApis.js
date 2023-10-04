@@ -1921,7 +1921,7 @@ const API_LIST = {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     },
-    "/course/batch/cert/v1/template/add": {
+    "/learner/course/batch/cert/v1/template/add": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     }
@@ -2076,7 +2076,7 @@ const API_LIST = {
     '/learner/course/v1/enrol',
     '/learner/course/v1/batch/participants/list',
     '/learner/user/v1/search',
-    '/course/batch/cert/v1/template/add'
+    '/learner/course/batch/cert/v1/template/add'
   ]
 };
 module.exports = API_LIST;
