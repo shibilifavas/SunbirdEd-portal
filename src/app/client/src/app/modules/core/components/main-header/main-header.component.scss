@@ -373,3 +373,16 @@ __textbooks {
 .hidden{
   display: none;
 }
+.profile__actions__list{
+  .taxonomy-editor-link{
+    .mat-icon{
+      margin-left: -4px;
+      font-size: 35px;
+      width: 34px;
+      height: 35px;
+    }
+    .link-text{
+      padding: 0;
+    }
+  }
+}

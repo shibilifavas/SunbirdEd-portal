@@ -30,7 +30,7 @@
         </div>
     </section>
     <section class="ui container">
-        <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData"></register-btn-card>
+        <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData" (navigateToRegister)="registerClick()"></register-btn-card>
     </section>
     <section class="ui container" *ngIf="resourceService?.frmelmnts?.lp?.hpExploreCardData">
         <p class="exploreTitle">{{resourceService?.frmelmnts?.lp?.exploreCompass}}</p>

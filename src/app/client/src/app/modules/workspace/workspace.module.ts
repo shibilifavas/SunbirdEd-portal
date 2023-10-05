@@ -26,10 +26,7 @@ import { ContentSearchModule } from '@sunbird/content-search';
 import { CollectionEditorLibraryModule } from '@project-sunbird/sunbird-collection-editor'; //commented for infinite-scroll
 import { QuestionsetEditorLibraryModule } from 'compass-collection-editor';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { taxonomyEnvironment } from '../../framework.config';
-import { SbTaxonomyEditorModule } from 'sb-taxonomy-editor'
 import { MatIconModule } from '@angular/material/icon'
-import { TaxonomyViewWrapComponent } from './components/taxonomy-view-wrap/taxonomy-view-wrap.component';
 
 @NgModule({
   imports: [ 
@@ -46,8 +43,7 @@ import { TaxonomyViewWrapComponent } from './components/taxonomy-view-wrap/taxon
     CollectionEditorLibraryModule,
     QuestionsetEditorLibraryModule, //commented for infinte-scroll
     MatTooltipModule,
-    MatIconModule,
-    SbTaxonomyEditorModule
+    MatIconModule
   ],
   declarations: [WorkspaceComponent, WorkspacesidebarComponent, DateFilterXtimeAgoPipe,
     CreateContentComponent, DraftComponent, ReviewSubmissionsComponent,
@@ -69,8 +65,7 @@ import { TaxonomyViewWrapComponent } from './components/taxonomy-view-wrap/taxon
     ReviewCommentsComponent,
     CollaborationContentFilterComponent,
     WorkspaceContentFilterComponent,
-    NewCollectionEditorComponent,
-    TaxonomyViewWrapComponent
+    NewCollectionEditorComponent
   ],
   providers: [WorkSpaceService, EditorService, BatchService, ReviewCommentsService, DateFilterXtimeAgoPipe]
 })

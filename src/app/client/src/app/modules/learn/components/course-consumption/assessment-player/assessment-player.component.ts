@@ -123,6 +123,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isSectionVisible: boolean = true;
   completedCount: any = 0;
   totalCount: any = 0;
+  pagesVisited: any = [];
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -381,6 +382,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .subscribe((_res) => {
         const res = this.CourseProgressService.getContentProgressState(req, _res);
         this.completedCount = res.completedCount;
+        //need to check if user manually selects course, read api should pick selected content
+        this.pagesVisited = res.content[0].progressdetails?.current;
         this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
@@ -413,6 +416,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     }
     const telObject = _.get(event, 'detail.telemetryData');
     const eid = _.get(telObject, 'eid');
+    this.CourseProgressService.setmimeType(_.get(this.activeContent, 'mimeType'));
     const isMimeTypeH5P = _.get(this.activeContent, 'mimeType') === 'application/vnd.ekstep.h5p-archive';
 
     /* istanbul ignore else */
@@ -595,6 +599,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   private subscribeToContentProgressEvents() {
     return this.contentProgressEvents$.pipe(
       map(event => {
+        // this.CourseProgressService.endEventData(event);
         this.contentProgressEvent(event);
         return {
           contentProgressEvent: event
@@ -602,6 +607,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }),
       takeUntil(this.unsubscribe)
     );
+  }
+
+  endEventReached(event: any) {
+    this.CourseProgressService.endEventData(event);
   }
 
   logTelemetry(id, content?: {}, rollup?) {
@@ -709,8 +718,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    setTimeout(() => {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+    }, 1000)
   }
 
   onShareLink() {
@@ -926,6 +937,9 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
+          if(this.pagesVisited && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = this.pagesVisited;
+          }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');
           const _currentAttempt = _contentIndex > 0 ? _.get(this.contentStatus[_contentIndex], 'score.length') : 0;
@@ -1020,6 +1034,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   hideSection() {
     this.isSectionVisible = false;
   }
+
+  // mimeType(type: string) {
+  //   this.courseConsumptionService.setmimeType(type)
+  // }
 
 
 }

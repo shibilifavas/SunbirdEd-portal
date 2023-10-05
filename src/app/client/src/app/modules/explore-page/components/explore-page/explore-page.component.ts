@@ -133,6 +133,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     popularTopics = [];
     popularCompetenciesData = [];
     popularCompetencyMapping = [];
+    breadCrumbData = [];
 
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
@@ -325,6 +326,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.contentDownloadStatus = contentDownloadStatus;
             this.addHoverData();
         });
+        this.breadCrumbData.push(
+            {
+                "label": "Learn",
+                "status": "active",
+                "link": "",
+                "showIcon": true
+            });
     }
 
     public fetchPopularCompetenciesData() {
@@ -384,7 +392,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    
+
 
     public fetchRequestContents() {
         for (let section of this.contentSections) {
@@ -1557,7 +1565,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     loadCompetencyCourses(identifier: string) {
-        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&targetTaxonomyCategory4Ids=${identifier}&hideFilter=true`)
+        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&Competencies=${identifier}&framework=${this.contentSearchService.frameworkId}&hideFilter=true`)
         console.log('loadCompetencyCourses', identifier);
     }
 

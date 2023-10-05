@@ -1,6 +1,5 @@
-<compass-banner [config]="resourceService?.frmelmnts?.llp?.banner">
-</compass-banner>
-
+<compass-breadcrumb [data]="breadCrumbData"></compass-breadcrumb>
+<compass-banner [config]="resourceService?.frmelmnts?.llp?.banner"></compass-banner>
 <div
   [ngClass]="[layoutConfiguration ? 'sbt-fluid-content-bg':'', (getSelectedTab() === 'home' || getSelectedTab() === 'explore') ? '': '']">
   <div class="ui container featured-courses-section">
@@ -285,7 +284,7 @@
     </div>
     <div class="ui grid middle aligned stackable">
       <div class="three wide column" *ngFor="let data of popularCompetencyMapping;let i=index">
-        <div class="pointing" (click)="loadCompetencyCourses(data['identifier'])">
+        <div class="pointing" (click)="loadCompetencyCourses(data['title'])">
           <sb-popular-card [pillName]="'Competency'" [data]="data"></sb-popular-card>
         </div>
       </div>
