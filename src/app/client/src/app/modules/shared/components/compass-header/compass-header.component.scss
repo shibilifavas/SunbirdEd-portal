@@ -86,3 +86,30 @@
 }
 
 
+.com-header {
+
+  .sbt-header-logo {
+    min-height: auto;
+  }
+
+  .sb-g{
+    padding:6px 0 7px;
+  }
+
+}
+
+.main-menu {  
+  &.mobile-only {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__wrap{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    
+  }
+  
+}
