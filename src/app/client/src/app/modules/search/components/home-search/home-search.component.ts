@@ -105,6 +105,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.isDesktopApp = this.utilService.isDesktopApp;
     this.listenLanguageChange();
+    this.fetchContentOnParamChange();
     this.contentManagerService.contentDownloadStatus$
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(contentDownloadStatus => {
@@ -156,7 +157,14 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
         this.categoryDetails = [...res.result.framework.categories];
-        const facetList: any =  res.result.framework.categories.filter(category => category.name === "Competencies")
+        const facetList: any =  res.result.framework.categories.filter(category => {
+          if (frameworkId === "fracing_fw" && category.name === "Competencies") {
+            return true;
+          } else if(frameworkId!="fracing_fw"){
+            return true;
+          }
+          return false;
+        })
         .map(category => {
           const val = category.terms.map(term => ({ name: term.name }));
           return {
@@ -167,9 +175,8 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.activatedRoute.snapshot.queryParams.hideFilter !== 'true') {
           this.facets = [...facetList];
         }
-        this.categoryNames=res.result.framework.categories.map(cat => cat.name);
+        this.categoryNames=res.result.framework.categories.filter(category => category.name === "Competencies").map(cat => cat.name);
          this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
-        this.fetchContentOnParamChange();
       });
   }
 

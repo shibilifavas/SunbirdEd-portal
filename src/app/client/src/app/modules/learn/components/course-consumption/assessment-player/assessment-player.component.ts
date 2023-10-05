@@ -123,7 +123,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isSectionVisible: boolean = true;
   completedCount: any = 0;
   totalCount: any = 0;
-  pagesVisited: any = [];
+  visitedData: any;
+  selectedContentId: any;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -169,6 +170,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.initLayout();
     this.subscribeToQueryParam();
+    this.getContentState();
     this.subscribeToContentProgressEvents().subscribe(data => { });
     this.navigationHelperService.contentFullScreenEvent.
     pipe(takeUntil(this.unsubscribe)).subscribe(isFullScreen => {
@@ -230,8 +232,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         this.courseId = queryParams.courseId;
         this.courseName = queryParams.courseName;
         this.groupId = _.get(queryParams, 'groupId');
-        const selectedContent = queryParams.selectedContent;
-        let isSingleContent = this.collectionId === selectedContent;
+        this.selectedContentId = queryParams.selectedContent;
+        let isSingleContent = this.collectionId === this.selectedContentId;
         this.isParentCourse = this.collectionId === this.courseId;
         if (this.batchId) {
           this.telemetryCdata = [{ id: this.batchId, type: 'CourseBatch' }];
@@ -266,7 +268,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               }
               this.enrolledBatchInfo = data.enrolledBatchDetails;
               this.certificateDescription = this.courseBatchService.getcertificateDescription(this.enrolledBatchInfo);
-              this.setActiveContent(selectedContent, isSingleContent);
+              this.setActiveContent(this.selectedContentId, isSingleContent);
             }, error => {
               this.toasterService.error(this.resourceService.messages.fmsg.m0051);
               this.goBack();
@@ -286,7 +288,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
                 this.activeContent = this.courseHierarchy;
                 this.initPlayer(_.get(this.activeContent, 'identifier'));
               } else {
-                this.setActiveContent(selectedContent);
+                this.setActiveContent(this.selectedContentId);
               }
             }, error => {
               this.toasterService.error(this.resourceService.messages.fmsg.m0051);
@@ -341,7 +343,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       this.initPlayer(_.get(this.activeContent, 'identifier'));
     }
     this.selectedContentName = this.activeContent.name;
-    this.getContentState();
   }
 
   private firstNonCollectionContent(contents) {
@@ -382,8 +383,12 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .subscribe((_res) => {
         const res = this.CourseProgressService.getContentProgressState(req, _res);
         this.completedCount = res.completedCount;
-        //need to check if user manually selects course, read api should pick selected content
-        this.pagesVisited = res.content[0].progressdetails?.current;
+        res.content?.forEach((content: any) => {
+          if(content.contentId == this.selectedContentId) {
+            this.visitedData = content.progressdetails?.current;
+          }
+        });
+        // this.pagesVisited = res.content[0].progressdetails?.current;
         this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
@@ -937,8 +942,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
-          if(this.pagesVisited && this.playerConfig.metadata.mimeType == 'application/pdf') {
-            this.playerConfig.config.pagesVisited = this.pagesVisited;
+          if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = this.visitedData;
+          } else if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'video/mp4') {
+            this.playerConfig.config.currentDuration = this.visitedData[0];
           }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');
