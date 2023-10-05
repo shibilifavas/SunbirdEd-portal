@@ -91,7 +91,8 @@
   color: rgba(0, 0, 0, 0.60);
 }
 
-#header-search:focus, #header-search:focus-visible{
+#header-search:focus,
+#header-search:focus-visible {
   border: solid 1px rgba(0, 0, 0, 0.16) !important;
 }
 
@@ -113,4 +114,33 @@
 
 .pointing {
   cursor: pointer;
+}
+
+.com-header {
+
+  .sbt-header-logo {
+    min-height: auto;
+  }
+
+  .sb-g {
+    padding: 0px;
+  }
+
+}
+
+.main-menu {
+  &.mobile-only {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+  }
+
 }

@@ -10,6 +10,7 @@ import { ToasterService } from '@sunbird/shared';
 import { Router } from '@angular/router';
 import * as _ from 'lodash-es';
 import { zip } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
 // import { LanguageDropdownComponent } from './../../../core/components/language-dropdown/language-dropdown.component';
 
 @Component({
@@ -45,7 +46,9 @@ export class CompassHeaderComponent implements OnInit {
   keyParam:string;
 
   constructor(private managedUserService: ManagedUserService, public orgDetailsService: OrgDetailsService,
-    public formService: FormService, public router: Router, public toasterService: ToasterService, public route:ActivatedRoute) {
+    public formService: FormService, public router: Router, public toasterService: ToasterService, 
+    public route:ActivatedRoute,
+    public deviceDetectorService: DeviceDetectorService,) {
 
     this.route.queryParams.subscribe((param : Params) => {
       this.keyParam = param['key'];
