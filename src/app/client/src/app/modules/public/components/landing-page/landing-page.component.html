@@ -5,7 +5,7 @@
 <div class="featured-courses-section">
     <p class="heading">{{resourceService?.frmelmnts?.lp?.featuredCourses}}</p>
     <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)"
-        (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
+        (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)" responsive="breakpoints">
         <div ngxSlickItem class="slide" *ngFor='let course of courses;'>
             <compass-course-card [data]="course"></compass-course-card>
         </div>
@@ -30,7 +30,7 @@
         </div>
     </section>
     <section class="ui container">
-        <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData"></register-btn-card>
+        <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData" (navigateToRegister)="registerClick()"></register-btn-card>
     </section>
     <section class="ui container" *ngIf="resourceService?.frmelmnts?.lp?.hpExploreCardData">
         <p class="exploreTitle">{{resourceService?.frmelmnts?.lp?.exploreCompass}}</p>
