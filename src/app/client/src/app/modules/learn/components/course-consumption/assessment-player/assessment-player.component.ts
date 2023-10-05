@@ -942,10 +942,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
-          if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'application/pdf') {
-            this.playerConfig.config.pagesVisited = this.visitedData;
-          } else if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'video/mp4') {
-            this.playerConfig.config.currentDuration = this.visitedData[0];
+          let consumedData: any = this.CourseProgressService.contentProgress['content_'+`${this.selectedContentId}`];
+          if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = consumedData || this.visitedData;
+          } else if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'video/mp4') {
+            this.playerConfig.config['currentDuration'] = consumedData[0] || this.visitedData[0];
           }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');
