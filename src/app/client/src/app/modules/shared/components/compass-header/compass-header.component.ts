@@ -147,7 +147,7 @@ export class CompassHeaderComponent implements OnInit {
     return showLanguageChangeDropdown;
   }
 
-  searchCourses(text) {
-    this.router.navigateByUrl(`search/Library/1?channel=${this.userService.channel}&key=${encodeURIComponent(text)}`)
+  searchCourses(text: string) {
+    this.router.navigateByUrl(`search/Library/1?channel=${this.userService.channel}&key=${encodeURIComponent(text)}&hideFilter=false`)
   }
 }

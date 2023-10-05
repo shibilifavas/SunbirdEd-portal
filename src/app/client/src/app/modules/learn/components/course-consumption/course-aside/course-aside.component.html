@@ -6,36 +6,40 @@
         <button class="com-secondary-btn"><mat-icon>share</mat-icon>{{configContent.courseAside.share}}</button>
     </p>
     <section class="aside__course-info">
-        <h4 class="sub-heading-one">This course has</h4>
+        <h4 class="sub-heading-one">{{configContent.courseAside.title}}</h4>
         <ul>
             <li *ngIf="courseHierarchy.Duration">
                 <mat-icon>timer</mat-icon>
                 {{courseHierarchy.Duration}} {{configContent.courseAside.durationText}}
                 <!-- {{ courseHierarchy.duration }} -->
             </li>
-            <li *ngIf="courseHierarchy.mimeTypeObjs['application/vnd.ekstep.content-collection']">
+            <li *ngIf="courseHierarchy.mimeTypeObjs['application/vnd.ekstep.content-collection']" class="nested">
+              <div>
                 <mat-icon>toc</mat-icon>
                 {{courseHierarchy.mimeTypeObjs['application/vnd.ekstep.content-collection']}} {{configContent.courseAside.modules}}
+              </div>
                 <!-- {{ courseHierarchy.duration }} -->
-            </li>
-            <li *ngIf="courseHierarchy.mimeTypeObjs['video/mp4']">
-                <mat-icon>play_circle_filled</mat-icon>
-                {{courseHierarchy.mimeTypeObjs['video/mp4']}} {{configContent.courseAside.videos}}
-                <!-- {{ courseHierarchy.duration }} -->
-            </li>
-            <li *ngIf="courseHierarchy.mimeTypeObjs['application/pdf']">
-                <mat-icon>picture_as_pdf</mat-icon>
-               {{courseHierarchy.mimeTypeObjs['application/pdf']}} {{configContent.courseAside.pdfs}}
-                <!-- {{ courseHierarchy.resources }} -->
-            </li>
-            <li *ngIf="courseHierarchy.mimeTypeObjs['application/vnd.sunbird.questionset']">
-                <mat-icon>playlist_add_check</mat-icon>
-               {{courseHierarchy.mimeTypeObjs['application/vnd.sunbird.questionset']}} {{configContent.courseAside.assessments}}
-                <!-- {{ courseHierarchy.resources }} -->
+                <ul>
+                    <li *ngIf="courseHierarchy.mimeTypeObjs['video/mp4']">
+                        <mat-icon>play_circle_filled</mat-icon>
+                        {{courseHierarchy.mimeTypeObjs['video/mp4']}} {{configContent.courseAside.videos}}
+                        <!-- {{ courseHierarchy.duration }} -->
+                    </li>
+                    <li *ngIf="courseHierarchy.mimeTypeObjs['application/pdf']">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                       {{courseHierarchy.mimeTypeObjs['application/pdf']}} {{configContent.courseAside.pdfs}}
+                        <!-- {{ courseHierarchy.resources }} -->
+                    </li>
+                    <li *ngIf="courseHierarchy.mimeTypeObjs['application/vnd.sunbird.questionset']">
+                        <mat-icon>playlist_add_check</mat-icon>
+                       {{courseHierarchy.mimeTypeObjs['application/vnd.sunbird.questionset']}} {{configContent.courseAside.assessments}}
+                        <!-- {{ courseHierarchy.resources }} -->
+                    </li>
+                </ul>
             </li>
         </ul>
     </section>
-    </div>
+   </div>
     <mat-divider></mat-divider>
     <div class="aside__bottom">
         <ul>

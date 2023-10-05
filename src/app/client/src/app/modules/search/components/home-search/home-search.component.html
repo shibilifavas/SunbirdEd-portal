@@ -1,7 +1,8 @@
+<compass-breadcrumb [data]="breadCrumbData"></compass-breadcrumb>
 <app-landing-section *ngIf="allTabData" [textToDisplay]="resourceService?.frmelmnts?.tab?.all" [layoutConfiguration]="layoutConfiguration" [svgToDisplay]="allTabData?.theme?.imageName"></app-landing-section>
-<div [ngClass]="layoutConfiguration ? 'sbt-fluid-content-bg sbt-home-search-component':''">
-  <div class="sb-g" [ngClass]="layoutConfiguration ? 'sb-g sbt-container sbt-page-content' : 'sb-g'">
-    <div [ngClass]="FIRST_PANEL_LAYOUT">
+<div class="container ui" [ngClass]="layoutConfiguration ? 'sbt-home-search-component':''">
+  <div class="ui grid">
+    <div *ngIf="activatedRoute.snapshot.queryParams.hideFilter !== 'true'" class="three wide column">
       <div *ngIf="layoutConfiguration">
         <ng-container *ngIf="isDesktopApp">
           <app-network-status></app-network-status>
@@ -17,7 +18,7 @@
         </ng-container>
       </div>
     </div>
-    <div [ngClass]="SECOND_PANEL_LAYOUT">
+    <div class="drag-up" [ngClass]="{'twelve wide column': activatedRoute.snapshot.queryParams.hideFilter == 'true'}" [ngClass]="{'nine wide column': activatedRoute.snapshot.queryParams.hideFilter == 'false'}">
       <div [ngClass]="layoutConfiguration ? 'sbt-page-content-area' : 'ui container mt-16'">
   <div class="content-grid relative9" >
     <div class="sb-pageSection" *ngIf="!showLoader && contentList?.length && !showBackButton">
@@ -47,11 +48,13 @@
     <!-- <div class="twelve wide column ui container hidden"> -->
       <app-global-search-selected-filter [facets]="facets" [selectedFilters]="selectedFilters"
               *ngIf="initFilters && facets && layoutConfiguration" (filterChange)="handleFilterChange($event)"></app-global-search-selected-filter>
-      <div [appTelemetryImpression]="telemetryImpression"  *ngIf="!showLoader && contentList?.length"
-        class="dynamic-section-card">
+      <div [appTelemetryImpression]="telemetryImpression" class="dynamic-section-card">
         <ng-container>
+          <div class="courseContainer d-flex">
+            <compass-course-card *ngFor="let content of contentList;let i = index;" [routerLink]="['/learn/course', content['identifier']]" class="course" [data]="content"></compass-course-card>
+          </div>
           <!-- <ng-container *ngFor="let data of contentList;let i = index;"> -->
-            <div class="sb-grid mb-16">
+            <!-- <div class="sb-grid mb-16">
               <div *ngFor="let content of contentList;let i = index;" [id]="i" [data]="content" class="sb-grid--item"
                 [ngClass]="{'last mb-0':last}">
                 <sb-library-card *ngIf="!isDesktopApp;else desktopCard" [indexToDisplay]="i"
@@ -76,7 +79,7 @@
                   </div>
                 </ng-template>
               </div>
-            </div>
+            </div> -->
           <!-- </ng-container> -->
         </ng-container>
         <!-- <div *ngFor="let section of contentList; let last = last" [ngClass]="{'last mb-0':last}">

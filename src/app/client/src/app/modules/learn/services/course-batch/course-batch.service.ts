@@ -2,7 +2,7 @@ import { of as observableOf, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { ConfigService, ServerResponse } from '@sunbird/shared';
-import { SearchParam, LearnerService, UserService, ContentService, SearchService } from '@sunbird/core';
+import { SearchParam, LearnerService, UserService, ContentService, SearchService, PublicDataService  } from '@sunbird/core';
 import * as _ from 'lodash-es';
 
 @Injectable({
@@ -16,7 +16,8 @@ export class CourseBatchService {
   private defaultUserList: any;
   constructor(public searchService: SearchService, public userService: UserService, public content: ContentService,
     public configService: ConfigService,
-    public learnerService: LearnerService) { }
+    public learnerService: LearnerService,
+    private publicService: PublicDataService ) { }
   getAllBatchDetails(searchParams) {
     return this.batchSearch(searchParams);
   }

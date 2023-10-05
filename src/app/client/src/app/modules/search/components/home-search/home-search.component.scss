@@ -1,14 +1,40 @@
 @import "compass-sb-styles/assets/mixins/mixins";
 
-.all-comp-container{
+.all-comp-container {
     flex-direction: column;
 }
-.popular-comp-container{
+
+.popular-comp-container {
     flex-direction: row;
 }
-.allCompetencyTitle{
+
+.allCompetencyTitle {
     @include typography(var(--font-com-en), 24px, 600, 0.25px, 36px);
 }
-.hidden{
+
+.hidden {
     display: none;
+}
+
+.courseContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.course {
+    flex: 1;
+    min-width: calc(33% - 20px);
+    margin: calculateRem(10px);
+    padding: calculateRem(10px);
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.sbt-home-search-component {
+    margin-top: 7em;
+}
+
+.drag-up {
+    margin-top: -6em;
 }

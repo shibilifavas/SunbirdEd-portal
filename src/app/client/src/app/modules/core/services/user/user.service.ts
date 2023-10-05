@@ -433,6 +433,18 @@ export class UserService {
       }));
   }
 
+  registerExternalUser(data) {
+    const options = {
+      url: this.config.urlConFig.URLS.USER.SIGNUP,
+      data: data
+    };
+    return this.learnerService.post(options).pipe(
+      map((resp) => {
+        this.createManagedUser.emit(_.get(resp, 'result.userId'));
+        return resp;
+      }));
+  }
+
   userMigrate(requestBody) {
     const option = {
       url: this.config.urlConFig.URLS.USER.USER_MIGRATE,
@@ -553,5 +565,16 @@ export class UserService {
     }
   
     return { board: this.defaultBoard, ...userFramework };
+  }
+
+  getEnrolledUsers(req:any){
+   const options = {
+      url:this.config.urlConFig.URLS.USER.USER_SEARCH,
+      data: req
+    }
+    return this.learnerService.post(options).pipe(
+      map((res:any) => {
+      return res.result.response.content;
+    }))
   }
 }

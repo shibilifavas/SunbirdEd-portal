@@ -17,7 +17,16 @@
 
 .menuIcon {
   cursor: pointer;
-  margin-right: 10px;
+}
+
+.spaces-icon {
+  padding-right: 30%;
+
+  span {
+    position: absolute;
+    padding-left: 8px;
+    padding-top: 1px;
+  }
 }
 
 .bs-1:hover {
@@ -51,6 +60,7 @@
   border-radius: 6px;
   font-size: 16px;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 .sbt-guest-profile {
@@ -74,7 +84,7 @@
 }
 
 #header-search {
-  width: 320px;
+  // width: 320px;
   padding-left: 38px;
   border-radius: 8px;
   border: solid 1px rgba(0, 0, 0, 0.16);
@@ -85,4 +95,22 @@
   border: solid 1px rgba(0, 0, 0, 0.16) !important;
 }
 
+.search-right-icon {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}
 
+.search-left-icon {
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+
+.ui.input {
+  width: 80%;
+}
+
+.pointing {
+  cursor: pointer;
+}

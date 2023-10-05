@@ -52,6 +52,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
   @Output() closePlayerEvent = new EventEmitter<any>();
   @Output() ratingPopupClose = new EventEmitter<any>();
   @Output() selfAssessLastAttempt = new EventEmitter<any>();
+  @Output() endEventReached = new EventEmitter<any>();
   contentDeleted = false;
   isMobileOrTab: boolean;
   showPlayIcon = true;
@@ -375,6 +376,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
   eventHandler(event) {
     if (event.eid === 'END') {
       const metaDataconfig = event.metaData;
+      this.endEventReached.emit(event)
       if (this.userService.loggedIn) {
         this.userService.userData$.subscribe((user: any) => {
           if (user && !user.err) {

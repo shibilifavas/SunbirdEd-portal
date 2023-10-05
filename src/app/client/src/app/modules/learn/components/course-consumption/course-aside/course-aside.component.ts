@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Inject, SimpleChange, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import * as _ from 'lodash-es';
 import { CourseConsumptionService, CourseProgressService } from '../../../services';
@@ -16,11 +16,12 @@ export class CourseAsideComponent implements OnInit {
   @Input() courseHierarchy:any;
   @Input() configContent:any;
   @Input() params: any;
+
   firstContentId: any;
   parentId: any;
   batchId: any;
 
-  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService) { }
+  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService, private userService: UserService) { }
 
   ngOnInit(): void {
     const firstModule = this.courseConsumptionService.getCourseContent()[0];
@@ -36,10 +37,13 @@ export class CourseAsideComponent implements OnInit {
 
   navigate() {
     // this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier]);
+    if(!this.courseConsumptionService.isUserExistInBatch()){
+      this.courseConsumptionService.enrollToCourse(this.courseHierarchy);
+    }
     this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
     { 
       queryParams: { 
-        batchId: this.batchId,
+        batchId: this.batchId || this.courseConsumptionService.getBatchId(),
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
         selectedContent: this.firstContentId,

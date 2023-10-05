@@ -423,7 +423,11 @@
               </svg></i>
             {{resourceService.frmelmnts?.lnk?.dashboard}}
           </li>
-        
+          <li class="list-item taxonomy-editor-link" tabindex="0" role="link" *ngIf='!isDesktopApp && permissionService.permissionAvailable'
+          appPermission [permission]='adminDashboard' (click)="toggleSideMenu(false)">
+           <mat-icon class="mr-8">settings_applications</mat-icon>
+            <a [routerLink]="'/dashBoard/taxonomy-editor'" class="link-text">{{resourceService?.frmelmnts?.snav?.taxonomyEditor}}</a>
+          </li>
           <li class="list-item" *ngIf='!isDesktopApp && permissionService.permissionAvailable' appPermission
           [permission]='programDashboardRole' (click)="toggleSideMenu(false)" routerLink="program">
           <i class="icon-svg icon-svg--sm icon-dashboard mr-8"><svg class="icon icon-svg--primary">
@@ -510,7 +514,7 @@
               </svg></i>
             {{resourceService?.frmelmnts?.lbl?.accessible}}
           </li>
-
+         
           <li appOnlineOnly class="list-item" role="link" tabindex="0" appTelemetryInteract
             [telemetryInteractEdata]="getLogoutInteractEdata()" (click)="toggleSideMenu(false);logout()">
             <i class="icon-svg icon-svg--sm icon-logout mr-8"><svg class="icon icon-svg--primary">
@@ -617,7 +621,7 @@
                 </svg></i>
               {{resourceService?.frmelmnts?.lbl?.desktop?.about_us | interpolate:'{instance}': instance}}
             </li>
-
+           
           </ul>
         </div>
       </div>

@@ -2,7 +2,7 @@
 </app-landing-section>
 <compass-banner [loginCallback]="loginClick" [registerCallback]="registerClick" [config]="resourceService?.frmelmnts?.lp?.banner">
 </compass-banner>
-<div class="featured-courses-section">
+<div class="ui container featured-courses-section">
     <p class="heading">{{resourceService?.frmelmnts?.lp?.featuredCourses}}</p>
     <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)"
         (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)">
@@ -13,29 +13,31 @@
 </div>
 
 <!-- Goal oriented HR benefits section -->
-<div class="container goal-oriented-hr-section">
+<div class="ui container goal-oriented-hr-section">
     <p class="heading">{{resourceService?.frmelmnts?.lp?.benefitsOfGoalOrientedHR}}</p>
     <div class="ui grid middle aligned stackable">
         <div class="three wide column" *ngFor='let card of doJsonDecode(resourceService?.frmelmnts?.lp?.goalOrientedHrCards);'>
             <goal-oriented-hr-card [data]="card"></goal-oriented-hr-card>
         </div>
     </div>
-    <!-- <info-card-container [cardInfo]="configContent.infoCard"></info-card-container> -->
+</div>
 
-    <section class="infor-card__wrap" *ngIf="resourceService?.frmelmnts?.lp?.infoCardsData">
-        <div class="ui container">
-            <h1>{{resourceService?.frmelmnts?.lp?.empGovSuccessThruGoalOriHR}}</h1>
-            <info-card *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.lp?.infoCardsData);" [cardInfo]="info"></info-card>
-        </div>
-    </section>
-    <section class="ui container">
-        <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData"></register-btn-card>
-    </section>
-    <section class="ui container" *ngIf="resourceService?.frmelmnts?.lp?.hpExploreCardData">
-        <p class="exploreTitle">{{resourceService?.frmelmnts?.lp?.exploreCompass}}</p>
-        <div class="sb-g marginVertical">
-            <explore-compass-card *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.lp?.exploreCardData);"
-                class="sb-g-col-xxl-4 sb-g-col-xl-4 sb-g-col-lg-3 sb-g-col-md-5 sb-g-col-xs-10" [cardInfo]="info">
-            </explore-compass-card>
-        </div>
-    </section>
+<!-- <info-card-container [cardInfo]="configContent.infoCard"></info-card-container> -->
+
+<section class="infor-card__wrap" *ngIf="resourceService?.frmelmnts?.lp?.infoCardsData">
+    <div class="ui container">
+        <h1>{{resourceService?.frmelmnts?.lp?.empGovSuccessThruGoalOriHR}}</h1>
+        <info-card *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.lp?.infoCardsData);" [cardInfo]="info"></info-card>
+    </div>
+</section>
+<section class="ui container">
+    <register-btn-card [regCardData]="resourceService?.frmelmnts?.lp?.regCardsData" (navigateToRegister)="registerClick()"></register-btn-card>
+</section>
+<section class="ui container" *ngIf="resourceService?.frmelmnts?.lp?.hpExploreCardData">
+    <p class="exploreTitle">{{resourceService?.frmelmnts?.lp?.exploreCompass}}</p>
+    <div class="sb-g marginVertical">
+        <explore-compass-card *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.lp?.exploreCardData);"
+            class="sb-g-col-xxl-4 sb-g-col-xl-4 sb-g-col-lg-3 sb-g-col-md-5 sb-g-col-xs-10" [cardInfo]="info">
+        </explore-compass-card>
+    </div>
+</section>
