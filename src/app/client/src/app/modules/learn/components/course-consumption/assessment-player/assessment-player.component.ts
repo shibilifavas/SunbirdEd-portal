@@ -377,6 +377,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   private getContentState() {
     if (this.batchId && (_.get(this.activeContent, 'contentType') === 'SelfAssess' || !this.isRouterExtrasAvailable)) {
       const req: any = this.getContentStateRequest(this.courseHierarchy);
+      this.totalCount = req.contentIds?.length;
       this.CsCourseService
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe))
@@ -389,7 +390,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           }
         });
         // this.pagesVisited = res.content[0].progressdetails?.current;
-        this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
         if (_.get(this.activeContent, 'contentType') === 'SelfAssess' && this.isRouterExtrasAvailable) {
