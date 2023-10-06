@@ -7,7 +7,7 @@ import { SuiModule } from 'ng2-semantic-ui-v9';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserSearchService } from './services';
 import { UserFilterComponent, UserEditComponent, UserDeleteComponent, HomeSearchComponent,
-   UserProfileComponent, UserSearchComponent } from './components';
+   UserProfileComponent, UserSearchComponent, AllCompetenciesComponent } from './components';
 import { TelemetryModule } from '@sunbird/telemetry';
 import {SharedFeatureModule} from '@sunbird/shared-feature';
 // import { Angular2CsvModule } from 'angular2-csv'; Angular2CsvModule removed TODO: use Blob object to generate csv file
@@ -35,7 +35,7 @@ import { CardModule } from 'compass-common-consumption';
   ],
   declarations: [ UserSearchComponent,
   UserFilterComponent, UserEditComponent, UserDeleteComponent,
-  UserProfileComponent, HomeSearchComponent ],
+  UserProfileComponent, HomeSearchComponent, AllCompetenciesComponent ],
   providers: [UserSearchService]
 })
 export class SearchModule { }
