@@ -170,16 +170,17 @@ export class AllCompetenciesComponent implements OnInit {
 
 public onCourseClick(event){
   console.log("identifier",event.identifier);
-  if(event.batches && !event.batches.isEmpty){
-    event.batches.map((batch : any) =>{
+  if (event.hasOwnProperty('batches') && Array.isArray(event.batches) && event.batches.length > 0) {
+    event.batches.map(batch =>{
       this.batchId = batch.batchId;
     })
-    this.router.navigateByUrl(`learn/course/${event.identifier}/batch/${this.batchId}`);
+    this.router.navigateByUrl(`learn/course/`+ event.identifier+`/batch/`+ this.batchId);
+  } else {
+    this.router.navigateByUrl(`learn/course/`+ event.identifier);
   }
-  else{
-    this.router.navigateByUrl(`learn/course/${event.identifier}`);
-  }
-  console.log(event);
+  
+  
+  
 }
 
 }
