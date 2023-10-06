@@ -31,8 +31,11 @@ export class AllCompetenciesComponent implements OnInit {
   courses: any = [];
   popularCompetencies: any = [];
   popularCompetenciesData: any = [];
+  breadCrumbData = [];
+  batchId = "";
 
-  constructor(private frameworkService: FrameworkService, public activatedRoute: ActivatedRoute, public searchService: SearchService) { }
+  constructor(private frameworkService: FrameworkService, public activatedRoute: ActivatedRoute, public searchService: SearchService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.fetchpopularCompetencies();
@@ -42,10 +45,23 @@ export class AllCompetenciesComponent implements OnInit {
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
-        
         this.categoryDetails = [...res.result.framework.categories];
         this.categoryCodes = res.result.framework.categories.map((cat, index) => `target${cat.code.replace(/^./, cat.code[0].toUpperCase())}Ids`);
         this.allCompetencies.title = "All Competencies";
+        this.breadCrumbData = [
+          {
+              "label": "Learn",
+              "status": "inactive",
+              "link": "resources",
+              "showIcon": true
+          },
+          {
+            "label": "All competencies",
+            "status": "active",
+            "link": "",
+            "showIcon": false
+        }
+      ];
         const competencyRequestData = {
           "filters": {
             "channel":this.activatedRoute.snapshot.queryParams.channel,
@@ -69,7 +85,7 @@ export class AllCompetenciesComponent implements OnInit {
                 let competency : Competency = {};
                 competency.title = term.name;
                 competency.description = term.description;
-                competency.type = "type"; //hardcoded
+                competency.type = ""; //hardcoded
                 competency.noOfCourses = 0;
                 competency.icon = "/assets/images/course-icon.png";
                 competency.expand = true;
@@ -98,7 +114,7 @@ export class AllCompetenciesComponent implements OnInit {
                       let competency : Competency = {};
                       if(comp.name == term.identifier){
                         competency.title = term.name;
-                        competency.type = "type"; //hardcoded
+                        competency.type = ""; //hardcoded
                         competency.noOfCourses = comp.count;
                         competency.icon = "/assets/images/course-icon.png";
                         competency.expand = false;
@@ -149,8 +165,21 @@ export class AllCompetenciesComponent implements OnInit {
     this.searchService.compositePopularSearch(requestData).subscribe(res => {
         this.popularCompetencies = res['result']['facets'][0]['values'];
         this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
-        console.log('Popular competencies 1', this.popularCompetencies);
     });
+}
+
+public onCourseClick(event){
+  console.log("identifier",event.identifier);
+  if(event.batches && !event.batches.isEmpty){
+    event.batches.map((batch : any) =>{
+      this.batchId = batch.batchId;
+    })
+    this.router.navigateByUrl(`learn/course/${event.identifier}/batch/${this.batchId}`);
+  }
+  else{
+    this.router.navigateByUrl(`learn/course/${event.identifier}`);
+  }
+  console.log(event);
 }
 
 }
