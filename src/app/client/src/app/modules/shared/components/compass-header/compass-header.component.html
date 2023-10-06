@@ -2,7 +2,7 @@
   <div class="ui container">
     <!--Header section-->
     <header>
-      <div class="sb-g">
+      <div class="sb-g head-container">
         <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sb-g-col-xxxl-3 sbt-header-logo">
           <div [ngClass]="userService.loggedIn ? 'flex-jc-space-between' : 'flex-jc-flex-start'"
             class="d-flex flex-ai-center w-100">
@@ -37,7 +37,7 @@
         </div>
         <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sb-g-col-xxxl-3 sbt-header-tool-bar">
           <div class="d-flex flex-ai-center">
-            <div class="mr-2" *ngIf="!(deviceDetectorService.isMobile() || deviceDetectorService.isTablet())">
+            <div class="language-dd mr-2" *ngIf="!(deviceDetectorService.isMobile() || deviceDetectorService.isTablet())">
               <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
                 *ngIf=" isLanguageDropdown && languages && showLanguageDropdown()">
               </app-language-dropdown>
