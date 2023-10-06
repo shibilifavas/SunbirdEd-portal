@@ -26,6 +26,7 @@ export class CourseProgressService {
   completionPercentage: any = 0;
   progressdetails: any = {};
   mimeType: string = '';
+  contentProgress: any = {};
 
   /**
   * An event emitter to emit course progress data from a service.
@@ -279,5 +280,13 @@ export class CourseProgressService {
       percentage = (completed / total) * 100
 
       return Math.ceil(percentage) > 98 ? 100 : Math.ceil(percentage);
+    }
+
+    storeVisitedContent(response: any) {
+      if(response?.content.length > 0) {
+        response.content?.forEach((content: any) => {
+          this.contentProgress['content_'+`${content.contentId}`] = content.progressdetails?.current;
+        });
+      }
     }
 }
