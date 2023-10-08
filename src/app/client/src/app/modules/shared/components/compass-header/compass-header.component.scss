@@ -248,3 +248,22 @@
 ::ng-deep#cdk-overlay-0{
   left:0 !important;
 }
+
+//  Mobile
+@media only screen and (max-width: 480px) {
+
+  .spaces-icon,
+  .language-dd {
+    display: none;
+  }
+
+  .ui.input {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .head-container {
+    padding: 10px 0px !important;
+  }
+}
