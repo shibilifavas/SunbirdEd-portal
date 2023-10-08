@@ -18,7 +18,7 @@ import {
 } from './services';
 import { ContentDirectionDirective, HighlightTextDirective, MarkdownDirective, TelemetryEventsDirective } from './directives';
 import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders  } from '@angular/core';
 import { DateFormatPipe, FilterPipe, InterpolatePipe, SortByPipe, SbDataTablePipe, TransposeTermsPipe } from './pipes';
 import { CacheService } from '../shared/services/cache-service/cache.service';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -54,6 +54,7 @@ import { CompassHeaderComponent } from './components/compass-header/compass-head
 // import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { LanguageDropdownComponent } from './components/language-dropdown/language-dropdown.component';
 import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/compass-breadcrumb.component';
+import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
 
 
 @NgModule({
@@ -78,7 +79,7 @@ import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/comp
         SbDatatableComponent, OnDemandReportsComponent, SbDataTablePipe, NetworkStatusComponent, LoadOfflineContentComponent,
         TelemetryEventsDirective, DesktopAppUpdateComponent, AlertModalComponent, SystemWarningComponent, FullPageLoaderComponent, ModalWrapperComponent, ModalContentDirective,
       AutocompletePipe, MaterialAutoCompleteComponent, TransposeTermsPipe, SlickComponent, SummaryCardComponent, SummaryCardContainerComponent,
-                   CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent
+                   CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent, MegaMenuComponent
     ],
     exports: [AppLoaderComponent, DateFormatPipe, TranslateModule,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe,
