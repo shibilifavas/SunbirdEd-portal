@@ -1,0 +1,29 @@
+<compass-breadcrumb [data]="breadCrumbData"></compass-breadcrumb>
+<div class="container ui">
+    <!-- popular competencies -->
+    <section class="ui container mt-60" *ngIf="popularCompetencies">
+      <p class="allCompetencyTitle w-100">{{popularCompetencies.title}}</p>
+      <div class="w-100 d-flex flex-jc-flex-start popular-comp-container">
+          <sb-popular-card
+            *ngFor="let info of popularCompetencies.data"
+            [pillName]="'Competency'" [data]="info"
+            class="w-25 mb-32 mr-24"
+          ></sb-popular-card>
+      </div>
+  </section>
+    <!-- popular competencies -->
+
+    <!-- all competencies -->
+    <section class="ui container mt-60" *ngIf="allCompetencies">
+      <p class="allCompetencyTitle w-80">{{allCompetencies.title}}</p>
+      <div class="w-80 d-flex all-comp-container">
+          <sb-popular-card
+            *ngFor="let info of allCompetencies.data"
+            [pillName]="'Competency'" [data]="info"
+            class="w-100 mb-32"
+            (filterChange) = "onCourseClick($event)"
+          ></sb-popular-card>
+      </div>
+  </section>
+  <!-- all competencies -->
+</div>
