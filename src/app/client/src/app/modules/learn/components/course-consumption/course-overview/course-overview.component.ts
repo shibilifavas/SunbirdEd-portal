@@ -12,26 +12,39 @@ export class CourseOverviewComponent implements OnInit {
   @Input() configContent: any;
   @Input() params: any
   associatedTerms = [];
+  categoryTermsIdLevels:[]
 
-  // levelsInfo = {
-  //   header:{
-  //     content: 'Content Type',
-  //   },
-  //   data: []
-  // }
+  levelsInfo = {
+    header:{
+      content: 'Content Type',
+      level: 'Your level'
+    },
+    data: []
+  }
   categoryTermsId: any;
-  associatedCompetencies:[]
+  associatedCompetencies:[];
+
   constructor(private framework: FrameworkService) { }
 
   ngOnInit(): void {
     this.categoryTermsId = this.courseDetails.se_subjectIds || this.courseDetails.targetTaxonomyCategory4Ids;
+    this.categoryTermsIdLevels = this.courseDetails.targetTaxonomyCategory5Ids;
     if(this.categoryTermsId){
       this.framework.getSelectedFrameworkCategories(this.courseDetails.targetFWIds[0]).subscribe((res:any) => {
         if(res.result.framework.categories.length>3) {
          this.associatedCompetencies = res.result.framework.categories[3].terms.filter((term:any) => this.categoryTermsId.includes(term.identifier))
+          this.updateLevelInfo();
         }
       }) 
     }
   }
 
+  updateLevelInfo(){
+    this.levelsInfo['data'] = [ ...this.associatedCompetencies.map((com:any) => {
+      return {
+          content: com.name,
+          level:   3 
+      }
+    })]
+  }
 }
