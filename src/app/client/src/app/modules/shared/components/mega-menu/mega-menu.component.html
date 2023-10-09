@@ -1,0 +1,37 @@
+<div class="container ui">
+    <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();">Spaces</h3> 
+    <ul class="list" (click)="$event.stopPropagation();">
+        <li>
+            <a href="javascript:void(0);" (click)="navigateToHomepage()" mat-menu-item>
+                <mat-icon>school</mat-icon>
+                 <div class="display">
+                    <h3 class="	sub-heading-two">Learn</h3>
+                    <p>Learn space</p>
+                 </div>
+              </a>
+        </li>
+    </ul>
+    <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
+     *ngIf="permissionService.checkRolesPermissions(workSpaceRole) || permissionService.checkRolesPermissions(adminDashboard)"
+    >Others</h3>
+    <ul class="list">
+      <li *ngIf="permissionService.checkRolesPermissions(adminDashboard)">
+        <a href="javascript:void(0);"  (click)="navigateTo('/dashBoard/taxonomy-editor')" mat-menu-item>
+          <mat-icon class="mr-8">settings_applications</mat-icon>
+           <div class="display">
+              <h3 class="sub-heading-two">{{resourceService?.frmelmnts?.snav?.taxonomyEditor}}</h3>
+              <p>A visual representation of framework categories.</p>
+           </div>
+        </a>
+      </li>
+      <li *ngIf="permissionService.checkRolesPermissions(workSpaceRole)">
+        <a href="javascript:void(0);"  (click)="navigateToWorkspace()" mat-menu-item>
+          <mat-icon>settings_brightness</mat-icon>
+           <div class="display">
+              <h3 class="	sub-heading-two">Workspace</h3>
+              <p>Workspace space access</p>
+           </div>
+       </a>
+      </li>
+    </ul>
+  </div>

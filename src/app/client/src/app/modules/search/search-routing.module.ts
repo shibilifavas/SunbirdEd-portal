@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import {
   UserSearchComponent, UserEditComponent, UserProfileComponent, HomeSearchComponent,
-  UserDeleteComponent,
+  UserDeleteComponent, AllCompetenciesComponent
 } from './components';
 import { AuthGuard } from '../core/guard/auth-gard.service';
 
@@ -29,7 +29,7 @@ const routes: Routes = [
 
   },
   {
-    path: 'Library/:pageNumber', component: HomeSearchComponent,
+    path: 'Library/:pageNumber', component: AllCompetenciesComponent,
     data: {
       breadcrumbs: [{ label: 'Home', url: '/home' }, { label: 'Search', url: '' }],
       telemetry: {
