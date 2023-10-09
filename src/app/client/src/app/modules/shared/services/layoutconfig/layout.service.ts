@@ -86,7 +86,7 @@ export class LayoutService {
 
   initiateSwitchLayout() {
   if (this.layoutConfig) {
-      this.layoutConfig = null;
+      // this.layoutConfig = null;
       document.documentElement.setAttribute('layout', 'base');
       this.acessibleLayoutEnabled = false;
       localStorage.setItem('layoutType', 'default');
