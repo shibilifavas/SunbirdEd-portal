@@ -125,6 +125,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   totalCount: any = 0;
   visitedData: any;
   selectedContentId: any;
+  contentIds: any;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -295,6 +296,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               this.goBack();
             });
         }
+        this.contentIds = this.courseConsumptionService.getContentIds();
+        this.totalCount = this.contentIds?.length;
         this.setTelemetryCourseImpression();
       });
   }
@@ -317,7 +320,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     return {
       userId: this.userService.userid,
       courseId: this.courseId,
-      contentIds: this.courseConsumptionService.parseChildren(course),
+      contentIds: this.contentIds,
       batchId: this.batchId,
       fields: ['progress', 'score']
     };

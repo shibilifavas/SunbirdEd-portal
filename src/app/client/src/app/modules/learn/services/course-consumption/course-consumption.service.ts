@@ -30,6 +30,7 @@ export class CourseConsumptionService {
   completedPercentage: any = 0;
   progressdetails: any = {};
   mimeType: string = '';
+  contentIds: any;
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -68,7 +69,7 @@ export class CourseConsumptionService {
         contentIds.push(node.model.identifier);
       }
     });
-
+    this.setContentIds(contentIds);
     return contentIds;
   }
 
@@ -323,6 +324,14 @@ getAllOpenBatches(contents) {
   //     this.tocList = [];
   //     this.tocList.push(toc);
   // }
+
+  setContentIds(ids: any) {
+    this.contentIds = ids;
+  }
+
+  getContentIds() {
+    return this.contentIds;
+  }
 
   enrollToCourse(courseHierarchy) {
     const request = {
