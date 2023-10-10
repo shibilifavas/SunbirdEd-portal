@@ -123,7 +123,9 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   isSectionVisible: boolean = true;
   completedCount: any = 0;
   totalCount: any = 0;
-  pagesVisited: any = [];
+  visitedData: any;
+  selectedContentId: any;
+  contentIds: any;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -169,6 +171,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.initLayout();
     this.subscribeToQueryParam();
+    this.getContentState();
     this.subscribeToContentProgressEvents().subscribe(data => { });
     this.navigationHelperService.contentFullScreenEvent.
     pipe(takeUntil(this.unsubscribe)).subscribe(isFullScreen => {
@@ -230,8 +233,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         this.courseId = queryParams.courseId;
         this.courseName = queryParams.courseName;
         this.groupId = _.get(queryParams, 'groupId');
-        const selectedContent = queryParams.selectedContent;
-        let isSingleContent = this.collectionId === selectedContent;
+        this.selectedContentId = queryParams.selectedContent;
+        let isSingleContent = this.collectionId === this.selectedContentId;
         this.isParentCourse = this.collectionId === this.courseId;
         if (this.batchId) {
           this.telemetryCdata = [{ id: this.batchId, type: 'CourseBatch' }];
@@ -266,7 +269,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               }
               this.enrolledBatchInfo = data.enrolledBatchDetails;
               this.certificateDescription = this.courseBatchService.getcertificateDescription(this.enrolledBatchInfo);
-              this.setActiveContent(selectedContent, isSingleContent);
+              this.setActiveContent(this.selectedContentId, isSingleContent);
             }, error => {
               this.toasterService.error(this.resourceService.messages.fmsg.m0051);
               this.goBack();
@@ -286,13 +289,15 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
                 this.activeContent = this.courseHierarchy;
                 this.initPlayer(_.get(this.activeContent, 'identifier'));
               } else {
-                this.setActiveContent(selectedContent);
+                this.setActiveContent(this.selectedContentId);
               }
             }, error => {
               this.toasterService.error(this.resourceService.messages.fmsg.m0051);
               this.goBack();
             });
         }
+        this.contentIds = this.courseConsumptionService.getContentIds();
+        this.totalCount = this.contentIds?.length;
         this.setTelemetryCourseImpression();
       });
   }
@@ -315,7 +320,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     return {
       userId: this.userService.userid,
       courseId: this.courseId,
-      contentIds: this.courseConsumptionService.parseChildren(course),
+      contentIds: this.contentIds,
       batchId: this.batchId,
       fields: ['progress', 'score']
     };
@@ -341,7 +346,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       this.initPlayer(_.get(this.activeContent, 'identifier'));
     }
     this.selectedContentName = this.activeContent.name;
-    this.getContentState();
   }
 
   private firstNonCollectionContent(contents) {
@@ -376,15 +380,19 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   private getContentState() {
     if (this.batchId && (_.get(this.activeContent, 'contentType') === 'SelfAssess' || !this.isRouterExtrasAvailable)) {
       const req: any = this.getContentStateRequest(this.courseHierarchy);
+      this.totalCount = req.contentIds?.length;
       this.CsCourseService
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((_res) => {
         const res = this.CourseProgressService.getContentProgressState(req, _res);
         this.completedCount = res.completedCount;
-        //need to check if user manually selects course, read api should pick selected content
-        this.pagesVisited = res.content[0].progressdetails?.current;
-        this.totalCount = res.totalCount
+        res.content?.forEach((content: any) => {
+          if(content.contentId == this.selectedContentId) {
+            this.visitedData = content.progressdetails?.current;
+          }
+        });
+        // this.pagesVisited = res.content[0].progressdetails?.current;
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
         if (_.get(this.activeContent, 'contentType') === 'SelfAssess' && this.isRouterExtrasAvailable) {
@@ -937,8 +945,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
-          if(this.pagesVisited && this.playerConfig.metadata.mimeType == 'application/pdf') {
-            this.playerConfig.config.pagesVisited = this.pagesVisited;
+          let consumedData: any = this.CourseProgressService.contentProgress['content_'+`${this.selectedContentId}`];
+          if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = consumedData || this.visitedData;
+          } else if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'video/mp4') {
+            this.playerConfig.config['currentDuration'] = consumedData[0] || this.visitedData[0];
           }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');

@@ -83,8 +83,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.showSlides(this.slideIndex);
     setInterval(() => { this.plusSlides(1) }, 3000);
-    let element = document.getElementsByTagName('body')[0];
-    element.style.overflow = "hidden";
+    // let element = document.getElementsByTagName('body')[0];
+    // element.style.overflow = "hidden";
+    let element = document.getElementsByTagName('footer')[0];
+    element.style.display = "none";
 
     // Telemetry Start
     this.signUpTelemetryStart();

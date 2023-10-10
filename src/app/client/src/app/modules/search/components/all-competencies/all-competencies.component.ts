@@ -41,7 +41,7 @@ export class AllCompetenciesComponent implements OnInit {
     this.fetchpopularCompetencies();
     // this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
   }
-
+  
   public setBreadCrumbData(){
     let param = {};
     param['label'] = 'All competencies';
@@ -52,7 +52,7 @@ export class AllCompetenciesComponent implements OnInit {
     param['showIcon'] = true;
     localStorage.setItem('breadCrumbForAllComp', JSON.stringify(param));
   }
-
+  
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {

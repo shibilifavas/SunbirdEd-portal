@@ -393,9 +393,9 @@ app-workspace {
     padding: calculateRem(16px) 0 calculateRem(24px) calculateRem(8px);
   }
 
-  @include respond-above(sm) {
-    background: var(--sbt-body-bg2);
-  }
+  // @include respond-above(sm) {
+  //   background: var(--sbt-body-bg2);
+  // }
 
   &__div {
     position: relative;

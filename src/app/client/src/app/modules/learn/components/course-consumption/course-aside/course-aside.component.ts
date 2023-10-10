@@ -40,7 +40,7 @@ export class CourseAsideComponent implements OnInit {
     if(!this.courseConsumptionService.isUserExistInBatch()){
       this.courseConsumptionService.enrollToCourse(this.courseHierarchy);
     }
-    this.router.navigate(['/learn/course/play',this.courseHierarchy.identifier],
+    this.router.navigate(['/learn/course/play',this.parentId],
     { 
       queryParams: { 
         batchId: this.batchId || this.courseConsumptionService.getBatchId(),
