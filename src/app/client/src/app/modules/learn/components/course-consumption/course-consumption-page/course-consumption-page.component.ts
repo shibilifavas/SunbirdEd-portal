@@ -60,6 +60,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.enrolledBatchInfo = enrolledBatchDetails;
         this.courseHierarchy = courseHierarchy;
         this.contentIds = this.courseConsumptionService.parseChildren(this.courseHierarchy);
+        this.courseConsumptionService.setContentIds(this.contentIds);
         this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
         this.layoutService.updateSelectedContentType.emit(courseHierarchy.contentType);
         this.getContentState();
