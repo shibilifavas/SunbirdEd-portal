@@ -41,6 +41,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   queryParams: any = {};
   progressToDisplay = 0;
   _routerStateContentStatus: any;
+  breadCrumbData;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -79,6 +80,33 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           numberOfRating:'123 ratings',
           duration:this.courseHierarchy.Duration
         };
+        this.breadCrumbData = [
+          {
+              "label": "Learn",
+              "status": "inactive",
+              "link": "resources",
+              "showIcon": true
+          }
+      ];
+      const stored = localStorage.getItem('breadCrumbForAllComp');
+      if(stored){
+        let param = {};
+        const parsedData = JSON.parse(stored);
+        param['label'] = parsedData.label;
+        param['status'] = "inactive";
+        let channelId = parsedData.channel;
+        let fw = parsedData.framework;
+        param['link'] = parsedData.link;
+        param['showIcon'] = true;
+        this.breadCrumbData.push(param);
+      }
+      const newBreadCrumb = {
+        "label": this.config.title,
+        "status": "active",
+        "link": "",
+        "showIcon": false}
+        this.breadCrumbData.push(newBreadCrumb);
+      
       }, err => {
         if (_.get(err, 'error.responseCode') && err.error.responseCode === 'RESOURCE_NOT_FOUND') {
           this.toasterService.error(this.generaliseLabelService.messages.emsg.m0002);
