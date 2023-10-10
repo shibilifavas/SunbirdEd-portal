@@ -16,8 +16,8 @@
 <app-batch-info *ngIf="showBatchInfo" [enrolledBatchInfo]="selectedCourseBatches"
     (routeChanged)="refreshComponent($event)">
 </app-batch-info> -->
-
 <ng-container *ngIf="config">
+    <compass-breadcrumb *ngIf="breadCrumbData" [data]="breadCrumbData"></compass-breadcrumb>
     <compass-banner [config]="config" (wishList)="addWishList($event)"></compass-banner>
 </ng-container>
 <div *ngIf="courseTabs&&courseHierarchy" class="courseTab">

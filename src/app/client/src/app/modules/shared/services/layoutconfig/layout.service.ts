@@ -86,18 +86,17 @@ export class LayoutService {
 
   initiateSwitchLayout() {
   if (this.layoutConfig) {
-      this.layoutConfig = null;
+      // this.layoutConfig = null;
       document.documentElement.setAttribute('layout', 'base');
       this.acessibleLayoutEnabled = false;
       localStorage.setItem('layoutType', 'default');
      } else {
-      if(!this.layoutConfig.name){
-          this.layoutConfig = this.configService.appConfig.layoutConfiguration;
-          this.layoutConfig.name = 'joy';
-          document.documentElement.setAttribute('layout', 'joy');
-          localStorage.setItem('layoutType', 'joy');
+      // this.layoutConfig = this.configService.appConfig.layoutConfiguration;
+      //     this.layoutConfig.name = 'joy';
+      //     document.documentElement.setAttribute('layout', 'joy');
+      //     localStorage.setItem('layoutType', 'joy');
+        this.switchLayoutBlueSky();
       }
-    }
  
     this.setLayoutConfig(this.layoutConfig);
   }
