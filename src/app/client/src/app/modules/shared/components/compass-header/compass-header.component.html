@@ -3,29 +3,67 @@
     <!--Header section-->
     <header>
       <div class="sb-g head-container">
-        <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sb-g-col-xxxl-3 sbt-header-logo">
-          <div [ngClass]="userService.loggedIn ? 'flex-jc-space-between' : 'flex-jc-flex-start'"
+        <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sbt-header-logo">
+          <div [ngClass]="userService.loggedIn ? '' : 'flex-jc-flex-start'"
             class="d-flex flex-ai-center w-100">
             <!--Logo-->
             <a class="logo sbt-logo" tabindex="0" title="Compass" role="link" aria-label="Navigate to Homepage">
               <img (click)="navigateToHomepage()" class="cursor-pointer" alt={{tenantInfo.titleName}}
                 src="{{tenantInfo.logo}}">
             </a>
-            <ng-container *ngIf="userService.loggedIn &&  !(deviceDetectorService.isMobile() || deviceDetectorService.isTablet())">
+            <ng-container *ngIf="userService.loggedIn">
               <!-- menu -->
-              <div class="spaces-icon">
-                <mat-icon class="menuIcon" [matMenuTriggerFor]="menu">menu</mat-icon>
-                <span>Spaces</span>
-                <mat-menu #menu="matMenu">
-                  <button (click)="navigateToHomepage()" mat-menu-item>Learn</button>
-                </mat-menu>
+              <div class="spaces-icon mx-60">
+                <div class="menu-trigger" [matMenuTriggerFor]="menu">
+                  <mat-icon class="menuIcon open">menu</mat-icon>
+                  <mat-icon class="close" >close</mat-icon>
+                  <span class="mx-10">Spaces</span>
+                </div>
+                  <mat-menu #menu="matMenu" yPosition="below" [hasBackdrop]="false">
+                    <app-mega-menu (navigateToHome)="navigateToHomepage()"></app-mega-menu>
+                      <!-- <div class="container ui" (click)="$event.stopPropagation();">
+                        <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();">Spaces</h3> 
+                        <ul class="list" (click)="$event.stopPropagation();">
+                            <li>
+                                <button (click)="navigateToHomepage()" mat-menu-item>
+                                    <mat-icon>school</mat-icon>
+                                     <div class="display">
+                                        <h3 class="	sub-heading-two">Learn</h3>
+                                        <p>Discription Learn</p>
+                                     </div>
+                                </button>
+                            </li>
+                            <li>
+                                <button (click)="navigateToHomepage()" mat-menu-item>
+                                  <mat-icon>forum</mat-icon>
+                                  <div class="display">
+                                    <h3 class="	sub-heading-two"> Discussion forum</h3>
+                                    <p>Discription Discussion forum</p>
+                                </div>
+                                </button>
+                            </li>
+                        </ul>
+                        <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();">Others</h3>
+                        <ul class="list" (click)="$event.stopPropagation();">
+                          <li>
+                            <button (click)="navigateToHomepage()" mat-menu-item>
+                              <mat-icon>school</mat-icon>
+                               <div class="display">
+                                  <h3 class="	sub-heading-two">Taxonomy Editor</h3>
+                                  <p>As Admin can add terms into framework categories.</p>
+                               </div>
+                          </button>
+                          </li>
+                        </ul>
+                      </div> -->
+                    </mat-menu>
               </div>
             </ng-container>
             <!--/Logo-->
           </div>
 
         </div>
-        <div class="sb-g-col-xs-6 sb-g-col-md-6 sb-g-col-lg-6 sb-g-col-xxxl-6 sbt-header-logo">
+        <div class="sb-g-col-xs-6 sb-g-col-md-6 sb-g-col-lg-6 sbt-header-logo">
           <!--  -->
           <div class="ui center aligned container search-container" *ngIf="userService.loggedIn">  
             <div class="ui input">
@@ -35,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sb-g-col-xxxl-3 sbt-header-tool-bar">
+        <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sbt-header-tool-bar">
           <div class="d-flex flex-ai-center">
             <div class="language-dd mr-2" *ngIf="!(deviceDetectorService.isMobile() || deviceDetectorService.isTablet())">
               <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
@@ -83,14 +121,20 @@
     
   </div>
 </div>
-<section class="ui container mobile-only main-menu" *ngIf="deviceDetectorService.isMobile() || deviceDetectorService.isTablet()">
+<section class="ui container mobile-only main-menu">
   <nav class="main-menu__wrap">
       <!-- menu -->
       <ng-container *ngIf="userService.loggedIn">
-        <mat-icon class="menuIcon" [matMenuTriggerFor]="menu">menu</mat-icon>
-        <span>Spaces</span>
-        <mat-menu #menu="matMenu">
-          <button (click)="navigateToHomepage()" mat-menu-item>Learn</button>
+        <div class="menu-trigger" [matMenuTriggerFor]="menu">
+            <mat-icon class="menuIcon open">menu</mat-icon>
+            <mat-icon class="close" >close</mat-icon>
+            <span class="mx-10">Spaces</span>
+        </div>
+        <mat-menu #menu="matMenu" yPosition="above" [hasBackdrop]="false">
+          <app-mega-menu (navigateToHome)="navigateToHomepage()"></app-mega-menu>
+          <div class="menu-trigger__close" [matMenuTriggerFor]="menu">
+            <mat-icon>cancel</mat-icon>
+          </div>
         </mat-menu>
       </ng-container>
   </nav>

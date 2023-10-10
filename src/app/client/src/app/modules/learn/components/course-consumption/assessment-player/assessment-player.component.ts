@@ -125,6 +125,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   totalCount: any = 0;
   visitedData: any;
   selectedContentId: any;
+  contentIds: any;
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -295,6 +296,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               this.goBack();
             });
         }
+        this.contentIds = this.courseConsumptionService.getContentIds();
+        this.totalCount = this.contentIds?.length;
         this.setTelemetryCourseImpression();
       });
   }
@@ -317,7 +320,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     return {
       userId: this.userService.userid,
       courseId: this.courseId,
-      contentIds: this.courseConsumptionService.parseChildren(course),
+      contentIds: this.contentIds,
       batchId: this.batchId,
       fields: ['progress', 'score']
     };
@@ -377,6 +380,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   private getContentState() {
     if (this.batchId && (_.get(this.activeContent, 'contentType') === 'SelfAssess' || !this.isRouterExtrasAvailable)) {
       const req: any = this.getContentStateRequest(this.courseHierarchy);
+      this.totalCount = req.contentIds?.length;
       this.CsCourseService
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe))
@@ -389,7 +393,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           }
         });
         // this.pagesVisited = res.content[0].progressdetails?.current;
-        this.totalCount = res.totalCount
         const _contentIndex = _.findIndex(this.contentStatus, {contentId: _.get(this.activeContent, 'identifier')});
         const _resIndex =  _.findIndex(res.content, {contentId: _.get(this.activeContent, 'identifier')});
         if (_.get(this.activeContent, 'contentType') === 'SelfAssess' && this.isRouterExtrasAvailable) {
@@ -942,10 +945,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             config.context.objectRollup = this.objectRollUp;
           }
           this.playerConfig = config;
-          if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'application/pdf') {
-            this.playerConfig.config.pagesVisited = this.visitedData;
-          } else if(this.visitedData?.length > 0 && this.playerConfig.metadata.mimeType == 'video/mp4') {
-            this.playerConfig.config.currentDuration = this.visitedData[0];
+          let consumedData: any = this.CourseProgressService.contentProgress['content_'+`${this.selectedContentId}`];
+          if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'application/pdf') {
+            this.playerConfig.config.pagesVisited = consumedData || this.visitedData;
+          } else if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'video/mp4') {
+            this.playerConfig.config['currentDuration'] = consumedData[0] || this.visitedData[0];
           }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');

@@ -1,0 +1,114 @@
+.main-menu {
+    &.mobile-only {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding:8px 0;
+    }
+    &__wrap {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+     }
+  
+  }
+  .menu-trigger{
+    cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      .open{
+        display: block;
+      }
+      .close{
+        display: none;
+      }
+      &__close {
+        text-align: right;
+        .mat-icon{
+          color:var(--com-pink);
+          font-size: 30px;
+          font-size: 35px;
+          width: 35px;
+          height: 35px;
+        }
+      }
+  }
+   
+  .menu-trigger[aria-expanded="true"]{
+    background-color: var(--com-grey-14);
+    padding: 4px 8px;
+    border-radius: 3px;
+    .mat-icon{
+      color: var(--com-primary-color);
+     }
+    .close{
+      display: block;
+    }
+    .open{
+      display: none;
+    }
+  }
+  ::ng-deep.mat-menu-panel {
+    max-width: none !important;
+    width:95vw;
+    padding:10px;
+  
+    .mat-menu-content {
+      padding: 0;
+    }
+    .sub-heading-mobile{
+      padding:10px 2px;
+    }
+    ul{
+      padding:0;
+      li{
+          padding:0;
+          margin:0;
+          .mat-menu-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 20px;  
+            height: 72px;
+            padding: 15px 10px;
+            &:hover {
+              text-decoration: none;
+            }
+            .mat-icon{
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+              align-items: center;
+              color: var(--com-primary-color);
+              width: 60px;
+              height: 60px;
+              background-color: var(--com-grey-14);
+              border-radius: 10px;
+            }
+          }
+      }
+      @media only screen and (min-width: 540px)  {
+          display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            
+              li {
+                  margin-right: 20px;
+              }
+          
+      }
+    }
+    @media only screen and (min-width: 768px)  {
+      width: 100vw;
+      padding: 15px;
+      margin-top:10px;
+    }
+  }
+  
+
+  ::ng-deep#cdk-overlay-0{
+    left:0 !important;
+  }

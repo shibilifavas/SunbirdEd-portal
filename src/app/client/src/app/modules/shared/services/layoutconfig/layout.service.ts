@@ -52,7 +52,7 @@ export class LayoutService {
     const total = 12;
     const sixteenColumn = 16;
     const resultLayout = columnType[panelIndex];
-    const xxxltotal = panelIndex === 0 ? 4 : 12;
+    const xxxltotal = panelIndex === 0 ? 3 : 9;
     if (layoutConfigExternal) {
         return 'sb-g-col-xs-' + total + ' sb-g-col-md-' + resultLayout + ' sb-g-col-lg-' + resultLayout + ' sb-g-col-xxxl-' + xxxltotal;
     } else {
@@ -86,16 +86,17 @@ export class LayoutService {
 
   initiateSwitchLayout() {
   if (this.layoutConfig) {
-      this.layoutConfig = null;
+      // this.layoutConfig = null;
       document.documentElement.setAttribute('layout', 'base');
       this.acessibleLayoutEnabled = false;
       localStorage.setItem('layoutType', 'default');
      } else {
-      this.layoutConfig = this.configService.appConfig.layoutConfiguration;
-      this.layoutConfig.name = 'joy';
-      document.documentElement.setAttribute('layout', 'joy');
-      localStorage.setItem('layoutType', 'joy');
-    }
+      // this.layoutConfig = this.configService.appConfig.layoutConfiguration;
+      //     this.layoutConfig.name = 'joy';
+      //     document.documentElement.setAttribute('layout', 'joy');
+      //     localStorage.setItem('layoutType', 'joy');
+        this.switchLayoutBlueSky();
+      }
  
     this.setLayoutConfig(this.layoutConfig);
   }
