@@ -325,7 +325,6 @@ getAllOpenBatches(contents) {
   // }
 
   enrollToCourse(courseHierarchy) {
-    debugger;
     const request = {
       request: {
         courseId: courseHierarchy.identifier,

@@ -311,6 +311,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
+        localStorage.removeItem('breadCrumbForAllComp');
         this.fwCategory = _.map(this.taxonomyService.getTaxonomyCategories(), category => { return category });
         this.isDesktopApp = this.utilService.isDesktopApp;
         this.setUserPreferences();
