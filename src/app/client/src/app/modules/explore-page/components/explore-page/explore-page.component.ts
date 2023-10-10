@@ -294,7 +294,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     console.log('Popular competencies mapping', this.popularCompetencyMapping);
                 }, err => {
                     this.toasterService.error(get(this.resourceService, 'frmelmnts.lbl.fetchingContentFailed'));
-                    this.navigationhelperService.goBack();
+                    // this.navigationhelperService.goBack();
                 })
             );
     }
