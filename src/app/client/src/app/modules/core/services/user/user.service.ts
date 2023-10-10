@@ -564,7 +564,7 @@ export class UserService {
       userFramework = (isUserLoggedIn && framework && _.pick(framework, [])) || {}; // 'medium', 'gradeLevel', 'board', 'id'
     }
   
-    return { board: this.defaultBoard, ...userFramework };
+    return {...userFramework }; //  board: this.defaultBoard
   }
 
   getEnrolledUsers(req:any){
