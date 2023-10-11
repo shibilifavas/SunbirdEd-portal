@@ -16,8 +16,8 @@ export class CourseOverviewComponent implements OnInit {
   competencylevels: any;
   levelsInfo = {
     header:{
-      content: 'Content Type',
-      level: 'Your level'
+      content: '',
+      level: ''
     },
     data: []
   }
@@ -26,6 +26,10 @@ export class CourseOverviewComponent implements OnInit {
 
   constructor(private framework: FrameworkService) { }
 
+  ngOnChanges(){
+    this.levelsInfo.header.content = this.configContent.overview.competencyType;
+    this.levelsInfo.header.level = this.configContent.overview.level;
+  }
   ngOnInit(): void {
     this.categoryTermsId = this.courseDetails.se_subjectIds || this.courseDetails.targetTaxonomyCategory4Ids;
     this.categoryTermsIdLevels = this.courseDetails.targetTaxonomyCategory5Ids;
