@@ -2,7 +2,7 @@
 import { of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
-import { PlayerService, PermissionService, UserService, GeneraliseLabelService } from '@sunbird/core';
+import { PlayerService, PermissionService, UserService, GeneraliseLabelService, CoursesService } from '@sunbird/core';
 import { ServerResponse, ResourceService, ToasterService } from '@sunbird/shared';
 import { CourseProgressService } from '../courseProgress/course-progress.service';
 import * as _ from 'lodash-es';
@@ -35,7 +35,8 @@ export class CourseConsumptionService {
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
     private navigationHelperService: NavigationHelperService, private permissionService: PermissionService,
-    private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService) {
+    private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService,
+    private coursesService: CoursesService) {
     }
 
   getCourseHierarchy(courseId, option: any = { params: {} }) {
@@ -69,7 +70,6 @@ export class CourseConsumptionService {
         contentIds.push(node.model.identifier);
       }
     });
-    this.setContentIds(contentIds);
     return contentIds;
   }
 
@@ -344,6 +344,9 @@ getAllOpenBatches(contents) {
     this.courseBatchService.enrollToCourse(request)
          .subscribe((data) => {
         console.log(data);
+        if(data.result.response == 'SUCCESS') {
+          this.getEnrolledCourses();
+        }
       }, (err) => {
         console.log(err);
       });
@@ -363,6 +366,12 @@ getAllOpenBatches(contents) {
 
   getBatchId() {
     return this.courseHierarchy.batches[0].batchId;
+  }
+
+  getEnrolledCourses() {
+    this.coursesService.getEnrolledCourses().subscribe((data) => {
+        console.log("New enrolled data", data);
+    });
   }
 
 }

@@ -211,3 +211,9 @@
 .shadow{
   box-shadow: 0 calculateRem(10px) calculateRem(10px) calculateRem(-10px) rgba(var(--rc-rgba-black), 0.25);
 }
+
+@media (min-width: 1920px) {
+  .playerPageContainer .sb-g {
+    grid-template-columns: repeat(12,1fr);
+  }
+}
