@@ -12,8 +12,8 @@ export class CourseOverviewComponent implements OnInit {
   @Input() configContent: any;
   @Input() params: any
   associatedTerms = [];
-  categoryTermsIdLevels:[]
-
+  categoryTermsIdLevels:any
+  competencylevels: any;
   levelsInfo = {
     header:{
       content: 'Content Type',
@@ -33,7 +33,8 @@ export class CourseOverviewComponent implements OnInit {
       this.framework.getSelectedFrameworkCategories(this.courseDetails.targetFWIds[0]).subscribe((res:any) => {
         if(res.result.framework.categories.length>3) {
          this.associatedCompetencies = res.result.framework.categories[3].terms.filter((term:any) => this.categoryTermsId.includes(term.identifier))
-          this.updateLevelInfo();
+          this.competencylevels = res.result.framework.categories[4].terms.filter((term:any) => this.categoryTermsIdLevels.includes(term.identifier))
+         this.updateLevelInfo();
         }
       }) 
     }
@@ -43,7 +44,7 @@ export class CourseOverviewComponent implements OnInit {
     this.levelsInfo['data'] = [ ...this.associatedCompetencies.map((com:any) => {
       return {
           content: com.name,
-          level:   3 
+          level:   this.competencylevels[0].index
       }
     })]
   }
