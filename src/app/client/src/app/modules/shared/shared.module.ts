@@ -3,6 +3,7 @@ import {
   SuiProgressModule, SuiRatingModule, SuiCollapseModule
 } from 'ng2-semantic-ui-v9';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {RouterModule} from '@angular/router';
 import {
   NoResultComponent, AppLoaderComponent, CardComponent,
   CardCreationComponent, ShareLinkComponent, BrowserCompatibilityComponent, QrCodeModalComponent, RedirectComponent,
@@ -68,7 +69,8 @@ import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
         MatTooltipModule, MatTabsModule, MatDialogModule,
         MatAutocompleteModule, MatFormFieldModule, MatInputModule,
         MatChipsModule, MatIconModule, MatSelectModule, MatListModule, MatButtonModule, MatCheckboxModule, MaterialModule,
-    CommonConsumptionModule, MatMenuModule
+    CommonConsumptionModule, MatMenuModule,
+    RouterModule
     ],
     declarations: [AppLoaderComponent, DateFormatPipe,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe, InterpolatePipe,

@@ -75,6 +75,12 @@
         </div>
         <div class="sb-g-col-xs-3 sb-g-col-md-3 sb-g-col-lg-3 sbt-header-tool-bar">
           <div class="d-flex flex-ai-center">
+            <a [routerLink]="['/resources']" class="header-icon__home mr-2">
+              <mat-icon>home</mat-icon>
+            </a>
+            <a class="header-icon__notification mr-2">
+              <mat-icon>notifications</mat-icon>
+            </a>
             <div class="language-dd mr-2" *ngIf="!(deviceDetectorService.isMobile() || deviceDetectorService.isTablet())">
               <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
                 *ngIf=" isLanguageDropdown && languages && showLanguageDropdown()">
@@ -138,9 +144,17 @@
         </mat-menu>
       </ng-container>
   </nav>
-  <div class="main-menu__lang">
-    <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
-      *ngIf=" isLanguageDropdown && languages && showLanguageDropdown()">
-    </app-language-dropdown>
+  <div class="right">
+      <a [routerLink]="['/resources']" class="header-icon__home mr-2">
+        <mat-icon>home</mat-icon>
+      </a>
+      <a class="header-icon__notification mr-2">
+        <mat-icon>notifications</mat-icon>
+      </a>
+      <div class="main-menu__lang">
+        <app-language-dropdown [layoutConfiguration]="layoutConfiguration" [languageRange]='languages'
+          *ngIf=" isLanguageDropdown && languages && showLanguageDropdown()">
+        </app-language-dropdown>
+  </div>
   </div>
 </section>
