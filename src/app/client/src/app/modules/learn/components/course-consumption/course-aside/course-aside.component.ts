@@ -20,13 +20,18 @@ export class CourseAsideComponent implements OnInit {
   firstContentId: any;
   parentId: any;
   batchId: any;
+  courseStatus:number;
 
-  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService, private userService: UserService) { }
+  constructor(private router: Router, private courseConsumptionService: CourseConsumptionService,
+     private userService: UserService,  public courseProgressService: CourseProgressService) { }
 
   ngOnInit(): void {
     const firstModule = this.courseConsumptionService.getCourseContent()[0];
     this.firstContentId = firstModule.body[0].selectedContent;
     this.parentId = firstModule.body[0].collectionId;
+    this.courseProgressService.courseStatus.subscribe((status:number) => {
+      this.courseStatus = status
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
