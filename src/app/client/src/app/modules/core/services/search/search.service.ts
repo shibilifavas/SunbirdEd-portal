@@ -286,7 +286,9 @@ export class SearchService {
           fields: requestParam.fields,
           softConstraints: requestParam.softConstraints,
           mode: requestParam.mode,
-          facets: requestParam.facets && requestParam.facets
+          facets: requestParam.facets && requestParam.facets,
+          targetTaxonomyCategory4Ids: requestParam.targetTaxonomyCategory4Ids,
+          keywords: requestParam.keywords
         }
       }
     };

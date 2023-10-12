@@ -270,13 +270,14 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                                     // console.log('PPG', this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['identifier']);
                                     let index = this.popularCompetencies.indexOf(this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier']);
                                     if (index != -1) {
+                                        let obj = {};
                                         obj['identifier'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier'];
                                         obj['title'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['name'];
                                         obj['noOfCourses'] = this.popularCompetenciesData[index]['count'];
                                         obj['icon'] = '/assets/images/course-icon.png';
                                         obj['type'] = '';
                                         obj['associatedCoursesTxt'] = 'Associated Courses';
-                                        this.popularCompetencyMapping[tempIndex++] = obj;
+                                        this.popularCompetencyMapping.push(obj);
                                     }
                                 }
                             }
@@ -466,6 +467,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (title.toLowerCase() == "competency") {
             // this.router.navigate(['search/Library', 1]);
             this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
+        } else if (title.toLowerCase() == "topic") {
+            // this.router.navigate(['search/Library', 1]);
+            this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
     }
 
@@ -1589,12 +1593,12 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     loadCompetencyCourses(identifier: string) {
-        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&Competencies=${identifier}&framework=${this.contentSearchService.frameworkId}&hideFilter=true`)
+        this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&competency=${identifier}&framework=${this.contentSearchService.frameworkId}`)
         console.log('loadCompetencyCourses', identifier);
     }
 
     loadTopicCourses(keyword: string) {
-        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keywords=${keyword}&hideFilter=true`)
+        this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keyword=${keyword}`)
         console.log('loadKeywordCourses', keyword);
     }
 }
