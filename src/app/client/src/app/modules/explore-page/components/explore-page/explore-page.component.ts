@@ -443,7 +443,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         "channel": this.channelId,
                         "status": [
                             "Live"
-                        ]
+                        ],
+                        "primaryCategory": [
+                            "Course"
+                        ],
                     },
                     "limit": 100,
                     "sort_by": {
@@ -677,6 +680,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             request.channelId = this.selectedFilters['channel'];
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
+                        
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
                         _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {

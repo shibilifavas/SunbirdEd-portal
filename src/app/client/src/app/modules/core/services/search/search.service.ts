@@ -412,7 +412,7 @@ export class SearchService {
     let filters = request.filters;
     const { facets } = request;
     filters = _.omit(filters, ['key', 'sort_by', 'sortType', 'appliedFilters']);
-    filters['primaryCategory'] = primaryCategory;
+    filters['primaryCategory'] = primaryCategory.filter(p => p === 'Course');
     if (!request.isCustodianOrg) {
       filters['channel'] = request.channelId;
     }
