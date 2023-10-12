@@ -16,6 +16,8 @@ import { ContentSearchModule } from '@sunbird/content-search';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonConsumptionModule } from 'compass-common-consumption';
 import { CardModule } from 'compass-common-consumption';
+import { AllTopicsComponent } from './components/all-topics/all-topics.component';
+import { CoursesSearchComponent } from './components/courses-search/courses-search.component';
 
 @NgModule({
   imports: [
@@ -35,7 +37,7 @@ import { CardModule } from 'compass-common-consumption';
   ],
   declarations: [ UserSearchComponent,
   UserFilterComponent, UserEditComponent, UserDeleteComponent,
-  UserProfileComponent, HomeSearchComponent, AllCompetenciesComponent ],
+  UserProfileComponent, HomeSearchComponent, AllCompetenciesComponent, AllTopicsComponent, CoursesSearchComponent ],
   providers: [UserSearchService]
 })
 export class SearchModule { }
