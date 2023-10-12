@@ -41,7 +41,18 @@ export class AllCompetenciesComponent implements OnInit {
     this.fetchpopularCompetencies();
     // this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
   }
-
+  
+  public setBreadCrumbData(){
+    let param = {};
+    param['label'] = 'All competencies';
+    param['status'] = "inactive";
+    let channelId = this.activatedRoute.snapshot.queryParams.channel;
+    let fw = this.activatedRoute.snapshot.queryParams.framework;
+    param['link'] = `search/Library/1?channel=${channelId}&framework=${fw}&hideFilter=false`;
+    param['showIcon'] = true;
+    localStorage.setItem('breadCrumbForAllComp', JSON.stringify(param));
+  }
+  
   public findCategory(frameworkId:any){
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
@@ -126,8 +137,8 @@ export class AllCompetenciesComponent implements OnInit {
                 })
               })
               this.popularCompetencies.title = "Popular competencies";
+              this.popularCompetenciesData.sort((a, b) => b.noOfCourses - a.noOfCourses);
               this.popularCompetencies.data = this.popularCompetenciesData;
-              console.log(this.popularCompetenciesData);
             }
           }
         });  
@@ -170,6 +181,7 @@ export class AllCompetenciesComponent implements OnInit {
 
 public onCourseClick(event){
   console.log("identifier",event.identifier);
+  this.setBreadCrumbData();
   if (event.hasOwnProperty('batches') && Array.isArray(event.batches) && event.batches.length > 0) {
     event.batches.map(batch =>{
       this.batchId = batch.batchId;
