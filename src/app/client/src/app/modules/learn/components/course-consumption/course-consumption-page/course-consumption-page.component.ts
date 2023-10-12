@@ -349,6 +349,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         // this.calculateProgress();
         // this.updateCourseContent(this.courseHierarchy);
       }, error => {
+        this.courseProgressService.updateCourseStatus(0);
         console.log('Content state read CSL API failed ', error);
       });
   }
