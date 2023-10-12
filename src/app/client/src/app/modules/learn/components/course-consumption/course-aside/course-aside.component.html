@@ -1,6 +1,16 @@
 <aside class="aside">
     <div class="aside__top">
-    <button class="com-primary-btn" (click)="navigate()">{{configContent.courseAside.startCourse}}</button>
+    <button class="com-primary-btn" (click)="navigate()">
+        <ng-container *ngIf="courseStatus === 0">
+            {{configContent.courseAside.startCourse}}
+        </ng-container>
+        <ng-container *ngIf="courseStatus === 1">
+            {{configContent.courseAside.resume}}
+        </ng-container>
+        <ng-container *ngIf="courseStatus === 2">
+            {{configContent.courseAside.restartCourse}}
+        </ng-container>
+    </button>
     <p class="aside__share-rating">
         <button class="com-secondary-btn"> <span class="button-icon"><mat-icon>star</mat-icon></span><label class="button-label">{{configContent.courseAside.rating}}</label></button>
         <button class="com-secondary-btn"><span class="button-icon"><mat-icon>share</mat-icon></span><label class="button-label">{{configContent.courseAside.share}}</label></button>
