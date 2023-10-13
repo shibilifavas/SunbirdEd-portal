@@ -230,3 +230,11 @@ body .slick-next {
 .pointing {
   cursor: pointer;
 }
+
+::ng-deep .slide .course-card .poster-img {
+  // height: 30vh;
+  width: 100%;
+}
+::ng-deep .slide .course-card .text-section {
+  height: 145px;
+}

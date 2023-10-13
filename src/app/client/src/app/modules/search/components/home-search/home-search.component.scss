@@ -38,3 +38,10 @@
 .drag-up {
     margin-top: -6em;
 }
+::ng-deep .courseContainer .course-card .poster-img {
+    // height: 30vh;
+    width: 100%;
+}
+::ng-deep .slide .course-card .text-section {
+    height: 145px;
+}
