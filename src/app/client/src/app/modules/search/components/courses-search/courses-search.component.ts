@@ -53,14 +53,20 @@ export class CoursesSearchComponent implements OnInit {
         visibility: ["Default", "Parent"], 
         channel: channelId ,
         keywords: keyword ?? '',
-        // targetTaxonomyCategory4Ids: [
-        //   competency ?? ''
-        // ],
+        targetTaxonomyCategory4Ids: [
+          competency ?? ''
+        ]
       },
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
       pageNumber: pageNumber
     };
+    if(option.filters.keywords == ''){
+      delete option.filters.keywords;
+    }
+    if(option.filters.targetTaxonomyCategory4Ids[0]==''){
+      delete option.filters.targetTaxonomyCategory4Ids;
+    }
     this.searchService.contentSearch(option).subscribe(res => {
       this.courses = res['result']['content'];
       // console.log('Searched Courses', res['result']['content']);
