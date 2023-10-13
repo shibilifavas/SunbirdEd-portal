@@ -104,7 +104,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     view: this.configService.constants.VIEW.VERTICAL,
     isTitle:false
   };
-
+  breadCrumbData = [
+    {
+        "label": "Profile",
+        "status": "inactive",
+        "link": "",
+        "showIcon": true,
+        'matIcon':'person'
+    }
+  ];
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,
   public resourceService: ResourceService, public coursesService: CoursesService,
     public toasterService: ToasterService, public profileService: ProfileService, public userService: UserService,
