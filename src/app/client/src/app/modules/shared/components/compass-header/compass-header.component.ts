@@ -151,6 +151,6 @@ export class CompassHeaderComponent implements OnInit {
   }
 
   searchCourses(text: string) {
-    this.router.navigateByUrl(`search/Library/1?channel=${this.userService.channel}&key=${encodeURIComponent(text)}&hideFilter=false`)
+    this.router.navigateByUrl(`search/Courses/1?channel=${this.userService.channel}&key=${encodeURIComponent(text)}`)
   }
 }

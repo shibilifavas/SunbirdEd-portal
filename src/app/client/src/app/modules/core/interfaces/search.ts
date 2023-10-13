@@ -82,4 +82,6 @@ export interface SearchParam {
  fields?: string[];
  locationIds?: string[];
  isRootOrg?: boolean;
+ targetTaxonomyCategory4Ids?: any[],
+ keywords?: string
 }

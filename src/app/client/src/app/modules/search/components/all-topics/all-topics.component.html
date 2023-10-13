@@ -1,0 +1,32 @@
+<compass-breadcrumb [data]="breadCrumbData"></compass-breadcrumb>
+<div class="ui container mt-4rem">    
+    <div *ngIf="popularTopics.length > 0" class="ui container mt-4rem">
+        <div class="popular-card">
+            <div class="popular-card-title">{{resourceService?.frmelmnts?.llp?.topics.title}}</div>
+            <!--div><button class="com-secondary-btn">{{topicsData.button}}</button></div-->
+        </div>
+        <div class="ui grid middle aligned stackable">
+            <div class="three wide column" *ngFor="let data of popularTopics;let i=index">
+            <div class="card-container" (click)="loadTopicCourses(data.name)">
+                <sb-popular-card [pillName]="'Topic'" [data]="data"></sb-popular-card>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui container mt-4rem">    
+    <div *ngIf="allTopics.length > 0" class="ui container mt-4rem mb-4rem">
+        <div class="popular-card">
+            <div class="popular-card-title">{{resourceService?.frmelmnts?.llp?.topics.button}}</div>
+            <!-- <div><button class="com-secondary-btn">Serach</button></div> -->
+        </div>
+        <div class="ui grid middle aligned stackable">
+            <div class="three wide column" *ngFor="let data of allTopics">
+            <div class="pointing" (click)="loadTopicCourses(data.name)">
+                <sb-popular-card [pillName]="'Topic'" [data]="data"></sb-popular-card>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

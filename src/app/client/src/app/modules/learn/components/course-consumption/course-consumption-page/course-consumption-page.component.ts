@@ -342,12 +342,14 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
         //set completedPercentage for consumed courses
         this.courseProgressService.storeVisitedContent(_parsedResponse);
+        this.courseProgressService.updateCourseStatus(res[0]?.status?res[0]?.status:0)
         // this.progressToDisplay = Math.floor((_parsedResponse.completedCount / this.courseHierarchy.leafNodesCount) * 100);
         // this.contentStatus = _parsedResponse.content || [];
         // this._routerStateContentStatus = _parsedResponse;
         // this.calculateProgress();
         // this.updateCourseContent(this.courseHierarchy);
       }, error => {
+        this.courseProgressService.updateCourseStatus(0);
         console.log('Content state read CSL API failed ', error);
       });
   }

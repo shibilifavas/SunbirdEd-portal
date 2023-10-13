@@ -278,8 +278,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                                         obj['type'] = '';
                                         obj['associatedCoursesTxt'] = 'Associated Courses';
                                         this.popularCompetencyMapping.push(obj);
-                                        // console.log('1', obj['identifier']);
-                                        // console.log('2', obj['title']);
                                     }
                                 }
                             }
@@ -443,7 +441,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         "channel": this.channelId,
                         "status": [
                             "Live"
-                        ]
+                        ],
+                        "primaryCategory": [
+                            "Course"
+                        ],
                     },
                     "limit": 100,
                     "sort_by": {
@@ -468,9 +469,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getBrowseByData(title: string) {
-        if (title.toLowerCase() == "competency") {
-            // this.router.navigate(['search/Library', 1]);
+        if (title.toLowerCase() == "competency" || title.toLowerCase() == "popular competencies") {
             this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
+        } else if (title.toLowerCase() == "topic" || title.toLowerCase() == "popular topics") {
+            this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
     }
 
@@ -677,6 +679,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             request.channelId = this.selectedFilters['channel'];
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
+                        
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
                         _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {
@@ -1594,12 +1597,12 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     loadCompetencyCourses(identifier: string) {
-        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&Competencies=${identifier}&framework=${this.contentSearchService.frameworkId}&hideFilter=true`)
+        this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&competency=${identifier}&framework=${this.contentSearchService.frameworkId}`)
         console.log('loadCompetencyCourses', identifier);
     }
 
     loadTopicCourses(keyword: string) {
-        this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keywords=${keyword}&hideFilter=true`)
+        this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keyword=${keyword}`)
         console.log('loadKeywordCourses', keyword);
     }
 }

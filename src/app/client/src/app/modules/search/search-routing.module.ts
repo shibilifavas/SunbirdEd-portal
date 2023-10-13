@@ -6,6 +6,8 @@ import {
   UserDeleteComponent, AllCompetenciesComponent
 } from './components';
 import { AuthGuard } from '../core/guard/auth-gard.service';
+import { AllTopicsComponent } from './components/all-topics/all-topics.component';
+import { CoursesSearchComponent } from './components/courses-search/courses-search.component';
 
 const routes: Routes = [
   {
@@ -18,12 +20,32 @@ const routes: Routes = [
     }
 
   },
+  // {
+  //   path: 'Courses/:pageNumber', component: HomeSearchComponent,
+  //   data: {
+  //     breadcrumbs: [{ label: 'Home', url: '/home' }, { label: 'Search', url: '' }],
+  //     telemetry: {
+  //       env: 'course', pageid: 'course-search', type: 'view', subtype: 'paginate'
+  //     }
+  //   }
+
+  // },
   {
-    path: 'Courses/:pageNumber', component: HomeSearchComponent,
+    path: 'Courses/:pageNumber', component: CoursesSearchComponent,
     data: {
       breadcrumbs: [{ label: 'Home', url: '/home' }, { label: 'Search', url: '' }],
       telemetry: {
         env: 'course', pageid: 'course-search', type: 'view', subtype: 'paginate'
+      }
+    }
+
+  },
+  {
+    path: 'Topics/:pageNumber', component: AllTopicsComponent,
+    data: {
+      breadcrumbs: [],
+      telemetry: {
+        
       }
     }
 

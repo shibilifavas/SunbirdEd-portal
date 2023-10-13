@@ -286,7 +286,9 @@ export class SearchService {
           fields: requestParam.fields,
           softConstraints: requestParam.softConstraints,
           mode: requestParam.mode,
-          facets: requestParam.facets && requestParam.facets
+          facets: requestParam.facets && requestParam.facets,
+          targetTaxonomyCategory4Ids: requestParam.targetTaxonomyCategory4Ids,
+          keywords: requestParam.keywords
         }
       }
     };
@@ -412,7 +414,7 @@ export class SearchService {
     let filters = request.filters;
     const { facets } = request;
     filters = _.omit(filters, ['key', 'sort_by', 'sortType', 'appliedFilters']);
-    filters['primaryCategory'] = primaryCategory;
+    filters['primaryCategory'] = primaryCategory.filter(p => p === 'Course');
     if (!request.isCustodianOrg) {
       filters['channel'] = request.channelId;
     }
