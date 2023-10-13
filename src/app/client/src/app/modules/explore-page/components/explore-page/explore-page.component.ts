@@ -283,6 +283,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             }
                         }
                     }
+                    // console.log('Pr == g', this.popularCompetencyMapping);
                     // Filtering to remove duplicated data 
                     let tempIds = [], tempData = [];
                     for (let i = 0; i < this.popularCompetencyMapping.length; i++) {
@@ -292,10 +293,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         tempIds.push(this.popularCompetencyMapping[i]['identifier']);
                     }
                     this.popularCompetencyMapping = tempData;
-                    console.log('Popular competencies mapping', this.popularCompetencyMapping);
+                    // console.log('Popular competencies mapping', this.popularCompetencyMapping);
                 }, err => {
                     this.toasterService.error(get(this.resourceService, 'frmelmnts.lbl.fetchingContentFailed'));
-                    this.navigationhelperService.goBack();
+                    // this.navigationhelperService.goBack();
                 })
             );
     }
@@ -312,6 +313,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
+        localStorage.removeItem('breadCrumbForAllComp');
         this.fwCategory = _.map(this.taxonomyService.getTaxonomyCategories(), category => { return category });
         this.isDesktopApp = this.utilService.isDesktopApp;
         this.setUserPreferences();
@@ -386,7 +388,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             for (let i = 0; i < this.popularCompetenciesData.length; i++) {
                 this.popularCompetencies[i] = this.popularCompetenciesData[i]['name'];
             }
-            // console.log('Popular competencies 1', this.popularCompetenciesData);
+            console.log('Popular competencies 1', this.popularCompetenciesData);
         });
     }
 
@@ -439,7 +441,10 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         "channel": this.channelId,
                         "status": [
                             "Live"
-                        ]
+                        ],
+                        "primaryCategory": [
+                            "Course"
+                        ],
                     },
                     "limit": 100,
                     "sort_by": {
@@ -464,10 +469,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getBrowseByData(title: string) {
-        if (title.toLowerCase() == "competency") {
-            // this.router.navigate(['search/Library', 1]);
+        if (title.toLowerCase() == "competency" || title.toLowerCase() == "popular competencies") {
             this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
-        } else if (title.toLowerCase() == "topic") {
+        } else if (title.toLowerCase() == "popular topics" || title.toLowerCase() == "topic") {
             // this.router.navigate(['search/Library', 1]);
             this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
@@ -676,6 +680,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             request.channelId = this.selectedFilters['channel'];
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
+                        
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
                         _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {

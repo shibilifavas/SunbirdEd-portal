@@ -561,10 +561,10 @@ export class UserService {
       let userDetails = JSON.parse(localStorage.getItem('guestUserDetails'));
       userFramework = _.get(userDetails, 'framework');
     } else {
-      userFramework = (isUserLoggedIn && framework && _.pick(framework, ['medium', 'gradeLevel', 'board', 'id'])) || {};
+      userFramework = (isUserLoggedIn && framework && _.pick(framework, [])) || {}; // 'medium', 'gradeLevel', 'board', 'id'
     }
   
-    return { board: this.defaultBoard, ...userFramework };
+    return {...userFramework }; //  board: this.defaultBoard
   }
 
   getEnrolledUsers(req:any){

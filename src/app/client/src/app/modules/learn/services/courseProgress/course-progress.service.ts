@@ -1,4 +1,4 @@
-import { of as observableOf, Observable, of } from 'rxjs';
+import { of as observableOf, Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { ConfigService, ServerResponse, ToasterService, ResourceService } from '@sunbird/shared';
@@ -28,6 +28,8 @@ export class CourseProgressService {
   mimeType: string = '';
   contentProgress: any = {};
 
+  private courseStatus$ = new BehaviorSubject<Number>(0);
+  courseStatus = this.courseStatus$.asObservable();
   /**
   * An event emitter to emit course progress data from a service.
   */
@@ -289,4 +291,9 @@ export class CourseProgressService {
         });
       }
     }
+
+    updateCourseStatus(status){
+      this.courseStatus$.next(status)
+    }
+
 }

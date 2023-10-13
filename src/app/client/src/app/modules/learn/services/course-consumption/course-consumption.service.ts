@@ -70,7 +70,6 @@ export class CourseConsumptionService {
         contentIds.push(node.model.identifier);
       }
     });
-    this.setContentIds(contentIds);
     return contentIds;
   }
 

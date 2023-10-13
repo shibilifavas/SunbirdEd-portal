@@ -171,7 +171,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
     this.initLayout();
     this.subscribeToQueryParam();
-    this.getContentState();
+    // this.getContentState();
     this.subscribeToContentProgressEvents().subscribe(data => { });
     this.navigationHelperService.contentFullScreenEvent.
     pipe(takeUntil(this.unsubscribe)).subscribe(isFullScreen => {
@@ -236,6 +236,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         this.selectedContentId = queryParams.selectedContent;
         let isSingleContent = this.collectionId === this.selectedContentId;
         this.isParentCourse = this.collectionId === this.courseId;
+        this.contentIds = this.courseConsumptionService.getContentIds();
+        this.totalCount = this.contentIds?.length;
         if (this.batchId) {
           this.telemetryCdata = [{ id: this.batchId, type: 'CourseBatch' }];
           if (this.groupId) {
@@ -254,7 +256,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, this.parentContentId);
               this.nextModule = _.get(module, 'next');
               this.prevModule = _.get(module, 'prev');
-              this.getCourseCompletionStatus();
               this.layoutService.updateSelectedContentType.emit(data.courseHierarchy.contentType);
               if (!this.isParentCourse && data.courseHierarchy.children) {
                 this.courseHierarchy = data.courseHierarchy.children.find(item => item.identifier === this.collectionId);
@@ -262,6 +263,11 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
                 this.courseHierarchy = data.courseHierarchy;
               }
               this.updateCourseContent();
+              if(!this.contentIds || this.contentIds?.length == 0) {
+                this.contentIds = this.courseConsumptionService.parseChildren(data.courseHierarchy);
+                this.totalCount = this.contentIds?.length;
+              }
+              // this.getCourseCompletionStatus();
               console.log("courseHierarchy",this.courseHierarchy);
               if (!isSingleContent && _.get(this.courseHierarchy, 'mimeType') !==
               this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.collection) {
@@ -283,6 +289,10 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((data) => {
               this.courseHierarchy = data.result.content;
+              if(!this.contentIds || this.contentIds?.length == 0) {
+                this.contentIds = this.courseConsumptionService.parseChildren(this.courseHierarchy);
+                this.totalCount = this.contentIds?.length;
+              }
               this.updateCourseContent();
               this.layoutService.updateSelectedContentType.emit(this.courseHierarchy.contentType);
               if (this.courseHierarchy.mimeType !== 'application/vnd.ekstep.content-collection') {
@@ -296,8 +306,6 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
               this.goBack();
             });
         }
-        this.contentIds = this.courseConsumptionService.getContentIds();
-        this.totalCount = this.contentIds?.length;
         this.setTelemetryCourseImpression();
       });
   }
@@ -346,6 +354,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       this.initPlayer(_.get(this.activeContent, 'identifier'));
     }
     this.selectedContentName = this.activeContent.name;
+    this.getContentState();
   }
 
   private firstNonCollectionContent(contents) {
@@ -385,6 +394,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe))
       .subscribe((_res) => {
+        this.tocList = this.courseConsumptionService.attachProgresstoContent(_res);
         const res = this.CourseProgressService.getContentProgressState(req, _res);
         this.completedCount = res.completedCount;
         res.content?.forEach((content: any) => {
@@ -739,7 +749,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
 
   onRatingPopupClose() {
     this.contentRatingModal = false;
-    this.getCourseCompletionStatus(true);
+    // this.getCourseCompletionStatus(true);
   }
 
   setTelemetryShareData(param) {
