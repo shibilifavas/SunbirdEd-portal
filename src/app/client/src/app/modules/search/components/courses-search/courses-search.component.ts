@@ -53,10 +53,10 @@ export class CoursesSearchComponent implements OnInit {
         visibility: ["Default", "Parent"], 
         channel: channelId ,
         keywords: keyword ?? '',
+        // targetTaxonomyCategory4Ids: [
+        //   competency ?? ''
+        // ],
       },
-      targetTaxonomyCategory4Ids: [
-        competency ?? ''
-      ],
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
       pageNumber: pageNumber
