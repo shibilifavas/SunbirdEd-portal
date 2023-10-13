@@ -2,7 +2,52 @@
 [layoutConfiguration]="{}" [noTitle]="true"></app-landing-section>
   <!--profile Content Header -->
   <div [ngClass]="layoutConfiguration ? 'sb-back-actionbar' : 'sb-bg-white cc-player__btn-back'" class="relative position mt-0">
-    <div class="ui container py-0 px-0 d-flex flex-ai-center">
+    <compass-breadcrumb *ngIf="breadCrumbData" [data]="breadCrumbData"></compass-breadcrumb>
+    <header class="profile-header" *ngIf="userProfile">
+      <div class="profile-header__container container ui">
+          <div class="profile-header__intials mr-20 headline">
+            {{userProfile?.firstName[0] | uppercase }}{{userProfile?.lastName[0] | uppercase }}
+          </div>
+          <div class="profile-header__info">
+              <h3 class="profile-header__info-name headline">{{userProfile.firstName | titlecase}} {{userProfile.lastName | titlecase}}</h3>
+              <!-- <p class="profile-header__info-role 	body-one"></p>
+               <p class="profile-header__info-place body-two"></p> -->
+          </div>
+      </div>
+      <div class="profile-header__buttons container ui">
+          <button class="com-secondary-btn mr-40" appTelemetryInteract appOnlineOnly
+          [telemetryInteractEdata]="editProfileInteractEdata"
+          attr.aria-label="{{resourceService?.frmelmnts?.lbl?.editPersonalDetails}}" tabindex="0"
+          (click)="showEditUserDetailsPopup=true">Edit Profile</button>
+          <button class="com-secondary-btn">Your dashboard</button>
+      </div>
+  </header>
+  <section class="course-certificates container ui">
+    <div class="sb-g">
+    <section class="sb-g-col-xs-12 sb-g-col-md-6 sb-g-col-md-9 sb-g-col-lg-9" *ngIf="attendedTraining">
+          <h2 class="title">Courses & Certificates</h2>
+          <mat-divider></mat-divider>
+          <mat-list role="list">
+            <div *ngFor="let data of attendedTraining">
+                <mat-list-item role="listitem">
+                  <img [src]="data.content.posterImage" class="mr-20"/>
+                  <div >
+                      <h4 class="sub-heading-one">{{data.courseName}}</h4>
+                      <p class="body-one">{{data.description}}</p>
+                      <p class="body-one">{{data.completedOn | date:'mediumDate'}}</p>
+                  </div>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </div>
+          </mat-list>
+        </section>
+    
+    <aside class="hide aside-badge sb-g-col-xs-12 sb-g-col-md-6 sb-g-col-md-3 sb-g-col-lg-3">
+        <h4>My Badges</h4>
+    </aside>
+    </div>
+  </section>  
+    <!-- <div class="ui container py-0 px-0 d-flex flex-ai-center">
       <button type="button" (click)="goBack()" [ngClass]="layoutConfiguration ? 'sb-btn-primary sb-btn-round' : 'sb-btn-link sb-btn-link-primary sb-left-icon-btn px-0'" class="sb-btn sb-btn-normal" tabindex="0" attr.aria-label="{{resourceService?.frmelmnts?.btn?.back}}">
       <i class="icon-svg icon-svg--xxs icon-back mr-4"><svg class="icon icon-svg--primary">
           <use xlink:href="assets/images/sprite.svg#arrow-long-left"></use>
@@ -14,14 +59,14 @@
           <div class="content-header__title font-weight-bold ellipsis text-left"  tabindex="0" role="heading" aria-level="2">{{resourceService.frmelmnts?.lnk?.profile}}</div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   
 <div [ngClass]="layoutConfiguration ? 'sbt-inside-page-container' : ''">
 <div [ngClass]="layoutConfiguration ? 'relative9' : ''">
 <div [appTelemetryImpression]="telemetryImpression" *ngIf="userProfile">
   <section class="py-24 d-flex flex-ai-center flex-dc">
-    <div class="ui container">
+    <!-- <div class="ui container">
       <div class="mb-15 d-flex flex-jc-center relative avatar-container" aria-label="Profile">
        <img *ngIf="userProfile.stateValidated || !isCustodianOrgUser" role="img" src="assets/images/avatar-tickmark.svg" alt="certified" class="avatar-tickmark"
         matTooltip="{{resourceService.frmelmnts.lbl.stateVerified}}" [matTooltipPosition]="'right'">
@@ -64,10 +109,9 @@
       </span>
     </div>
     <div class="ui container">
-      
-  </div>
-    <div class="fs-1-5 font-w-bold d-flex mb-8 text-center org-info" *ngIf=" orgDetails && orgDetails.orgName">{{orgDetails.orgName}}
     </div>
+    <div class="fs-1-5 font-w-bold d-flex mb-8 text-center org-info" *ngIf=" orgDetails && orgDetails.orgName">{{orgDetails.orgName}}
+    </div> -->
     <!-- <div class="ui container" *ngIf="!isCustodianOrgUser">
       <div class="d-flex flex-dc flex-jcc-center flex-ai-center">
         <button appTelemetryInteract
@@ -108,9 +152,9 @@
   </section>
 
   <section class="d-flex flex-ai-center flex-dc pb-24 content-preference">
-    <h3 class="content-header-info font-weight-bold mb-16">{{resourceService.frmelmnts.lbl.profiledetails}}</h3>
+    <!-- <h3 class="content-header-info font-weight-bold mb-16">{{resourceService.frmelmnts.lbl.profiledetails}}</h3> -->
     <!-- add state and district -->
-      <div class="ui container content-preference__info pt-16">
+      <!-- <div class="ui container content-preference__info pt-16">
         <div *ngIf="persona?.name" class="mb-0 d-flex flex-jc-center m-responsive-flex-dc m-responsive-mt-15">
           <div class="fmedium text-center">{{resourceService.frmelmnts.lbl.role}} :</div>
           <div class="fmedium ml-5 font-w-bold text-center">{{persona.name}}</div>
@@ -157,12 +201,12 @@
                   class="no-text-transform sb-btn sb-btn-normal sb-btn-secondary sb-right-icon-btn mx-8 mb-8 px-24" type="submit">
           {{resourceService?.frmelmnts?.lbl?.iAmStateTeacher}} </button>
         </div>
-      </div>
+      </div> -->
   </section>
   
   <section class="d-flex flex-ai-center flex-dc pt-30 pb-30 profile-bg-c-4 content-preference">
     <!-- User info computer view starts-->
-    <div class="ui container">
+    <!-- <div class="ui container">
       <div class="d-flex flex-jc-center flex-ai-center flex-dc" *ngIf="userProfile && userProfile.framework ">
         <div class="max-w-400 computer only">
           <div class="mb-15 d-flex flex-jc-center" *ngIf="convertToString(fwCategoryCheck(userProfile?.framework,fwCategory[0]))">
@@ -191,11 +235,11 @@
           [telemetryInteractEdata]="myFrameworkEditEdata" attr.aria-label="{{resourceService.frmelmnts.lbl.edit}} {{resourceService.frmelmnts.lbl.boards}},{{resourceService.frmelmnts.lbl.medium}},{{resourceService.frmelmnts.lbl.classes}},{{convertToString(userProfile.framework.gradeLevel)}},{{resourceService.frmelmnts.lbl.subjects}}"
           (click)="showEdit = !showEdit" tabindex="0">{{resourceService.frmelmnts.lbl.edit}}</button>
       </div>
-    </div>
+    </div> -->
     <!-- User info computer view ends-->
 
     <!-- User info mobile view starts-->
-    <div class="max-w-300 mobile only">
+    <!-- <div class="max-w-300 mobile only">
       <div class="mb-15 d-flex flex-ai-center flex-dc">
         <span class="fmedium white-space-nowrap">{{resourceService.frmelmnts.lbl.boards | transposeTerms: 'frmelmnts.lbl.boards' : resourceService?.selectedLang}}:</span>
         <span class="fmedium font-w-bold text-center"
@@ -221,13 +265,13 @@
         (click)="showEdit = !showEdit" attr.aria-label="{{resourceService?.frmelmnts?.lbl?.editPersonalDetails}}">
         <button appOnlineOnly class="sb-btn sb-btn-primary sb-btn-xs mt-30">{{resourceService.frmelmnts.lbl.edit}}</button>
       </div>
-    </div>
+    </div> -->
     <!-- User info mobile view ends-->
   </section>
 
-  <section class="pt-30 pb-30 d-flex flex-jc-center profile-bg-c-3" *ngIf="userProfile.email || userProfile.phone">
-    <div class="d-flex flex-dc">
-      <div class="d-flex flex-jc-center">
+  <!-- <section class="pt-30 pb-30 d-flex flex-jc-center profile-bg-c-3" *ngIf="userProfile.email || userProfile.phone">
+    <div class="d-flex flex-dc"> -->
+      <!-- <div class="d-flex flex-jc-center">
         <div role="button" appOnlineOnly (click)="showContactPopup=true;contactType='phone'" tabindex="0"
           class="ui semi-circular dodger-blue basic label mb-15 cursor-pointer" *ngIf="userProfile.phone"
           appTelemetryInteract
@@ -240,39 +284,39 @@
           [telemetryInteractEdata]="editMobileInteractEdata">
           <i class="phone icon mr-5"></i> {{resourceService?.frmelmnts?.lbl?.addPhoneNo}}
         </div>
+      </div> -->
+     <!-- <div class="d-flex flex-jc-center">
+        <div appOnlineOnly (click)="showContactPopup=true;contactType='email'" tabindex="0"
+        class="ui semi-circular dodger-blue basic label cursor-pointer mb-15" attr.aria-label=“{{userProfile.email}}” *ngIf="userProfile.email" appTelemetryInteract
+        [telemetryInteractEdata]="editEmailInteractEdata">
+        <i class="mail blue icon mr-5"></i> {{userProfile.email}}
       </div>
-     <div class="d-flex flex-jc-center">
-      <div appOnlineOnly (click)="showContactPopup=true;contactType='email'" tabindex="0"
-      class="ui semi-circular dodger-blue basic label cursor-pointer mb-15" attr.aria-label=“{{userProfile.email}}” *ngIf="userProfile.email" appTelemetryInteract
-      [telemetryInteractEdata]="editEmailInteractEdata">
-      <i class="mail blue icon mr-5"></i> {{userProfile.email}}
-    </div>
-    <div appOnlineOnly (click)="showContactPopup=true;contactType='email'" tabindex="0" attr.aria-label=“{{resourceService?.frmelmnts?.lbl?.addEmailID}}”
-      class="ui semi-circular update basic label mb-15 cursor-pointer font-weight-normal" *ngIf="!userProfile.email"
-      appTelemetryInteract
-      [telemetryInteractEdata]="editEmailInteractEdata">
-      <i class="mail icon mr-5"></i> {{resourceService?.frmelmnts?.lbl?.addEmailID}}
-    </div>
-     </div>
+      <div appOnlineOnly (click)="showContactPopup=true;contactType='email'" tabindex="0" attr.aria-label=“{{resourceService?.frmelmnts?.lbl?.addEmailID}}”
+        class="ui semi-circular update basic label mb-15 cursor-pointer font-weight-normal" *ngIf="!userProfile.email"
+        appTelemetryInteract
+        [telemetryInteractEdata]="editEmailInteractEdata">
+        <i class="mail icon mr-5"></i> {{resourceService?.frmelmnts?.lbl?.addEmailID}}
+      </div>
+     </div> -->
 
       <!-- Add/edit recovery email/phone-->
-    <div class="d-flex flex-jc-center">
-      <div appOnlineOnly *ngIf="userProfile.recoveryEmail || userProfile.recoveryPhone" tabindex="0" (click)="showRecoveryId=true; mode='edit'" attr.aria-label=“{{userProfile.recoveryEmail}}” class="ui semi-circular dodger-blue basic label cursor-pointer mb-15 d-flex"
-      appTelemetryInteract
-      [telemetryInteractEdata]="editRecoveryIdInteractEdata">
-        <div class="recovery-img mr-5"></div>
-        <span *ngIf="userProfile.recoveryEmail">{{userProfile.recoveryEmail}}</span>
-        <span *ngIf="userProfile.recoveryPhone">{{userProfile.recoveryPhone}}</span>
-       </div>
-       <div appOnlineOnly *ngIf="!(userProfile.recoveryEmail || userProfile.recoveryPhone)" attr.aria-label=“{{resourceService?.frmelmnts?.lbl?.addRecoveryAccount}}” tabindex="0" (click)="showRecoveryId=true; mode='add'" class="ui semi-circular update basic label mb-15 cursor-pointer font-weight-normal d-flex"
-      appTelemetryInteract
-      [telemetryInteractEdata]="addRecoveryIdInteractEdata">
-        <div class="recovery-img mr-5"></div>
-       <span>{{resourceService?.frmelmnts?.lbl?.addRecoveryAccount}}</span>
-       </div>
-     </div>
-    </div>
-  </section>
+      <!-- <div class="d-flex flex-jc-center">
+        <div appOnlineOnly *ngIf="userProfile.recoveryEmail || userProfile.recoveryPhone" tabindex="0" (click)="showRecoveryId=true; mode='edit'" attr.aria-label=“{{userProfile.recoveryEmail}}” class="ui semi-circular dodger-blue basic label cursor-pointer mb-15 d-flex"
+        appTelemetryInteract
+        [telemetryInteractEdata]="editRecoveryIdInteractEdata">
+          <div class="recovery-img mr-5"></div>
+          <span *ngIf="userProfile.recoveryEmail">{{userProfile.recoveryEmail}}</span>
+          <span *ngIf="userProfile.recoveryPhone">{{userProfile.recoveryPhone}}</span>
+        </div>
+        <div appOnlineOnly *ngIf="!(userProfile.recoveryEmail || userProfile.recoveryPhone)" attr.aria-label=“{{resourceService?.frmelmnts?.lbl?.addRecoveryAccount}}” tabindex="0" (click)="showRecoveryId=true; mode='add'" class="ui semi-circular update basic label mb-15 cursor-pointer font-weight-normal d-flex"
+        appTelemetryInteract
+        [telemetryInteractEdata]="addRecoveryIdInteractEdata">
+          <div class="recovery-img mr-5"></div>
+        <span>{{resourceService?.frmelmnts?.lbl?.addRecoveryAccount}}</span>
+        </div>
+      </div>  -->
+    <!-- </div>
+  </section> -->
 
   
 
@@ -329,7 +373,7 @@
       <!--contributions view ends-->
 
       <!-- tarainings attended computer view strats-->
-      <div class="container my-16 sb-certificate-trained" *ngIf="attendedTraining && attendedTraining.length">
+      <!-- <div class="container my-16 sb-certificate-trained" *ngIf="attendedTraining && attendedTraining.length">
           <div class="list-heading">
             <label class="mb-0">{{resourceService?.frmelmnts?.lbl?.myLearning}}({{attendedTraining.length}})&#x200E;</label>
             <span class="fsmall mt-4 font-weight-bold">&nbsp;({{resourceService?.frmelmnts?.lbl?.refreshedDaily}})</span>
@@ -378,7 +422,7 @@
               (click)="toggleCourse(false, attendedTraining.length)" tabindex="0" *ngIf="!showMoreTrainings">{{resourceService.frmelmnts.lbl.viewless}}<i
                 class="chevron up icon"></i></button>
           </div>
-        </div>
+        </div> -->
          <!-- trainings attended computer view ends-->
 
          <!-- certificates - old layout-->

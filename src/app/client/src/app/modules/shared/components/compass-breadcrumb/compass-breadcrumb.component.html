@@ -1,10 +1,11 @@
 <div *ngIf="data.length > 0" class="compass-breadcrumb">
     <div class="container ui">
-        <div class="grid twelve columns">
+        <div class="grid twelve columns compass-breadcrumb__container">
             <img class="pointing" (click)="navigateTo('/resources')" src="assets/images/home-breadcrumb.svg" />
-            <span *ngFor="let breadcrumb of data">
+            <span class="compass-breadcrumb__links" *ngFor="let breadcrumb of data">
                 <img class="arrow-forward" src="assets/images/arrow-forward.svg" />
-                <img *ngIf="breadcrumb['showIcon']" (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== ''}" src="assets/images/learn-{{breadcrumb['status']}}-breadcrumb.svg" />
+                <img *ngIf="breadcrumb['showIcon'] && !breadcrumb['matIcon']" (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== ''}" src="assets/images/learn-{{breadcrumb['status']}}-breadcrumb.svg" />
+                 <mat-icon *ngIf="breadcrumb['matIcon']" [ngClass]="{'pointing' : breadcrumb['link'] !== '', 'active' : breadcrumb['link'] == ''}">{{breadcrumb['matIcon']}}</mat-icon>
                 <span (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== '', 'active' : breadcrumb['link'] == ''}" class="breadcrumb-label">{{breadcrumb['label']}}</span>
             </span>
         </div>
