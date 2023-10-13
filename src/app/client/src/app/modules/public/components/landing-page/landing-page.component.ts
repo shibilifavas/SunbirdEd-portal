@@ -44,7 +44,7 @@ export class LandingPageComponent implements OnInit {
         "sort_by": {
           "lastPublishedOn": "desc"
         },
-        "fields": ["name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "primaryCategory", "contentType", "channel", "organisation", "trackable", "Duration"],
+        "fields": ["name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "primaryCategory", "contentType", "channel", "organisation", "trackable", "Duration", "targetTaxonomyCategory4Ids"],
         "offset": 0
       }
     };

@@ -114,3 +114,10 @@ body .slick-next {
     background: rgb(28, 29, 31) !important;
     z-index: 100;
 }
+::ng-deep .slide .course-card .poster-img {
+    // height: 30vh;
+    width: 100%;
+}
+::ng-deep .slide .course-card .text-section {
+    height: 145px;
+  }
