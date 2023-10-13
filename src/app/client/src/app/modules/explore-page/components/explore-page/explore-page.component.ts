@@ -471,7 +471,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public getBrowseByData(title: string) {
         if (title.toLowerCase() == "competency" || title.toLowerCase() == "popular competencies") {
             this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
-        } else if (title.toLowerCase() == "topic" || title.toLowerCase() == "popular topics") {
+        } else if (title.toLowerCase() == "popular topics" || title.toLowerCase() == "topic") {
+            // this.router.navigate(['search/Library', 1]);
             this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
     }

@@ -252,21 +252,22 @@
     </div>
   </div>
 
-  <section class="ui container mt-4rem" *ngIf="resourceService?.frmelmnts?.llp?.browseByCardInfo">
-      <p class="browseTitle mb-32">{{resourceService?.frmelmnts?.llp?.browseByCardInfo.title}}</p>
-      <div class="cardContainer">
-          <browse-by-card
-            *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.llp?.browseByCardInfo.cards);"
-            class="browseByCard"
-            [cardInfo]="info"
-            (click)="getBrowseByData(info.title)"
-          ></browse-by-card>
+  <section class="mt-4rem" *ngIf="resourceService?.frmelmnts?.llp?.browseByCardInfo">
+      <p class="ui container browseTitle mb-32">{{resourceService?.frmelmnts?.llp?.browseByCardInfo.title}}</p>
+      <div class="ui grid">
+        <div class="four wide column"  *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.llp?.browseByCardInfo.cards);">
+            <browse-by-card
+              class="browseByCard"
+              [cardInfo]="info"
+              (click)="getBrowseByData(info.title)"
+            ></browse-by-card>
+        </div>
       </div>
   </section>
   <div *ngIf="popularTopics.length > 0" class="ui container mt-4rem">
     <div class="popular-card">
       <div class="popular-card-title">{{resourceService?.frmelmnts?.llp?.topics.title}}</div>
-      <button class="com-secondary-btn" (click)="getBrowseByData(resourceService?.frmelmnts?.llp?.topics.title)">{{resourceService?.frmelmnts?.llp?.topics.button}}</button>
+      <button (click)="getBrowseByData(resourceService?.frmelmnts?.llp?.topics.title)"class="com-secondary-btn">{{resourceService?.frmelmnts?.llp?.topics.button}}</button>
     </div>
     <div class="ui grid middle aligned stackable">
       <div class="three wide column" *ngFor="let data of popularTopics;let i=index">
