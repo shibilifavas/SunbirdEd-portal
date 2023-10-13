@@ -2,13 +2,13 @@
     <div class="aside__top">
     <button class="com-primary-btn" (click)="navigate()">
         <ng-container *ngIf="courseStatus === 0">
-            {{configContent.courseAside.startCourse}}
+            {{configContent.courseAside.startCourse || 'Start this course'}}
         </ng-container>
         <ng-container *ngIf="courseStatus === 1">
-            {{configContent.courseAside.resume}}
+            {{configContent.courseAside.resume || 'Resume'}}
         </ng-container>
         <ng-container *ngIf="courseStatus === 2">
-            {{configContent.courseAside.restartCourse}}
+            {{configContent.courseAside.restartCourse || 'Restart this course'}}
         </ng-container>
     </button>
     <p class="aside__share-rating">
