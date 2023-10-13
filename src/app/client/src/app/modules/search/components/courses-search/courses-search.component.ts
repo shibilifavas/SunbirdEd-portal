@@ -54,6 +54,9 @@ export class CoursesSearchComponent implements OnInit {
         channel: channelId,
         keywords: keyword ?? ''
       },
+      targetTaxonomyCategory4Ids: [
+        competency ?? ''
+      ],
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
       pageNumber: pageNumber
