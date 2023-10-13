@@ -51,18 +51,14 @@ export class CoursesSearchComponent implements OnInit {
       filters: { 
         primaryCategory: ["Course"], 
         visibility: ["Default", "Parent"], 
-        channel: channelId 
+        channel: channelId ,
+        keywords: keyword ?? '',
       },
-      keywords: keyword ?? '',
       targetTaxonomyCategory4Ids: [
         competency ?? ''
       ],
-      // fields: [],
-      // limit: 100,
-      offset: 0,
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
-      facets: [],
       pageNumber: pageNumber
     };
     this.searchService.contentSearch(option).subscribe(res => {
