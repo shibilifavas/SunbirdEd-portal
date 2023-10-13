@@ -357,8 +357,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             {
                 "label": "Learn",
                 "status": "active",
-                "link": "",
-                "showIcon": true
+                "icon": "school",
+                "link": ""
             });
     }
 
