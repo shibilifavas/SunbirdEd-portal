@@ -59,6 +59,9 @@ export class CoursesSearchComponent implements OnInit {
           competency ?? ''
         ]
       },
+      targetTaxonomyCategory4Ids: [
+        competency ?? ''
+      ],
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
       pageNumber: pageNumber
