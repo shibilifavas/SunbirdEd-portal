@@ -249,7 +249,10 @@
 
 .profile-header{
   background: #f5f5f5;
-  padding: 70px 0;
+  padding: 40px 0;
+  @media only screen and (min-width: 800px) {
+      padding: 70px 0;
+  }
   &__container{
     display: flex;
     flex-direction: row;
@@ -259,10 +262,15 @@
   &__intials{
     background:var(--black);
     color: var(--white);
-    padding: 40px 50px;
-    border-radius: 24px;
+      padding: 30px 40px;
+      border-radius: 20px;
     font-size: 40px;
     font-family: var(--com-font);
+    @media only screen and (min-width: 800px) {
+      padding: 40px 50px;
+      border-radius: 24px;
+    } 
+
   }
   &__info{
     
@@ -274,7 +282,8 @@
   &__buttons{
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
 }
 

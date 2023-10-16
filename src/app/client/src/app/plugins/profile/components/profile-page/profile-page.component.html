@@ -30,7 +30,7 @@
           <mat-list role="list">
             <div *ngFor="let data of attendedTraining">
                 <mat-list-item role="listitem">
-                  <img [src]="data.content.posterImage" class="mr-20"/>
+                  <img [src]="data.content.posterImage || 'assets/common-consumption/images/abstract_02.svg'" class="mr-20"/>
                   <div >
                       <h4 class="sub-heading-one">{{data.courseName}}</h4>
                       <p class="body-one">{{data.description}}</p>
