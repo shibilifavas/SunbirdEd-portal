@@ -29,10 +29,6 @@ export class LandingPageComponent implements OnInit {
   ngOnInit() {
     // alert()
     this.layoutConfiguration = this.layoutService.initlayoutConfig();
-    this.landingPageContentService.getPageContent().subscribe(res => {
-      this.configContent = res;
-    });
-
     let searchRequest = {
       "request": {
         "filters": {
