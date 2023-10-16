@@ -1,11 +1,12 @@
 <div *ngIf="data.length > 0" class="compass-breadcrumb">
     <div class="container ui">
-        <div class="grid twelve columns compass-breadcrumb__container">
-            <img class="pointing" (click)="navigateTo('/resources')" src="assets/images/home-breadcrumb.svg" />
-            <span class="compass-breadcrumb__links" *ngFor="let breadcrumb of data">
-                <img class="arrow-forward" src="assets/images/arrow-forward.svg" />
-                <img *ngIf="breadcrumb['showIcon'] && !breadcrumb['matIcon']" (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== ''}" src="assets/images/learn-{{breadcrumb['status']}}-breadcrumb.svg" />
-                 <mat-icon *ngIf="breadcrumb['matIcon']" [ngClass]="{'pointing' : breadcrumb['link'] !== '', 'active' : breadcrumb['link'] == ''}">{{breadcrumb['matIcon']}}</mat-icon>
+        <div class="grid twelve columns">
+            <!-- <img class="pointing" (click)="navigateTo('/resources')" src="assets/images/home-breadcrumb.svg" /> -->
+            <mat-icon class="home-icon">home</mat-icon>
+            <span class="in-line-flex" *ngFor="let breadcrumb of data">
+                <mat-icon class="arrow-forward">keyboard_arrow_right</mat-icon>
+                <!-- <img *ngIf="breadcrumb['showIcon']" (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== ''}" src="assets/images/learn-{{breadcrumb['status']}}-breadcrumb.svg" /> -->
+                <mat-icon [ngClass]="{'pointing' : breadcrumb['link'] !== '', 'active' : breadcrumb['link'] == ''}">{{breadcrumb['icon']}}</mat-icon>
                 <span (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== '', 'active' : breadcrumb['link'] == ''}" class="breadcrumb-label">{{breadcrumb['label']}}</span>
             </span>
         </div>

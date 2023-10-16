@@ -24,8 +24,8 @@ interface Competency {
   styleUrls: ['./all-competencies.component.scss']
 })
 export class AllCompetenciesComponent implements OnInit {
-  categoryDetails: any =[];
-  allCompetenciesData : Array<Competency> = [];
+  categoryDetails: any = [];
+  allCompetenciesData: Array<Competency> = [];
   allCompetencies: any = {};
   categoryCodes: any = [];
   courses: any = [];
@@ -41,8 +41,8 @@ export class AllCompetenciesComponent implements OnInit {
     this.fetchpopularCompetencies();
     // this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
   }
-  
-  public setBreadCrumbData(){
+
+  public setBreadCrumbData() {
     let param = {};
     param['label'] = 'All competencies';
     param['status'] = "inactive";
@@ -52,8 +52,8 @@ export class AllCompetenciesComponent implements OnInit {
     param['showIcon'] = true;
     localStorage.setItem('breadCrumbForAllComp', JSON.stringify(param));
   }
-  
-  public findCategory(frameworkId:any){
+
+  public findCategory(frameworkId: any) {
     this.frameworkService.getSelectedFrameworkCategories(frameworkId)
       .subscribe((res: any) => {
         this.categoryDetails = [...res.result.framework.categories];
@@ -61,23 +61,23 @@ export class AllCompetenciesComponent implements OnInit {
         this.allCompetencies.title = "All Competencies";
         this.breadCrumbData = [
           {
-              "label": "Learn",
-              "status": "inactive",
-              "link": "resources",
-              "showIcon": true
+            "label": "Learn",
+            "status": "inactive",
+            "icon": "school",
+            "link": "resources"
           },
           {
             "label": "All competencies",
             "status": "active",
-            "link": "",
-            "showIcon": false
-        }
-      ];
+            "icon": "extension",
+            "link": ""
+          }
+        ];
         const competencyRequestData = {
           "filters": {
-            "channel":this.activatedRoute.snapshot.queryParams.channel,
+            "channel": this.activatedRoute.snapshot.queryParams.channel,
             "primaryCategory": ["Course"],
-            "visibility": ["Default","Parent"]
+            "visibility": ["Default", "Parent"]
           },
           "limit": 100,
           "sort_by": {
@@ -87,13 +87,13 @@ export class AllCompetenciesComponent implements OnInit {
           "facets": [...this.categoryCodes]
         };
         // competencyRequestData['filters'][catCode]= term.identifier; 
-        this.contentSearch(competencyRequestData).subscribe(data =>{
+        this.contentSearch(competencyRequestData).subscribe(data => {
           this.courses = data;
-          for(let category of this.categoryDetails){
+          for (let category of this.categoryDetails) {
             const catCode = `target${category.code.replace(/^./, category.code[0].toUpperCase())}Ids`;
-            if(category.name.toLowerCase() == "competencies"){
-              for(let term of category.terms){
-                let competency : Competency = {};
+            if (category.name.toLowerCase() == "competencies") {
+              for (let term of category.terms) {
+                let competency: Competency = {};
                 competency.title = term.name;
                 competency.description = term.description;
                 competency.type = ""; //hardcoded
@@ -103,13 +103,13 @@ export class AllCompetenciesComponent implements OnInit {
                 competency.expandData = [];
                 competency.btnText = "View courses";
                 competency.associatedCoursesTxt = "Associated courses";
-                for(let course of this.courses){
+                for (let course of this.courses) {
                   if (course[catCode] && course[catCode].includes(term.identifier)) {
                     competency.expandData.push(course);
                   }
                 }
-                for(let comp of this.popularCompetencies){
-                  if(comp.name == term.identifier){
+                for (let comp of this.popularCompetencies) {
+                  if (comp.name == term.identifier) {
                     competency.noOfCourses = comp.count;
                   }
                 }
@@ -118,12 +118,12 @@ export class AllCompetenciesComponent implements OnInit {
               this.allCompetencies.data = this.allCompetenciesData;
               console.log(this.allCompetencies);
 
-              this.popularCompetencies.map((comp) =>{
-                this.categoryDetails.map((category) =>{
-                  if(category.name.toLowerCase() == "competencies"){
-                    for(let term of category.terms){
-                      let competency : Competency = {};
-                      if(comp.name == term.identifier){
+              this.popularCompetencies.map((comp) => {
+                this.categoryDetails.map((category) => {
+                  if (category.name.toLowerCase() == "competencies") {
+                    for (let term of category.terms) {
+                      let competency: Competency = {};
+                      if (comp.name == term.identifier) {
                         competency.title = term.name;
                         competency.type = ""; //hardcoded
                         competency.noOfCourses = comp.count;
@@ -141,58 +141,58 @@ export class AllCompetenciesComponent implements OnInit {
               this.popularCompetencies.data = this.popularCompetenciesData;
             }
           }
-        });  
+        });
       });
   }
 
   public contentSearch(req: any): Observable<any> {
     return this.searchService.contentSearch(req)
-    .pipe(
-      map(data => data.result.content)
-    );
+      .pipe(
+        map(data => data.result.content)
+      );
   }
 
   public fetchpopularCompetencies() {
     let requestData = {
-        "filters": {
-            "channel": this.activatedRoute.snapshot.queryParams.channel,
-            "status": [
-                "Live"
-            ],
-            "primaryCategory": [
-                "Course"
-            ]
-        },
-        "fields": [
-            "name"
+      "filters": {
+        "channel": this.activatedRoute.snapshot.queryParams.channel,
+        "status": [
+          "Live"
         ],
-        "facets": [
-            "targetTaxonomyCategory4Ids"
-        ],
-        "sort_by": {
-            "lastUpdatedOn": "desc"
-        }
+        "primaryCategory": [
+          "Course"
+        ]
+      },
+      "fields": [
+        "name"
+      ],
+      "facets": [
+        "targetTaxonomyCategory4Ids"
+      ],
+      "sort_by": {
+        "lastUpdatedOn": "desc"
+      }
     };
     this.searchService.compositePopularSearch(requestData).subscribe(res => {
-        this.popularCompetencies = res['result']['facets'][0]['values'];
-        this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
+      this.popularCompetencies = res['result']['facets'][0]['values'];
+      this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
     });
-}
-
-public onCourseClick(event){
-  console.log("identifier",event.identifier);
-  this.setBreadCrumbData();
-  if (event.hasOwnProperty('batches') && Array.isArray(event.batches) && event.batches.length > 0) {
-    event.batches.map(batch =>{
-      this.batchId = batch.batchId;
-    })
-    this.router.navigateByUrl(`learn/course/`+ event.identifier+`/batch/`+ this.batchId);
-  } else {
-    this.router.navigateByUrl(`learn/course/`+ event.identifier);
   }
-  
-  
-  
-}
+
+  public onCourseClick(event) {
+    console.log("identifier", event.identifier);
+    this.setBreadCrumbData();
+    if (event.hasOwnProperty('batches') && Array.isArray(event.batches) && event.batches.length > 0) {
+      event.batches.map(batch => {
+        this.batchId = batch.batchId;
+      })
+      this.router.navigateByUrl(`learn/course/` + event.identifier + `/batch/` + this.batchId);
+    } else {
+      this.router.navigateByUrl(`learn/course/` + event.identifier);
+    }
+
+
+
+  }
 
 }

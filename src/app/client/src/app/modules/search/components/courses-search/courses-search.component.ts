@@ -21,15 +21,15 @@ export class CoursesSearchComponent implements OnInit {
     this.breadCrumbData = [
       {
         "label": "Learn",
+        "icon": "school",
         "status": "inactive",
-        "link": "resources",
-        "showIcon": true
+        "link": "resources"
       },
       {
         "label": "Search",
         "status": "active",
-        "link": "",
-        "showIcon": false
+        "icon": "search",
+        "link": ""
       }
     ];
     this.fetchContentOnParamChange();

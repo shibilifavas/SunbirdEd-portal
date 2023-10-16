@@ -21,14 +21,14 @@ export class AllTopicsComponent implements OnInit {
       {
         "label": "Learn",
         "status": "inactive",
-        "link": "resources",
-        "showIcon": true
+        "icon": "school",
+        "link": "resources"
       },
       {
         "label": "All topics",
         "status": "active",
-        "link": "",
-        "showIcon": false
+        "icon": "map",
+        "link": ""
       }
     ];
     this.fetchData();
