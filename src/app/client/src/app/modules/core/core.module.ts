@@ -17,7 +17,7 @@ import { AuthGuard } from './guard/auth-gard.service';
 import { CacheService } from '../../modules/shared/services/cache-service/cache.service';
 import { WebExtensionModule } from '@project-sunbird/web-extensions';
 import { TelemetryModule } from '../telemetry/telemetry.module';
-import { CommonConsumptionModule } from '@project-sunbird/common-consumption';
+import { CommonConsumptionModule } from 'compass-common-consumption';
 import { ContentTypeComponent } from './components/content-type/content-type.component';
 import { LocationModule } from '../../plugins/location/location.module';
 import { NotificationModule } from '../notification/notification.module';
