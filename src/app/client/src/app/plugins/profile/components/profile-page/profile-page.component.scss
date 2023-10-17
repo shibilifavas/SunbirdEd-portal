@@ -288,9 +288,9 @@
 }
 
 .course-certificates{
-  .mat-divider {
-  }
-  padding:20px 0;
+  // .mat-divider {
+  // }
+  // padding:20px 0;
   .title{
     padding:20px 0;
   }
@@ -301,8 +301,52 @@
       width: 200px;
       height: auto;
     }
-    .mat-list-item-content{
+    // .mat-list-item-content{
 
-    }
+    // }
   }
+}
+
+.heading {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: RGBA(0, 0, 0, 0.87);
+  margin-bottom: 40px;
+}
+
+.slide {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+
+.slick-slider {
+  // width: 88%;
+  margin: auto;
+  // background: rgb(14, 13, 13);
+}
+
+.slick-slider > .slick-next::before, .slick-slider > .slick-next::before {
+  background: rgb(28, 29, 31) !important;
+  color: #ffffff !important;
+}
+
+
+body .slick-prev,
+body .slick-next {
+  height: 45px;
+  width: 40px;
+  background: rgb(28, 29, 31) !important;
+  z-index: 100;
+}
+::ng-deep .slide .course-card .poster-img {
+  // height: 30vh;
+  width: 100%;
+}
+::ng-deep .slide .course-card .text-section {
+  height: 145px;
+}
+
+.mt-4rem {
+  margin-top: 4rem!important;
 }

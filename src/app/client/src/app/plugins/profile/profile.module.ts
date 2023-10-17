@@ -21,6 +21,8 @@ import { CsLibInitializerService } from '../../service/CsLibInitializer/cs-lib-i
 import { CommonFormElementsModule } from '@project-sunbird/common-form-elements-full';
 import {LocationModule} from '../location';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CardModule } from 'compass-common-consumption';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 
 export const csCourseServiceFactory = (csLibInitializerService: CsLibInitializerService) => {
@@ -56,6 +58,8 @@ export const csCertificateServiceFactory = (csLibInitializerService: CsLibInitia
     CommonFormElementsModule,
     LocationModule,
     MatTooltipModule,
+    CardModule,
+    SlickCarouselModule
   ],
   declarations: [ProfilePageComponent, ProfileBadgeComponent, UpdateContactDetailsComponent,
    AccountRecoveryInfoComponent,
