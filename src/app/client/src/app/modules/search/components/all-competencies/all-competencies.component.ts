@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SearchService } from '../../../core/services/search/search.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ContentSearchService } from '@sunbird/content-search';
 
 interface Competency {
   title?: string,
@@ -35,7 +36,7 @@ export class AllCompetenciesComponent implements OnInit {
   batchId = "";
 
   constructor(private frameworkService: FrameworkService, public activatedRoute: ActivatedRoute, public searchService: SearchService,
-    private router: Router) { }
+    private router: Router, private contentSearchService: ContentSearchService) { }
 
   ngOnInit(): void {
     this.fetchpopularCompetencies();
@@ -89,6 +90,7 @@ export class AllCompetenciesComponent implements OnInit {
         // competencyRequestData['filters'][catCode]= term.identifier; 
         this.contentSearch(competencyRequestData).subscribe(data => {
           this.courses = data;
+          this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
           for (let category of this.categoryDetails) {
             const catCode = `target${category.code.replace(/^./, category.code[0].toUpperCase())}Ids`;
             if (category.name.toLowerCase() == "competencies") {
