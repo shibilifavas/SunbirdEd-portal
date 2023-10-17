@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService, SchemaService } from '@sunbird/core';
 import { ResourceService } from '@sunbird/shared';
+import { ContentSearchService } from '@sunbird/content-search';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject, of, Observable } from 'rxjs';
 import { takeUntil, map, delay, debounceTime, tap, mergeMap } from 'rxjs/operators';
@@ -15,7 +16,8 @@ export class CoursesSearchComponent implements OnInit {
   courses = [];
   public unsubscribe$ = new Subject<void>();
 
-  constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService, public resourceService: ResourceService, private schemaService: SchemaService) { }
+  constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService, 
+    public resourceService: ResourceService, private schemaService: SchemaService, private contentSearchService: ContentSearchService) { }
 
   ngOnInit(): void {
     this.breadCrumbData = [
@@ -69,6 +71,7 @@ export class CoursesSearchComponent implements OnInit {
     }
     this.searchService.contentSearch(option).subscribe(res => {
       this.courses = res['result']['content'];
+      this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
       // console.log('Searched Courses', res['result']['content']);
     });
   }

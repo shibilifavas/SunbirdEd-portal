@@ -458,6 +458,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             option['params'] = params;
             this.searchService.contentSearch(option).subscribe((res: any) => {
                 this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
+                this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
                 this.count = res.count;
                 // console.log('recentlyPublishedList', this.recentlyPublishedList);
             });
@@ -503,7 +504,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     let filteredCourses = _.filter(enrolledCourses || [], enrolledContentPredicate);
                     filteredCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     this.enrolledCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
+                    this.enrolledCourses = this.contentSearchService.updateCourseWithTaggedCompetency(this.enrolledCourses);
                     console.log('enrolledCourses', this.enrolledCourses);
+                   
                     const { constantData, metaData, dynamicFields } = _.get(this.configService, 'appConfig.CoursePageSection.enrolledCourses');
                     enrolledSection.contents = _.map(filteredCourses, content => {
                         const formatedContent = this.utilService.processContent(content, constantData, dynamicFields, metaData);
