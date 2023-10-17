@@ -285,7 +285,7 @@
     </div>
     <div class="ui grid middle aligned stackable">
       <div class="three wide column" *ngFor="let data of popularCompetencyMapping;let i=index">
-        <div class="pointing" (click)="loadCompetencyCourses(data['title'])">
+        <div class="pointing" (click)="loadCompetencyCourses(data['identifier'])">
           <sb-popular-card [pillName]="'Competency'" [data]="data"></sb-popular-card>
         </div>
       </div>

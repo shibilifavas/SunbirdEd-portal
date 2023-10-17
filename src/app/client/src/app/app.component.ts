@@ -418,10 +418,10 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     };
 
-    this.landingPageContentService.getPageContent().subscribe(res => {
-      this.configContent = res;
-      // console.log(this.configContent);
-    })
+    // this.landingPageContentService.getPageContent().subscribe(res => {
+    //   this.configContent = res;
+    //   // console.log(this.configContent);
+    // })
   }
 
   isNoHeaderPage(): boolean {
