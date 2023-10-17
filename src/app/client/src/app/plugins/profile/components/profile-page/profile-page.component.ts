@@ -109,8 +109,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
         "label": "Profile",
         "status": "inactive",
         "link": "",
-        "showIcon": true,
-        'matIcon':'person'
+        'icon':'person'
     }
   ];
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,

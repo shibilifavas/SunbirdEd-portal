@@ -121,7 +121,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     topicsData: any;
     fwCategory = [];
     courses: any = {};
-    slideConfigNew = { slidesToShow: 3, slidesToScroll: 3 };
+    slideConfigNew = { slidesToShow: 4, slidesToScroll: 4 };
 
     searchRequest: IContentSearchRequest;
     recentlyPublishedList: IContent[] = [];
@@ -129,13 +129,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     count: number;
     recentlyPublishedTitle: string;
     sliderConfig = {
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: 4,
+        slidesToScroll: 4,
         responsive: [{
             breakpoint: 1024,
             settings: {
-              slidesToShow: 3,
-              slidesToScroll: 3 
+              slidesToShow: 4,
+              slidesToScroll: 4 
             }
           },
           {
@@ -508,6 +508,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     filteredCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     this.enrolledCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     this.enrolledCourses = this.contentSearchService.updateCourseWithTaggedCompetency(this.enrolledCourses);
+                    this.enrolledCourses = this.enrolledCourses.filter((course) => {
+                        return course['completionPercentage'] !== 100;
+                    });
                     console.log('enrolledCourses', this.enrolledCourses);
                    
                     const { constantData, metaData, dynamicFields } = _.get(this.configService, 'appConfig.CoursePageSection.enrolledCourses');
