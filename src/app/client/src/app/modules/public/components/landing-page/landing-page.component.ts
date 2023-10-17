@@ -7,7 +7,6 @@ import { UserService, SearchService } from '@sunbird/core';
 
 import { ResourceService } from '@sunbird/shared';
 import { CoursesService } from '@sunbird/core';
-
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
@@ -32,7 +31,7 @@ export class LandingPageComponent implements OnInit {
     let searchRequest = {
       "request": {
         "filters": {
-          "primaryCategory": ["Course"],
+          "primaryCategory": ["Course", "Course Assessment"],
           "visibility": ["Default", "Parent"],
           "channel": "0138325860604395527"
         },

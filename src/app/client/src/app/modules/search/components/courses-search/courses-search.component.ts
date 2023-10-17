@@ -51,7 +51,7 @@ export class CoursesSearchComponent implements OnInit {
   public fetchContents(pageNumber, channelId, key, competency, keyword) {
     const option = {
       filters: { 
-        primaryCategory: ["Course"], 
+        primaryCategory: ["Course", "Course Assessment"], 
         visibility: ["Default", "Parent"], 
         channel: channelId ,
         keywords: keyword ?? '',
