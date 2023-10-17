@@ -3,11 +3,11 @@
     <!-- popular competencies -->
     <section class="ui container mt-60" *ngIf="popularCompetencies">
       <p class="allCompetencyTitle w-100">{{popularCompetencies.title}}</p>
-      <div class="w-100 d-flex flex-jc-flex-start popular-comp-container">
+      <div class="ui grid middle aligned stackable">
           <sb-popular-card
             *ngFor="let info of popularCompetencies.data"
             [pillName]="'Competency'" [data]="info"
-            class="w-25 mb-32 mr-24"
+            class="three wide column"
           ></sb-popular-card>
       </div>
   </section>

@@ -121,7 +121,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     topicsData: any;
     fwCategory = [];
     courses: any = {};
-    slideConfigNew = { slidesToShow: 3, slidesToScroll: 3 };
+    slideConfigNew = { slidesToShow: 4, slidesToScroll: 4 };
 
     searchRequest: IContentSearchRequest;
     recentlyPublishedList: IContent[] = [];
@@ -129,13 +129,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     count: number;
     recentlyPublishedTitle: string;
     sliderConfig = {
-        slidesToShow: 3,
-        slidesToScroll: 3,
+        slidesToShow: 4,
+        slidesToScroll: 4,
         responsive: [{
             breakpoint: 1024,
             settings: {
-              slidesToShow: 3,
-              slidesToScroll: 3 
+              slidesToShow: 4,
+              slidesToScroll: 4 
             }
           },
           {
@@ -357,8 +357,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             {
                 "label": "Learn",
                 "status": "active",
-                "link": "",
-                "showIcon": true
+                "icon": "school",
+                "link": ""
             });
     }
 
@@ -370,7 +370,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     "Live"
                 ],
                 "primaryCategory": [
-                    "Course"
+                    "Course",
+                    "Course Assessment"
                 ]
             },
             "fields": [
@@ -400,7 +401,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     "Live"
                 ],
                 "primaryCategory": [
-                    "Course"
+                    "Course",
+                    "Course Assessment"
                 ]
             },
             "fields": [
@@ -443,7 +445,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             "Live"
                         ],
                         "primaryCategory": [
-                            "Course"
+                            "Course",
+                            "Course Assessment"
                         ],
                     },
                     "limit": 100,
@@ -458,6 +461,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             option['params'] = params;
             this.searchService.contentSearch(option).subscribe((res: any) => {
                 this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
+                this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
                 this.count = res.count;
                 // console.log('recentlyPublishedList', this.recentlyPublishedList);
             });
@@ -471,7 +475,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public getBrowseByData(title: string) {
         if (title.toLowerCase() == "competency" || title.toLowerCase() == "popular competencies") {
             this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
-        } else if (title.toLowerCase() == "topic" || title.toLowerCase() == "popular topics") {
+        } else if (title.toLowerCase() == "popular topics" || title.toLowerCase() == "topic") {
+            // this.router.navigate(['search/Library', 1]);
             this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
         }
     }
@@ -502,7 +507,12 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     let filteredCourses = _.filter(enrolledCourses || [], enrolledContentPredicate);
                     filteredCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
                     this.enrolledCourses = _.orderBy(filteredCourses, [sortingField], [sortingOrder]);
+                    this.enrolledCourses = this.contentSearchService.updateCourseWithTaggedCompetency(this.enrolledCourses);
+                    this.enrolledCourses = this.enrolledCourses.filter((course) => {
+                        return course['completionPercentage'] !== 100;
+                    });
                     console.log('enrolledCourses', this.enrolledCourses);
+                   
                     const { constantData, metaData, dynamicFields } = _.get(this.configService, 'appConfig.CoursePageSection.enrolledCourses');
                     enrolledSection.contents = _.map(filteredCourses, content => {
                         const formatedContent = this.utilService.processContent(content, constantData, dynamicFields, metaData);

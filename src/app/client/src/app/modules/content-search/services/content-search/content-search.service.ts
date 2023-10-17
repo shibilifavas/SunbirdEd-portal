@@ -121,6 +121,7 @@ export class ContentSearchService {
       return acc;
     }, filters);
   }
+
   updateFrameworkInfo(framework, identifier){
       // let frameworkInfo = JSON.parse(localStorage.getItem('environment'));
       taxonomyEnvironment.channelId=identifier;
@@ -128,4 +129,22 @@ export class ContentSearchService {
       localStorage.setItem('environment', JSON.stringify(taxonomyEnvironment));
       localStorage.setItem('taxonomyConfig',JSON.stringify(taxonomyConfig));
   }
+
+  updateCourseWithTaggedCompetency(courses) {
+      let updatedCourseList;
+      updatedCourseList = courses.map(course =>this.mapCourseCompetencyIdwithTerms(course))
+      return updatedCourseList;
+  }
+
+  mapCourseCompetencyIdwithTerms(course) {
+    let competencyIdsMapping = [];
+    if(course.targetTaxonomyCategory4Ids) {
+        course.targetTaxonomyCategory4Ids.forEach(id => {
+          competencyIdsMapping.push(this.channelData[3].terms.filter(comp => comp.identifier=== id)[0].name)
+        })
+    }
+    course.competencyIdsMapping = competencyIdsMapping;
+    return course
+  }
+
 }

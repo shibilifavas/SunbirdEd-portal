@@ -168,12 +168,8 @@
 
 .cardContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content:flex-start;
   cursor: pointer;
-}
-
-.browseByCard {
-  width: 30%;
 }
 
 .browseTitle {

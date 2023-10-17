@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService, SchemaService } from '@sunbird/core';
 import { ResourceService } from '@sunbird/shared';
+import { ContentSearchService } from '@sunbird/content-search';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject, of, Observable } from 'rxjs';
 import { takeUntil, map, delay, debounceTime, tap, mergeMap } from 'rxjs/operators';
@@ -15,21 +16,22 @@ export class CoursesSearchComponent implements OnInit {
   courses = [];
   public unsubscribe$ = new Subject<void>();
 
-  constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService, public resourceService: ResourceService, private schemaService: SchemaService) { }
+  constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService, 
+    public resourceService: ResourceService, private schemaService: SchemaService, private contentSearchService: ContentSearchService) { }
 
   ngOnInit(): void {
     this.breadCrumbData = [
       {
         "label": "Learn",
+        "icon": "school",
         "status": "inactive",
-        "link": "resources",
-        "showIcon": true
+        "link": "resources"
       },
       {
         "label": "Search",
         "status": "active",
-        "link": "",
-        "showIcon": false
+        "icon": "search",
+        "link": ""
       }
     ];
     this.fetchContentOnParamChange();
@@ -49,17 +51,27 @@ export class CoursesSearchComponent implements OnInit {
   public fetchContents(pageNumber, channelId, key, competency, keyword) {
     const option = {
       filters: { 
-        primaryCategory: ["Course"], 
+        primaryCategory: ["Course", "Course Assessment"], 
         visibility: ["Default", "Parent"], 
-        channel: channelId,
-        keywords: keyword ?? ''
+        channel: channelId ,
+        keywords: keyword ?? '',
+        targetTaxonomyCategory4Ids: [
+          competency ?? ''
+        ]
       },
       query: key ?? '',
       sort_by: { lastPublishedOn: 'desc' },
       pageNumber: pageNumber
     };
+    if(option.filters.keywords == ''){
+      delete option.filters.keywords;
+    }
+    if(option.filters.targetTaxonomyCategory4Ids[0]==''){
+      delete option.filters.targetTaxonomyCategory4Ids;
+    }
     this.searchService.contentSearch(option).subscribe(res => {
       this.courses = res['result']['content'];
+      this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
       // console.log('Searched Courses', res['result']['content']);
     });
   }
