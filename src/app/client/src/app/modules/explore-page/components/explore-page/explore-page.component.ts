@@ -370,7 +370,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     "Live"
                 ],
                 "primaryCategory": [
-                    "Course"
+                    "Course",
+                    "Course Assessment"
                 ]
             },
             "fields": [
@@ -400,7 +401,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     "Live"
                 ],
                 "primaryCategory": [
-                    "Course"
+                    "Course",
+                    "Course Assessment"
                 ]
             },
             "fields": [
@@ -443,7 +445,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             "Live"
                         ],
                         "primaryCategory": [
-                            "Course"
+                            "Course",
+                            "Course Assessment"
                         ],
                     },
                     "limit": 100,

@@ -26,7 +26,7 @@
   <section class="course-certificates container ui mt-4rem">
     <div class="sb-g">
       <section class="sb-g-col-xs-12 sb-g-col-md-6 sb-g-col-md-12 sb-g-col-lg-12" *ngIf="attendedTraining">
-        <div class="heading">{{resourceService.frmelmnts.scttl.learning}}
+        <div class="heading">{{resourceService?.frmelmnts?.scttl?.learning}}
         <button (click)="showAllLearnings()"
           class="com-secondary-btn right-floated">{{resourceService?.frmelmnts?.lbl?.anncmntinboxseeall}}</button></div>
         <div class="ui grid middle aligned stackable">
