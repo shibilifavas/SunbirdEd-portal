@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icons/action/help</title>
+    <g id="V1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="03-Home-page-Copy" transform="translate(-1056, -192)">
+            <g id="Icons/action/help" transform="translate(1056, 192)">
+                <rect id="Rectangle" fill="#2386FC" x="0" y="0" width="20" height="20" rx="4"></rect>
+                <g id="Icons/action/close" transform="translate(2.5, 2.5)">
+                    <rect id="Size" fill="#D8D8D8" opacity="0" x="0" y="0" width="15" height="15"></rect>
+                    <path d="M7.5,7.5 C8.88125,7.5 10,6.38125 10,5 C10,3.61875 8.88125,2.5 7.5,2.5 C6.11875,2.5 5,3.61875 5,5 C5,6.38125 6.11875,7.5 7.5,7.5 Z M7.5,8.75 C5.83125,8.75 2.5,9.5875 2.5,11.25 L2.5,11.875 C2.5,12.21875 2.78125,12.5 3.125,12.5 L11.875,12.5 C12.21875,12.5 12.5,12.21875 12.5,11.875 L12.5,11.25 C12.5,9.5875 9.16875,8.75 7.5,8.75 Z" id="person" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
