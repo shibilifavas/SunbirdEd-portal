@@ -126,6 +126,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   visitedData: any;
   selectedContentId: any;
   contentIds: any;
+  contentTitle: string = ''
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -267,6 +268,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
                 this.contentIds = this.courseConsumptionService.parseChildren(data.courseHierarchy);
                 this.totalCount = this.contentIds?.length;
               }
+              this.contentTitle = this.courseHierarchy.name;
               // this.getCourseCompletionStatus();
               console.log("courseHierarchy",this.courseHierarchy);
               if (!isSingleContent && _.get(this.courseHierarchy, 'mimeType') !==
@@ -289,6 +291,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((data) => {
               this.courseHierarchy = data.result.content;
+              this.contentTitle = this.courseHierarchy.name;
               if(!this.contentIds || this.contentIds?.length == 0) {
                 this.contentIds = this.courseConsumptionService.parseChildren(this.courseHierarchy);
                 this.totalCount = this.contentIds?.length;
@@ -904,7 +907,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       if (this.batchId) {
         options.batchId = this.batchId;
       }
-      if (this.activeContent.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
+      if (this.activeContent?.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
         this.courseEvaluable = this.serverValidationCheck(this.activeContent?.eval);
         if(this.courseEvaluable){
@@ -957,9 +960,17 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           this.playerConfig = config;
           let consumedData: any = this.CourseProgressService.contentProgress['content_'+`${this.selectedContentId}`];
           if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'application/pdf') {
-            this.playerConfig.config.pagesVisited = consumedData || this.visitedData;
+            if(consumedData?.length > 0){
+              this.playerConfig.config.pagesVisited = consumedData;
+            } else {
+              this.playerConfig.config.pagesVisited = this.visitedData;
+            }
           } else if((consumedData?.length > 0 || this.visitedData?.length > 0) && this.playerConfig.metadata.mimeType == 'video/mp4') {
-            this.playerConfig.config['currentDuration'] = consumedData[0] || this.visitedData[0];
+            if(consumedData?.length > 0){
+              this.playerConfig.config.currentDuration = consumedData[0];
+            } else {
+              this.playerConfig.config.currentDuration = this.visitedData[0]
+            }
           }
           const _contentIndex = _.findIndex(this.contentStatus, { contentId: _.get(config, 'context.contentId') });
           this.playerConfig['metadata']['maxAttempt'] = _.get(this.activeContent, 'maxAttempts');
@@ -1046,6 +1057,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       },
       id: id
     };
+    this.contentTitle = event.header.title;
     const module = this.courseConsumptionService.setPreviousAndNextModule(this.parentCourse, event.content.collectionId);
     this.nextModule = _.get(module, 'next');
     this.prevModule = _.get(module, 'prev');
