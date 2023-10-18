@@ -1,4 +1,4 @@
-import {ProfileService} from '../../services';
+import { ProfileService } from '../../services';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Inject } from '@angular/core';
 import {
   CertRegService,
@@ -20,11 +20,11 @@ import {
   ConnectionService
 } from '@sunbird/shared';
 import * as _ from 'lodash-es';
-import {Subject, Subscription} from 'rxjs';
-import {IImpressionEventInput, IInteractEventEdata, TelemetryService} from '@sunbird/telemetry';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
+import { IImpressionEventInput, IInteractEventEdata, TelemetryService } from '@sunbird/telemetry';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CacheService } from '../../../../modules/shared/services/cache-service/cache.service';
-import {takeUntil} from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { CertificateDownloadAsPdfService } from 'sb-svg2pdf-v13';
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { FieldConfig, FieldConfigOption } from '@project-sunbird/common-form-elements-full';
@@ -38,9 +38,9 @@ import { TaxonomyService } from '../../../../service/taxonomy.service';
 })
 export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   private static readonly SUPPORTED_PERSONA_LIST_FORM_REQUEST =
-  { formType: 'config', formAction: 'get', contentType: 'userType', component: 'portal' };
+    { formType: 'config', formAction: 'get', contentType: 'userType', component: 'portal' };
   private static readonly DEFAULT_PERSONA_LOCATION_CONFIG_FORM_REQUEST =
-  { formType: 'profileConfig_v2', contentType: 'default', formAction: 'get' };
+    { formType: 'profileConfig_v2', contentType: 'default', formAction: 'get' };
   @ViewChild('profileModal') profileModal;
   @ViewChild('slickModal') slickModal;
   userProfile: any;
@@ -102,18 +102,23 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   avatarConfig = {
     size: this.configService.constants.SIZE.LARGE,
     view: this.configService.constants.VIEW.VERTICAL,
-    isTitle:false
+    isTitle: false
   };
   breadCrumbData = [
     {
-        "label": "Profile",
-        "status": "inactive",
-        "link": "",
-        'icon':'person'
+      "label": "Profile",
+      "status": "inactive",
+      "link": "",
+      'icon': 'person'
     }
   ];
+  configContent: any = {}
+  // CAROUSEL_BREAKPOINT = 768;
+  CAROUSEL_BREAKPOINT = 1400;
+  carouselDisplayMode = 'multiple';
+
   constructor(@Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService, private cacheService: CacheService,
-  public resourceService: ResourceService, public coursesService: CoursesService,
+    public resourceService: ResourceService, public coursesService: CoursesService,
     public toasterService: ToasterService, public profileService: ProfileService, public userService: UserService,
     public configService: ConfigService, public router: Router, public utilService: UtilService, public searchService: SearchService,
     private playerService: PlayerService, private activatedRoute: ActivatedRoute, public orgDetailsService: OrgDetailsService,
@@ -129,20 +134,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.fwCategory= _.map(this.taxonomyService.getTaxonomyCategories(), category => {return category} );
+    this.fwCategory = _.map(this.taxonomyService.getTaxonomyCategories(), category => { return category });
     this.isDesktopApp = this.utilService.isDesktopApp;
 
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['showEditUserDetailsPopup']) {
         this.showEditUserDetailsPopup = true;
       }
-      });
+    });
 
     if (this.isDesktopApp) {
       this.connectionService.monitor()
-      .pipe(takeUntil(this.unsubscribe$)).subscribe(isConnected => {
-        this.isConnected = isConnected;
-      });
+        .pipe(takeUntil(this.unsubscribe$)).subscribe(isConnected => {
+          this.isConnected = isConnected;
+        });
     }
     this.initLayout();
     this.instance = _.upperFirst(_.toLower(this.resourceService.instance || 'SUNBIRD'));
@@ -178,6 +183,48 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     this.setInteractEventData();
+  }
+  slideConfig = {
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    responsive: [{
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 4
+      }
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 520,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }]
+  };
+
+
+  slickInit(e: any) {
+    // console.log('slick initialized');
+  }
+
+  breakpoint(e: any) {
+    // console.log('breakpoint');
+  }
+
+  afterChange(e: any) {
+    // console.log('afterChange');
+  }
+
+  beforeChange(e: any) {
+    // console.log('beforeChange');
   }
 
   initLayout() {
@@ -261,16 +308,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getContribution(): void {
     const { constantData, metaData, dynamicFields } = this.configService.appConfig.Course.otherCourse;
-      const searchParams = {
-        status: ['Live'],
-        contentType: this.configService.appConfig.WORKSPACE.contentType,
-        params: { lastUpdatedOn: 'desc' }
-      };
-      const inputParams = { params: this.configService.appConfig.PROFILE.contentApiQueryParams };
-      this.searchService.searchContentByUserId(searchParams, inputParams).subscribe((data: ServerResponse) => {
-        this.contributions = this.utilService.getDataForCard(data.result.content, constantData, dynamicFields, metaData);
-        this.totalContributions = _.get(data, 'result.count') || 0;
-      });
+    const searchParams = {
+      status: ['Live'],
+      contentType: this.configService.appConfig.WORKSPACE.contentType,
+      params: { lastUpdatedOn: 'desc' }
+    };
+    const inputParams = { params: this.configService.appConfig.PROFILE.contentApiQueryParams };
+    this.searchService.searchContentByUserId(searchParams, inputParams).subscribe((data: ServerResponse) => {
+      this.contributions = this.utilService.getDataForCard(data.result.content, constantData, dynamicFields, metaData);
+      this.totalContributions = _.get(data, 'result.count') || 0;
+    });
   }
 
   getTrainingAttended() {
@@ -281,10 +328,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-/**
- * @param userId
- *It will fetch certificates of user, other than courses
- */
+  /**
+   * @param userId
+   *It will fetch certificates of user, other than courses
+   */
   getOtherCertificates(userId, certType) {
     this.otherCertificates = [];
     let requestBody = { userId: userId, schemaName: 'certificate' };
@@ -513,7 +560,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   navigate(url, formAction) {
-    this.router.navigate([url], {queryParams: {formaction: formAction}});
+    this.router.navigate([url], { queryParams: { formaction: formAction } });
   }
 
   ngAfterViewInit() {
@@ -631,72 +678,72 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       const offsetPosition = elementPosition - 144;
 
       window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
+        top: offsetPosition,
+        behavior: 'smooth'
       });
     });
   }
 
   private getUserLocation(profile: any) {
-   const userLocation = {};
+    const userLocation = {};
     if (profile && profile.userLocations && profile.userLocations.length) {
-        profile.userLocations.forEach((d) => {
-            userLocation[d.type] = d;
-        });
+      profile.userLocations.forEach((d) => {
+        userLocation[d.type] = d;
+      });
     }
     return userLocation;
-}
-
-private async getPersonaConfig(persona: string) {
-  const formFields = await this.formService.getFormConfig(ProfilePageComponent.SUPPORTED_PERSONA_LIST_FORM_REQUEST).toPromise();
-  return formFields.find(config => config.code === persona);
-}
-
-private async getSubPersonaConfig(persona: string, userLocation: any): Promise<string[]> {
-  if ((!this.userProfile.profileUserTypes || !this.userProfile.profileUserTypes.length) &&
-  (!this.userProfile.profileUserType || !this.userProfile.profileUserType.subType)) {
-      return undefined;
   }
-  let formFields;
-  try {
+
+  private async getPersonaConfig(persona: string) {
+    const formFields = await this.formService.getFormConfig(ProfilePageComponent.SUPPORTED_PERSONA_LIST_FORM_REQUEST).toPromise();
+    return formFields.find(config => config.code === persona);
+  }
+
+  private async getSubPersonaConfig(persona: string, userLocation: any): Promise<string[]> {
+    if ((!this.userProfile.profileUserTypes || !this.userProfile.profileUserTypes.length) &&
+      (!this.userProfile.profileUserType || !this.userProfile.profileUserType.subType)) {
+      return undefined;
+    }
+    let formFields;
+    try {
       const state = userLocation.state;
       formFields = await this.formService.getFormConfig({
         ...ProfilePageComponent.DEFAULT_PERSONA_LOCATION_CONFIG_FORM_REQUEST,
-        ...(state ? {contentType: state.code} : {})
+        ...(state ? { contentType: state.code } : {})
       }).toPromise();
-  } catch (e) {
+    } catch (e) {
       formFields = await this.formService.getFormConfig(ProfilePageComponent.DEFAULT_PERSONA_LOCATION_CONFIG_FORM_REQUEST).toPromise();
-  }
+    }
 
-  const personaConfig = formFields.find(formField => formField.code === 'persona');
-  const personaChildrenConfig: FieldConfig<any>[] = personaConfig['children'][persona];
-  const subPersonaConfig = personaChildrenConfig.find(formField => formField.code === 'subPersona');
-  if (!subPersonaConfig) {
+    const personaConfig = formFields.find(formField => formField.code === 'persona');
+    const personaChildrenConfig: FieldConfig<any>[] = personaConfig['children'][persona];
+    const subPersonaConfig = personaChildrenConfig.find(formField => formField.code === 'subPersona');
+    if (!subPersonaConfig) {
       return undefined;
-   }
-  const subPersonaList = [];
-  if (_.get(subPersonaConfig, 'templateOptions.multiple')) {
-    if (this.userProfile.profileUserTypes && this.userProfile.profileUserTypes.length) {
-      this.userProfile.profileUserTypes.forEach(ele => {
-        if (_.get(ele, 'subType')) {
-          subPersonaList.push(ele.subType);
-        }
-      });
+    }
+    const subPersonaList = [];
+    if (_.get(subPersonaConfig, 'templateOptions.multiple')) {
+      if (this.userProfile.profileUserTypes && this.userProfile.profileUserTypes.length) {
+        this.userProfile.profileUserTypes.forEach(ele => {
+          if (_.get(ele, 'subType')) {
+            subPersonaList.push(ele.subType);
+          }
+        });
+      } else {
+        subPersonaList.push(this.userProfile.profileUserType.subType);
+      }
     } else {
       subPersonaList.push(this.userProfile.profileUserType.subType);
     }
-  } else {
-    subPersonaList.push(this.userProfile.profileUserType.subType);
+
+    const subPersonaFieldConfigOption = [];
+    subPersonaList.forEach((ele) => {
+      subPersonaFieldConfigOption.push((subPersonaConfig.templateOptions.options as FieldConfigOption<any>[]).
+        find(option => option.value === ele).label);
+    });
+
+    return subPersonaFieldConfigOption;
   }
-
-   const subPersonaFieldConfigOption = [];
-   subPersonaList.forEach((ele) => {
-    subPersonaFieldConfigOption.push((subPersonaConfig.templateOptions.options as FieldConfigOption<any>[]).
-    find(option => option.value === ele).label);
-   });
-
-  return subPersonaFieldConfigOption;
-}
 
   public onLocationModalClose(event) {
     this.showEditUserDetailsPopup = !this.showEditUserDetailsPopup;
