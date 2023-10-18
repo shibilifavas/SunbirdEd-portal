@@ -2,7 +2,7 @@
     <div class="container ui">
         <div class="grid twelve columns">
             <!-- <img class="pointing" (click)="navigateTo('/resources')" src="assets/images/home-breadcrumb.svg" /> -->
-            <mat-icon class="home-icon">home</mat-icon>
+            <mat-icon (click)="navigateTo('/resources?selectedTab=home')" class="home-icon">home</mat-icon>
             <span class="in-line-flex" *ngFor="let breadcrumb of data">
                 <mat-icon class="arrow-forward">keyboard_arrow_right</mat-icon>
                 <!-- <img *ngIf="breadcrumb['showIcon']" (click)="navigateTo(breadcrumb['link'])" [ngClass]="{'pointing' : breadcrumb['link'] !== ''}" src="assets/images/learn-{{breadcrumb['status']}}-breadcrumb.svg" /> -->
