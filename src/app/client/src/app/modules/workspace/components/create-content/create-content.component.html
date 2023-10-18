@@ -112,7 +112,7 @@
             <p class="workspaceinstuction">{{resourceService?.frmelmnts?.lbl?.contentuploaddescription}}</p>
           </div>
            <!-- Assessment -->
-          <div class="three wide column" *ngIf='permissionService.permissionAvailable' appPermission
+          <!-- <div class="three wide column" *ngIf='permissionService.permissionAvailable' appPermission
             [permission]='assessmentRole'>
             <div class="ui link card" routerLink="assessment" appTelemetryInteract
               [telemetryInteractEdata]="{id:'createAssessment',type:'click',pageid:'create-assessment'}" [telemetryInteractCdata]="[{ id: 'user:workspace:assessment:create', type: 'Feature' }, { id: 'SB-17206', type: 'Task' }]">
@@ -124,7 +124,21 @@
               </div>
             </div>
             <p class="workspaceinstuction">{{resourceService?.frmelmnts?.lbl?.assessmentdescription}}</p>
+          </div> -->
+          <!-- Duplicate Assessment -->
+          <div class="three wide column" *ngIf='permissionService.permissionAvailable' appPermission
+          [permission]='courseRole'>
+          <div class="ui link card" routerLink="course" [queryParams]="{showFrameworkSelection: true, type: 'Assessment'}" appTelemetryInteract
+            [telemetryInteractEdata]="{id:'createCourse',type:'click',pageid:'create-course'}">
+            <div class="content">
+              <div class="textcontent">
+                <i class='my-icon file text outline icon'></i>
+                <span class="my-text">Assessment</span>
+              </div>
+            </div>
           </div>
+          <p class="workspaceinstuction">{{resourceService?.frmelmnts?.lbl?.assessment}}</p>
+        </div>
         </div>
       </div>
         <div class="twelve wide column hide">
