@@ -891,7 +891,7 @@
     "cdnUrl": "/content/preview/preview_cdn.html?webview=true"
   },
   "WORKSPACE": {
-    "PAGE_LIMIT": 9,
+    "PAGE_LIMIT": 20,
     "contentType": [
       "Collection",
       "TextBook",

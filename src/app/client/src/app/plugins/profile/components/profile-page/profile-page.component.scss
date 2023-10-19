@@ -1,5 +1,6 @@
-@use "@project-sunbird/sb-styles/assets/mixins/mixins" as *;
-@use 'pages/content-header' as *;
+@use "@project-sunbird/sb-styles/assets/mixins/mixins"as *;
+@use 'pages/content-header'as *;
+
 /* fonts */
 .font-w-bold {
   font-weight: bold !important;
@@ -17,7 +18,7 @@
 
 .profile-bg-c-4 {
   background: var(--sb-profile-bg-c-4) !important;
-  color:var(--black);
+  color: var(--black);
 }
 
 .profile-bg-c-4 {
@@ -177,7 +178,7 @@
   text-transform: unset;
 }
 
-.self-declared-title{
+.self-declared-title {
   font-size: calculateRem(12px);
   font-weight: bold;
 }
@@ -201,15 +202,17 @@
     }
   }
 }
-.sb-course-progress-status-label{
+
+.sb-course-progress-status-label {
   width: 100%;
-  border-radius:calculateRem(8px) calculateRem(8px) 0 0;
+  border-radius: calculateRem(8px) calculateRem(8px) 0 0;
   justify-content: space-between;
   display: flex;
   padding: calculateRem(8px) calculateRem(16px);
 }
-.sb-profile-page-container{
-  .ui.segment{
+
+.sb-profile-page-container {
+  .ui.segment {
     background: var(--sb-profile-page-container);
   }
 }
@@ -217,6 +220,7 @@
 .content-preference {
   @include respond-below(md) {
     padding: 0 2%;
+
     &__info {
       background: var(--sb-profile-bg-c-4);
       padding: calculateRem(16px) 0;
@@ -229,17 +233,18 @@
 
 ::ng-deep {
   .avatar-container {
-     .my-avatar.verified .sb-avatar-list-item .sb-avatar__img {
-      border: 1px solid  !important;
+    .my-avatar.verified .sb-avatar-list-item .sb-avatar__img {
+      border: 1px solid !important;
       border-color: var(--secondary-color) !important;
     }
-     .avatar-tickmark {
+
+    .avatar-tickmark {
       width: 2rem;
       height: 2rem;
       position: absolute;
       right: 0%;
       z-index: 9;
-      top: 0.2rem; 
+      top: 0.2rem;
 
     }
 
@@ -247,39 +252,44 @@
 
 }
 
-.profile-header{
+.profile-header {
   background: #f5f5f5;
   padding: 40px 0;
+
   @media only screen and (min-width: 800px) {
-      padding: 70px 0;
+    padding: 70px 0;
   }
-  &__container{
+
+  &__container {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
   }
-  &__intials{
-    background:var(--black);
+
+  &__intials {
+    background: var(--black);
     color: var(--white);
-      padding: 30px 40px;
-      border-radius: 20px;
+    padding: 30px 40px;
+    border-radius: 20px;
     font-size: 40px;
     font-family: var(--com-font);
+
     @media only screen and (min-width: 800px) {
       padding: 40px 50px;
       border-radius: 24px;
-    } 
+    }
 
   }
-  &__info{
-    
+
+  &__info {}
+
+  &__info-name {
+    color: var(--com-primary-color);
+    font-size: 20px;
   }
-  &__info-name{
-      color:var(--com-primary-color);
-      font-size: 20px;
-  }
-  &__buttons{
+
+  &__buttons {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -287,23 +297,23 @@
   }
 }
 
-.course-certificates{
+.course-certificates {
+
   // .mat-divider {
   // }
   // padding:20px 0;
-  .title{
-    padding:20px 0;
+  .title {
+    padding: 20px 0;
   }
+
   .mat-list-item {
     height: auto;
-    margin:20px 0;
-    img{
+    margin: 20px 0;
+
+    img {
       width: 200px;
       height: auto;
     }
-    // .mat-list-item-content{
-
-    // }
   }
 }
 
@@ -313,6 +323,7 @@
   font-weight: 600;
   color: RGBA(0, 0, 0, 0.87);
   margin-bottom: 40px;
+  display: inherit!important;
 }
 
 .slide {
@@ -326,7 +337,9 @@
   // background: rgb(14, 13, 13);
 }
 
-.slick-slider > .slick-next::before, .slick-slider > .slick-next::before {
+
+.slick-slider>.slick-next::before,
+.slick-slider>.slick-next::before {
   background: rgb(28, 29, 31) !important;
   color: #ffffff !important;
 }
@@ -339,14 +352,20 @@ body .slick-next {
   background: rgb(28, 29, 31) !important;
   z-index: 100;
 }
+
 ::ng-deep .slide .course-card .poster-img {
   // height: 30vh;
   width: 100%;
 }
+
 ::ng-deep .slide .course-card .text-section {
   height: 145px;
 }
 
 .mt-4rem {
-  margin-top: 4rem!important;
+  margin-top: 4rem !important;
+}
+
+.right-floated {
+  float: right !important;
 }

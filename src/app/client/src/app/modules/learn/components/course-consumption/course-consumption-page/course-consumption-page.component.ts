@@ -86,7 +86,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
               "label": "Learn",
               "status": "inactive",
               "link": "resources",
-              "showIcon": true
+              "icon": "school"
           }
       ];
       const stored = localStorage.getItem('breadCrumbForAllComp');
@@ -105,7 +105,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         "label": this.config.title,
         "status": "active",
         "link": "",
-        "showIcon": false}
+        "icon": "play_circle_filled"}
         this.breadCrumbData.push(newBreadCrumb);
       
       }, err => {

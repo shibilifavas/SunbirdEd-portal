@@ -91,7 +91,13 @@ export class SearchService {
           query: requestParam.query,
           sort_by: {
             lastUpdatedOn: requestParam.params.lastUpdatedOn || 'desc'
-          }
+          },
+          fields: [
+            "name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "contentType", "channel", "organisation", "trackable", "lastPublishedOn", "Duration", "targetTaxonomyCategory4Ids"
+          ],
+          facets: [
+            "taxonomyCategory4Ids"
+          ],
         }
       }
     };
@@ -189,7 +195,7 @@ export class SearchService {
    *
    * @param {SearchParam} requestParam api request data
   */
-   compositePopularSearch(requestParam: SearchParam): Observable<ServerResponse> {
+  compositePopularSearch(requestParam: SearchParam): Observable<ServerResponse> {
     const option = {
       url: this.config.urlConFig.URLS.CONTENT.SEARCH,
       param: { ...requestParam.params },
@@ -567,26 +573,26 @@ export class SearchService {
           facet['mimeTypeList'] = this.mimeTypeList;
           break;
         case 'mediaType':
-            facet['index'] = '8';
-            facet['label'] = this.resourceService.frmelmnts.lbl.mediaType;
-            facet['mimeTypeList'] = this.mimeTypeList;
-            break;
+          facet['index'] = '8';
+          facet['label'] = this.resourceService.frmelmnts.lbl.mediaType;
+          facet['mimeTypeList'] = this.mimeTypeList;
+          break;
         case 'audience':
-            facet['index'] = '9';
-            facet['label'] =  this.resourceService.frmelmnts.lbl.userType;
-            facet['placeholder'] =  this.resourceService.frmelmnts.lbl.selectMeantFor;
-            break;
+          facet['index'] = '9';
+          facet['label'] = this.resourceService.frmelmnts.lbl.userType;
+          facet['placeholder'] = this.resourceService.frmelmnts.lbl.selectMeantFor;
+          break;
         case 'channel':
           facet['index'] = '1';
           facet['label'] = _.get(this.resourceService, 'frmelmnts.lbl.orgname');
-          facet['placeholder'] =  _.get(this.resourceService, 'frmelmnts.lbl.orgname');
+          facet['placeholder'] = _.get(this.resourceService, 'frmelmnts.lbl.orgname');
           facet['values'] = _.map(facet.values || [], value => ({ ...value, name: value.orgName }));
           break;
-          case 'additionalCategories':
-            facet['index'] = '71';
-            facet['label'] = this.resourceService.frmelmnts.lbl.additionalCategories;
-            facet['placeholder'] = this.resourceService.frmelmnts.lbl.selectAdditionalCategory;
-            break;
+        case 'additionalCategories':
+          facet['index'] = '71';
+          facet['label'] = this.resourceService.frmelmnts.lbl.additionalCategories;
+          facet['placeholder'] = this.resourceService.frmelmnts.lbl.selectAdditionalCategory;
+          break;
       }
       return facet;
     });
@@ -600,15 +606,15 @@ export class SearchService {
   /**
    * global User Search.
   */
- globalUserSearch(requestParam: SearchParam): Observable<ServerResponse> {
-  const option = {
-    url: this.config.urlConFig.URLS.ADMIN.USER_SEARCH,
-    data: {
-      request: {
-        filters: requestParam.filters,
+  globalUserSearch(requestParam: SearchParam): Observable<ServerResponse> {
+    const option = {
+      url: this.config.urlConFig.URLS.ADMIN.USER_SEARCH,
+      data: {
+        request: {
+          filters: requestParam.filters,
+        }
       }
-    }
-  };
-  return this.learnerService.post(option);
-}
+    };
+    return this.learnerService.post(option);
+  }
 }
