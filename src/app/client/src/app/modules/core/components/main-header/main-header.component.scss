@@ -76,6 +76,7 @@
         letter-spacing: 0.25px;
         text-align: left;
         line-height: 20px;
+        width: 100%;
         .icon-logout{
           fill: #2386fc;
         }
@@ -96,7 +97,7 @@
 
         &:hover,
         &.active {
-          background-color: var(--sidebar-profil-header-bg);
+          background-color: var(--ui-seleted-label-bg-hover);
         }
       }
       .logout{
