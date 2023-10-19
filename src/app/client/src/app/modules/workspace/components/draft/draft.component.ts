@@ -215,7 +215,8 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
         this.draftList = [];
         this.totalCount = 0;
         this.noResult = false;
-        const primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories, this.frameworkService['_channelData'].collectionPrimaryCategories));
+        let primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories, this.frameworkService['_channelData'].collectionPrimaryCategories));
+        primaryCategories = _.concat(primaryCategories, ['Assessment']);
         if (bothParams['queryParams'].sort_by) {
             const sort_by = bothParams['queryParams'].sort_by;
             const sortType = bothParams['queryParams'].sortType;

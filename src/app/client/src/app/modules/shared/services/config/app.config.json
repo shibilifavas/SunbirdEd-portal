@@ -904,7 +904,8 @@
       "ExplanationResource",
       "ExperientialResource",
       "eTextBook",
-      "TVLesson"
+      "TVLesson",
+      "Assessment"
     ],
     "primaryCategory": [
       "Course Assessment",
