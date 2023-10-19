@@ -1,6 +1,7 @@
 body {
     overflow: hidden;
 }
+
 .new-layout-footer {
     display: none !important;
 }
@@ -10,7 +11,7 @@ body {
     overflow: hidden !important;
 
     .login-left {
-        background-color: rgb(35, 134, 252) !important;
+        background-color: rgb(1, 84, 210) !important;
         background: url(/assets/images/login-bg.png) fixed no-repeat bottom right;
         background-attachment: scroll;
 
@@ -179,8 +180,6 @@ body {
     }
 
     .login-container {
-        // margin-left: 20%;
-        // margin-right: 20%;
         align-items: center;
 
         input {
@@ -191,10 +190,6 @@ body {
             font-weight: 400 !important;
             color: rgba(0, 0, 0, 0.6) !important;
         }
-
-        // .field {
-        // width: 300px !important;
-        // }
 
         input:focus {
             border-color: #85b7d9 !important;
@@ -232,7 +227,7 @@ body {
         }
 
         .ui.blue {
-            background-color: rgb(55, 82, 205);
+            background-color: rgb(1, 84, 210) !important;
             // width: 300px;
             border-radius: 8px;
         }
@@ -256,18 +251,103 @@ body {
     }
 }
 
-//  Mobile
+.mobile-heading, #mobile-registration {
+    display: none;
+}
+
 @media only screen and (max-width: 768px) {
     body {
         overflow: scroll !important;
     }
+
     .login {
         height: unset !important;
-        .login-left {
-            background-image: unset !important;
+    }
+
+    .login-right {
+        height: 100%;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        padding-top: 0px !important;
+    }
+
+    .login-left {
+        background-image: unset !important;
+    }
+
+    .slideshow-container {
+        display: none;
+    }
+
+    .mobile-heading {
+        display: block;
+        color: #ffffff;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .slider-dots {
+        display: none;
+    }
+
+    .slider-heading {
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 36px;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 50px
+    }
+
+    .logo {
+        text-align: center !important;
+    }
+
+    .logo img {
+        margin-left: 0px !important;
+    }
+
+    .signUpMsg {
+        text-align: center;
+        // margin-top: 80px !important;
+    }
+
+    #mobile-registration {
+        width: 100% !important;
+        display: block;
+        text-align: center;
+        position: absolute;
+        bottom: 10px;
+        font-size: 12px;
+    }
+
+    #login-btn {
+        display: none;
+    }
+
+    // .login-right.wide.column {
+    //     padding: 1rem 0rem !important;
+    // }
+
+    .login-container {
+        margin-top: -45px !important;
+        margin-left: 0% !important;
+        margin-right: 0% !important;
+        .ui.form.segment {
+            border-top-left-radius: 32px !important;
+            border-top-right-radius: 32px !important;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            padding-bottom: 3rem;
         }
     }
-    .login-right {
-        height: 100vh;
+
+    .ui.stackable.grid>.wide.column {
+        padding: 1rem 0rem !important;
     }
+
+    .ui.blue {
+        width: -webkit-fill-available;
+    }
+
 }
