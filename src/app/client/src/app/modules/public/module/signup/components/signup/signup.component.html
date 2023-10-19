@@ -1,11 +1,11 @@
   <div class="login ui grid stackable">
     <div class="six wide column login-left">
       <div class="logo">
-        <img src="/assets/images/sunbird_logo.png" />
+        <img src="/assets/images/sunbird_logo_reg.png" />
       </div>
+      <p class="slider-heading mobile-heading">Track your goal, perform better!</p>
       <!-- Slideshow container -->
       <div class="slideshow-container">
-
         <!-- Full-width images with number and caption text -->
         <div class="mySlides fade">
           <div class="slide">
@@ -81,7 +81,7 @@
           </div>
         </div> -->
         <div class="ui form segment error">
-          <p class="heading">Register</p>
+          <p class="heading">Sign Up</p>
           <div class="first-name-field field" [ngClass]="{'error' : firstNameFieldError}">
             <label class="label">First name</label>
             <div class="ui input">
@@ -125,11 +125,16 @@
               <span>{{registerSuccessMessage}}</span>
             </div>
           </div>
-          <button (click)="register()" class="ui blue button">Register</button>
-          <a routerLink="/resources" class="login-link">Login</a>
+          <button (click)="register()" class="ui blue button">Sign Up</button>
+          <a id="login-btn" routerLink="/resources" class="login-link">Login</a>
         </div>
       </div>
     </div>
+    <div id="mobile-registration" class="field">
+      <div class="ui content signUpMsg">
+          Already have an account? <a routerLink="/resources" id="signup" class="registerLink">Sign In</a>
+      </div>
+  </div>
   </div>
 
 
