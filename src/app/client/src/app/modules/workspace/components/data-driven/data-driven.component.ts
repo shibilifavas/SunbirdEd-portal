@@ -349,8 +349,8 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
     if(_.get(requestData, 'content.primaryCategory') == 'Assessment') {
       requestData.content['name'] = 'Untitled Assessment';
       requestData.content['description'] = 'Enter description for Assessment';
-      requestData.content['contentType'] = 'Assessment';
-      requestData.content['resourceType'] = 'Assessment';
+      requestData.content['contentType'] = 'Course';
+      requestData.content['resourceType'] = 'Collection';
     }
     if (this.contentType === 'studymaterial' || this.contentType === 'assessment') {
       this.editorService.create(requestData).subscribe(res => {
