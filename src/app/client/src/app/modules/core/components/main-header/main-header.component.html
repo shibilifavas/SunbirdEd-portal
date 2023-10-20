@@ -345,13 +345,13 @@
     <div class="profile__info">
       <em class="icon-svg icon-svg--xs icon-close" role="button" aria-label="Close sidebar navigation" title="Close sidebar" tabindex="0"
         (click)="toggleSideMenu(false)">
-        <svg class="icon icon-svg--gray">
+        <svg class="icon icon-svg">
           <use xlink:href="./assets/images/sprite.svg#close"></use>
         </svg>
       </em>
 
       <div *ngIf="userService.loggedIn">
-        <div class="mb-16">
+        <div class="mb-16 menu-card">
           <sb-member-card [config]=cardConfig [initial]="userProfile?.firstName[0]" tabindex="0"
             [title]="userProfile?.firstName" [isMenu]="false">
           </sb-member-card>
@@ -402,9 +402,12 @@
           </div>
 
           <li class="list-item" tabindex="0" role="link" (click)="toggleSideMenu(false)" routerLink="profile">
-            <i class="icon-svg icon-svg--sm icon-profileuser mr-8"><svg class="icon icon-svg--primary">
+            <i class="icon-svg icon-svg--sm icon-profileuser mr-8">
+              <!-- <svg class="icon icon-svg--primary">
                 <use xlink:href="./assets/images/sprite.svg#profileuser"></use>
-              </svg></i>
+              </svg> -->
+              <img src="./assets/images/profile.svg" alt="profile">
+            </i>
             {{resourceService.frmelmnts?.lnk?.profile}}
           </li>
 
@@ -486,9 +489,12 @@
           </li> -->
           <li class="list-item" role="link" tabindex="0" appTelemetryInteract [telemetryInteractEdata]="helpMenuIntractEdata"
             (click)="toggleSideMenu(false);navigate('/faq')">
-            <i class="icon-svg icon-svg--sm icon-help mr-8"><svg class="icon icon-svg--primary">
+            <i class="icon-svg icon-svg--sm icon-help mr-8">
+              <!-- <svg class="icon icon-svg--primary">
                 <use xlink:href="./assets/images/sprite.svg#help"></use>
-              </svg></i>
+              </svg> -->
+              <img src="./assets/images/help.svg" alt="help">
+            </i>
             {{resourceService?.frmelmnts?.tab?.help}}
           </li>
           <!-- <li  *ngIf="showSwitchTheme" class="list-item" role="link" tabindex="0" (click)="toggleSideMenu(false);switchLayout()">
@@ -515,7 +521,7 @@
             {{resourceService?.frmelmnts?.lbl?.accessible}}
           </li> -->
          
-          <li appOnlineOnly class="list-item" role="link" tabindex="0" appTelemetryInteract
+          <li appOnlineOnly class="list-item logout" role="link" tabindex="0" appTelemetryInteract
             [telemetryInteractEdata]="getLogoutInteractEdata()" (click)="toggleSideMenu(false);logout()">
             <i class="icon-svg icon-svg--sm icon-logout mr-8"><svg class="icon icon-svg--primary">
                 <use xlink:href="./assets/images/sprite.svg#logout"></use>

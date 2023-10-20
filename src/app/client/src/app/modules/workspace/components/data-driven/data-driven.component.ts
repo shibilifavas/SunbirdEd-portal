@@ -123,6 +123,7 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
   public targetFramework: string;
   public primaryCategory: string;
   public userChannelData;
+  public typeofCreation: string = ''
   constructor(
     public searchService: SearchService,
     public workSpaceService: WorkSpaceService,
@@ -164,6 +165,7 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(queryParams => {
       this.showFrameworkSelection = _.get(queryParams, 'showFrameworkSelection');
+      this.typeofCreation = _.get(queryParams, 'type');
     });
     this.userService.userOrgDetails$.subscribe(() => { // wait for user organization details
       this.checkForPreviousRouteForRedirect();
@@ -344,6 +346,12 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
     if (!_.isUndefined(modal)) {
       modal.deny();
     }
+    if(_.get(requestData, 'content.primaryCategory') == 'Assessment') {
+      requestData.content['name'] = 'Untitled Assessment';
+      requestData.content['description'] = 'Enter description for Assessment';
+      requestData.content['contentType'] = 'Course';
+      requestData.content['resourceType'] = 'Collection';
+    }
     if (this.contentType === 'studymaterial' || this.contentType === 'assessment') {
       this.editorService.create(requestData).subscribe(res => {
         this.createLockAndNavigateToEditor({identifier: res.result.content_id});
@@ -435,7 +443,11 @@ export class DataDrivenComponent extends WorkSpace implements OnInit, OnDestroy,
    *                2. It also logs interact telemetry on card click.
    */
   selectFramework() {
-    this.primaryCategory = 'Course';
+    if(this.typeofCreation != 'Assessment') {
+      this.primaryCategory = 'Course';
+    } else {
+      this.primaryCategory = 'Assessment';
+    }
     this.workSpaceService.getCategoryDefinition('Collection', this.primaryCategory, this.userService.channel)
     .subscribe(categoryDefinitionData => {
       this.orgFWType = _.get(categoryDefinitionData, 'result.objectCategoryDefinition.objectMetadata.schema.properties.framework.enum') ||

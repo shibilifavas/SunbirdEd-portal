@@ -35,27 +35,8 @@
         <app-course-overview [courseDetails]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc" [params]="batchId"></app-course-overview>
         </mat-tab>
         <mat-tab label={{resourceService.frmelmnts.toc.tab.content}}>
-            <div class="ui container mt-48 course-content">
-                <div class="ui grid w-100 padded">
-                    <div class="first_panel eight wide column pl-0 pt-0">
-                        <div class="headline">
-                            {{resourceService.frmelmnts.toc.tab.content}}
-                        </div>
-                        <p>
-                            <button class="com-basic-btn"> {{resourceService.frmelmnts.toc.courseContent.expandAll}}</button>
-                            <!-- <button class="com-basic-btn" hide>{{resourceService.frmelmnts.toc.courseContent.collapseAll}}</button> -->
-                        </p>
-                        <div class="toc__container">
-                            <div class="toc__item" *ngFor="let content of tocList">
-                                <toc-content [courseModules]="content" (contentClicked)="contentClicked($event)"></toc-content>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="second_pannel four wide column">
-                        <app-course-aside [courseHierarchy]="courseHierarchy" [configContent]="configContent" [params]="batchId"></app-course-aside>
-                    </div>
-                </div>
-            </div>
+            <app-course-content [courseDetails]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc"
+             [params]="batchId" [tocList]="tocList" (contentClicked)="contentClicked($event)"></app-course-content>
         </mat-tab>
         <mat-tab label={{resourceService.frmelmnts.toc.tab.discussion}}>{{resourceService.frmelmnts.toc.tab.discussion}}</mat-tab>
         <mat-tab label={{resourceService.frmelmnts.toc.tab.members}}>

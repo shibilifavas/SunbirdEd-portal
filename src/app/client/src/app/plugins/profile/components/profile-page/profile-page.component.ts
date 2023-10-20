@@ -315,8 +315,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     const inputParams = { params: this.configService.appConfig.PROFILE.contentApiQueryParams };
     this.searchService.searchContentByUserId(searchParams, inputParams).subscribe((data: ServerResponse) => {
-      this.contributions = this.utilService.getDataForCard(data.result.content, constantData, dynamicFields, metaData);
+      // this.contributions = this.utilService.getDataForCard(data.result.content, constantData, dynamicFields, metaData);
+      this.contributions = data.result.content;
       this.totalContributions = _.get(data, 'result.count') || 0;
+      console.log('Contributions', this.contributions);
     });
   }
 
@@ -325,6 +327,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.attendedTraining = _.reverse(_.sortBy(data.enrolledCourses, val => {
         return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
       })) || [];
+      this.attendedTraining  = this.attendedTraining.slice(0, 4);
     });
   }
 
@@ -397,6 +400,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   downloadOldAndRCCert(courseObj) {
+    // alert('downloadOldAndRCCert');
     let requestBody = {
       certificateId: courseObj.id,
       schemaName: 'certificate',
@@ -758,5 +762,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   fwCategoryCheck(obj: any, category: string) {
     return this.taxonomyService.getCategoryforHTML(obj, category);
+  }
+
+  showAllLearnings() {
+    this.router.navigateByUrl(`search/Courses/1?learnings=true`)
   }
 }
