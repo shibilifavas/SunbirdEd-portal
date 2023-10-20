@@ -167,8 +167,9 @@ export class UploadedComponent extends WorkSpace implements OnInit, AfterViewIni
     this.showLoader = true;
     this.pageNumber = pageNumber;
     this.pageLimit = limit;
-    const primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories,
+    let primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories,
       this.frameworkService['_channelData'].collectionPrimaryCategories));
+      primaryCategories = _.concat(primaryCategories, ['Assessment']);
 
     const searchParams = {
       filters: {
