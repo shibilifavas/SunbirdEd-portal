@@ -271,7 +271,8 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
       this.sort = { lastUpdatedOn: this.config.appConfig.WORKSPACE.lastUpdatedOn };
     }
     // tslint:disable-next-line:max-line-length
-    const primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories, this.frameworkService['_channelData'].collectionPrimaryCategories));
+    let primaryCategories = _.compact(_.concat(this.frameworkService['_channelData'].contentPrimaryCategories, this.frameworkService['_channelData'].collectionPrimaryCategories));
+    primaryCategories = _.concat(primaryCategories, ['Assessment']);
     const searchParams = {
       filters: {
         status: ['Live'],
