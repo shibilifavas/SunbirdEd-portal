@@ -267,9 +267,9 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   // }
 
   updateCourseContent() {
-    if(this.courseConsumptionService.getCourseContent()?.length > 0) {
+  //  if(this.courseConsumptionService.getCourseContent()?.length > 0) {
       this.tocList = this.courseConsumptionService.getCourseContent();
-    }
+    //}
   }
 
   contentClicked(event: any) {

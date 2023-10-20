@@ -1,0 +1,21 @@
+<div class="ui container mt-48 course-content" *ngIf="tocList">
+    <div class="ui grid w-100 padded">
+        <div class="first_panel eight wide column pl-0 pt-0">
+            <div class="headline">
+                {{configContent.tab.content}}
+            </div>
+            <p>
+                <button class="com-basic-btn"> {{configContent.courseContent.expandAll}}</button>
+                <!-- <button class="com-basic-btn" hide>{{resourceService.frmelmnts.toc.courseContent.collapseAll}}</button> -->
+            </p>
+            <div class="toc__container">
+                <div class="toc__item" *ngFor="let content of tocList">
+                    <toc-content [courseModules]="content" (contentClicked)="contentClick($event)"></toc-content>
+                </div>
+            </div>
+        </div>
+        <div class="second_pannel four wide column">
+            <app-course-aside [courseHierarchy]="courseDetails" [configContent]="configContent" [params]="params"></app-course-aside>
+        </div>
+    </div>
+</div>
