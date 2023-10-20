@@ -446,7 +446,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         ],
                         "primaryCategory": [
                             "Course",
-                            "Course Assessment"
+                            "Assessment"
                         ],
                     },
                     "limit": 100,
