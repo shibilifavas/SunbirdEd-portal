@@ -201,7 +201,7 @@ getAllOpenBatches(contents) {
   }
 
   getCourseContent() {
-    if(this.tocList.length === 0) {
+    this.tocList.length = 0;
       this.courseHierarchy.children?.forEach((resource:any) => {
         let toc = {
                header:{
@@ -223,7 +223,6 @@ getAllOpenBatches(contents) {
            });
            this.tocList.push(toc)
        });
-    }
     return this.tocList;
   }
   

@@ -35,6 +35,7 @@ import { CourseAsideComponent } from './components/course-consumption/course-asi
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { BatchListComponent } from './components/batch/batch-list/batch-list.component';
+import { CourseContentComponent } from './components/course-consumption/course-content/course-content.component';
 
 export const csUserServiceFactory = (csLibInitializerService: CsLibInitializerService) => {
   if (!CsModule.instance.isInitialised) {
@@ -83,6 +84,6 @@ export const csNotificationServiceFactory = (csLibInitializerService: CsLibIniti
   declarations: [CoursePlayerComponent, CourseConsumptionHeaderComponent, AssessmentPlayerComponent,
     CourseConsumptionPageComponent, BatchDetailsComponent, CurriculumCardComponent, UnEnrollBatchComponent,
     AssessmentPlayerComponent, CourseCompletionComponent, CourseDetailsComponent, CertificateNameUpdatePopupComponent,
-     CourseOverviewComponent, IntialPipe, CourseAsideComponent, BatchListComponent]
+     CourseOverviewComponent, IntialPipe, CourseAsideComponent, BatchListComponent, CourseContentComponent]
 })
 export class CourseConsumptionModule { }
