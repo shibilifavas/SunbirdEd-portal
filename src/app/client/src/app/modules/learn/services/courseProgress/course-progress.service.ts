@@ -180,6 +180,7 @@ export class CourseProgressService {
       };
       req['completionPercentage'] = this.completionPercentage;
       req['progressdetails'] = this.progressdetails;
+      req['progress'] = this.completionPercentage;
     } else {
       req = {
         contentId: data.contentId,
@@ -292,8 +293,42 @@ export class CourseProgressService {
       }
     }
 
-    updateCourseStatus(status){
-      this.courseStatus$.next(status)
+    updateCourseStatus(response: any){
+      //Emit 0 for starting the course, if content state read api fails
+      if(response == 0) {
+        this.courseStatus$.next(0);
+        return;
+      }
+      if(response.length > 0) {
+        let restart = 0 ;
+        let start = 0;
+        response.every((res: any) => {
+          if(res.status == 2){
+            restart++;
+            return true;
+          }
+          if (res.status == 1 && ((res.progress == 0) || (res.completionPercentage == 0))) {
+            start++;
+            return true;
+          }
+          //Emit 1 for Resuming the course if any of the module has progress less than 100 and above 0 with status 1
+          if(res.status == 1 && ((res.progress > 0 && res.progress < 100) || (res.completionPercentage > 0 && res.completionPercentage < 100))) {
+            this.courseStatus$.next(1);
+            return false;
+          }
+        });
+        //Emit 0 for starting the course if none of the module has started
+        if(start == response.length) {
+          this.courseStatus$.next(0)
+        }
+        //Emit 2 for Restarting the course if all modules completes with status 2
+        if(restart == response.length) {
+          this.courseStatus$.next(2)
+        }
+      } else {
+        //Emit 0 for for starting the course, if content state read api has empty results
+        this.courseStatus$.next(0);
+      }
     }
 
 }
