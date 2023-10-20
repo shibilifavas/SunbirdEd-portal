@@ -297,4 +297,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     })
   }
   
+  loadLogin() {
+    window.location.href = "/resources";
+  }
 }
