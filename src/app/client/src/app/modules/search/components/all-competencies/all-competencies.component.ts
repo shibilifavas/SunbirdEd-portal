@@ -39,8 +39,12 @@ export class AllCompetenciesComponent implements OnInit {
     private router: Router, private contentSearchService: ContentSearchService) { }
 
   ngOnInit(): void {
-    this.fetchpopularCompetencies();
-    // this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
+    let custodianOrg;
+    let defaultBoard;
+    this.contentSearchService.initialize(this.activatedRoute.snapshot.queryParams.channel,custodianOrg, defaultBoard)
+    .subscribe((res: any) =>{
+      this.fetchpopularCompetencies();
+    })
   }
 
   public setBreadCrumbData() {
@@ -138,7 +142,6 @@ export class AllCompetenciesComponent implements OnInit {
                   }
                 })
               })
-              this.popularCompetencies.title = "Popular competencies";
               this.popularCompetenciesData.sort((a, b) => b.noOfCourses - a.noOfCourses);
               this.popularCompetencies.data = this.popularCompetenciesData;
             }
@@ -177,6 +180,7 @@ export class AllCompetenciesComponent implements OnInit {
     };
     this.searchService.compositePopularSearch(requestData).subscribe(res => {
       this.popularCompetencies = res['result']['facets'][0]['values'];
+      this.popularCompetencies.title = "Popular competencies";
       this.findCategory(this.activatedRoute.snapshot.queryParams.framework);
     });
   }
