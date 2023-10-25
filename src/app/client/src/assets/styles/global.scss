@@ -1547,3 +1547,7 @@ html[layout="joy"] .sb-modal-content .ui.center.aligned.segment {
   font-weight: normal;
   padding: calculateRem(10px) 0;
 }
+
+.no-radius {
+  border-radius: 0px !important;
+}

@@ -89,10 +89,10 @@
             <div class="compass-entrymenu m-0 d-flex flex-ai-center" role="navigation">
               <ng-container *ngIf="!userService.loggedIn">
                 <a aria-current="page" tabindex="0" (click)="clearCache()" href={{hrefPath}} appOnlineOnly
-                  class="com-secondary-btn" appTelemetryInteract [telemetryInteractEdata]="signInIntractEdata">
+                  class="com-secondary-btn no-radius" appTelemetryInteract [telemetryInteractEdata]="signInIntractEdata">
                   {{resourceService.frmelmnts?.btn?.login}}
                 </a>
-                <a aria-current="page" tabindex="1" href="/signup"   class="com-primary-btn" appTelemetryInteract
+                <a aria-current="page" tabindex="1" href="/signup"   class="com-primary-btn no-radius" appTelemetryInteract
                   [telemetryInteractEdata]="signUpInteractEdata">
                   {{resourceService.frmelmnts?.lbl?.register}}
                 </a>
