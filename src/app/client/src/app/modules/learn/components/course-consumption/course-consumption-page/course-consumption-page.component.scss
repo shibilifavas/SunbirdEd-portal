@@ -12,20 +12,28 @@
                 background-color: rgba(0, 0, 0, 0.04);
                 height: calculateRem(60px);
                 align-items: center;
-
+                div{
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
                 .mat-tab-labels {
                     margin-left: auto;
                     margin-right: auto;
                     justify-content: flex-start !important;
                     div{
-                        padding-left: 0;
-                        padding-right: calculateRem(24px);
-                        justify-content: left;
                         color: rgba(0, 0, 0, 0.87);
                         opacity: 1;
-                        min-width: 0;
                         text-transform: initial !important;
                         @include typography(var(--font-com-lato), 14px, 700, 0.5px, 20px);
+                    }
+                    .mat-tab-label-active{
+                        .mat-tab-label-content{
+                            color: var(--primary-color);
+                        }
+                    }
+                    .mat-tab-label-content{
+                        color: var(--com-grey-60);
                     }
                     .mat-ripple-element {
                         display: none !important;
@@ -37,7 +45,7 @@
             }
 
             &.mat-primary .mat-ink-bar {
-                background: none;
+                background: var(--primary-color);
             }
 
             .mat-tab-body-wrapper {
