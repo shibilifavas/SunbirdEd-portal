@@ -35,7 +35,7 @@
 </section>
 <section class="ui container" *ngIf="resourceService?.frmelmnts?.lp?.exploreCardData">
     <p class="exploreTitle">{{resourceService?.frmelmnts?.lp?.exploreCompass}}</p>
-    <div class="sb-g marginVertical">
+    <div class="sb-g">
         <explore-compass-card *ngFor="let info of doJsonDecode(resourceService?.frmelmnts?.lp?.exploreCardData);"
             class="sb-g-col-xxl-3 sb-g-col-xl-3 sb-g-col-lg-3 sb-g-col-md-5 sb-g-col-xs-10" [cardInfo]="info">
         </explore-compass-card>
