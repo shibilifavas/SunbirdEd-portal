@@ -293,10 +293,15 @@ export class CourseProgressService {
       }
     }
 
-    updateCourseStatus(response: any){
+    updateCourseStatus(response: any, noOfContents?: number){
       //Emit 0 for starting the course, if content state read api fails
       if(response == 0) {
         this.courseStatus$.next(0);
+        return;
+      }
+      //Emit 1 for resuming the course, if response and contentId's are not matched.
+      if(response.length != noOfContents) {
+        this.courseStatus$.next(1);
         return;
       }
       if(response.length > 0) {
@@ -307,7 +312,7 @@ export class CourseProgressService {
             restart++;
             return true;
           }
-          if (res.status == 1 && ((res.progress == 0) || (res.completionPercentage == 0))) {
+          if (res.status == 1 && ((res.progress == 0) || (res.completionPercentage == 0)) && (res.progress == res.completedPercentage)) {
             start++;
             return true;
           }
@@ -319,11 +324,18 @@ export class CourseProgressService {
         });
         //Emit 0 for starting the course if none of the module has started
         if(start == response.length) {
-          this.courseStatus$.next(0)
+          this.courseStatus$.next(0);
+          return;
         }
         //Emit 2 for Restarting the course if all modules completes with status 2
         if(restart == response.length) {
-          this.courseStatus$.next(2)
+          this.courseStatus$.next(2);
+          return;
+        }
+        //Emit 1 if few courses consumed and other courses not consumed
+        if(start != 0 || restart !=0) {
+          this.courseStatus$.next(1);
+          return;
         }
       } else {
         //Emit 0 for for starting the course, if content state read api has empty results
