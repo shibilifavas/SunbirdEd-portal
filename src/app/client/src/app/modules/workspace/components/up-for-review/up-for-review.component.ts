@@ -226,6 +226,7 @@ export class UpForReviewComponent extends WorkSpace implements OnInit, AfterView
       sort_by: this.sort
     };
     searchParams.filters['primaryCategory'] = _.get(bothParams, 'queryParams.primaryCategory') || this.getContentType();
+    searchParams.filters['primaryCategory'] = _.concat(searchParams.filters['primaryCategory'], ['Assessment']);
     this.search(searchParams).subscribe(
       (data: ServerResponse) => {
         const allContent= this.workSpaceService.getAllContent(data, this.isQuestionSetEnabled);
