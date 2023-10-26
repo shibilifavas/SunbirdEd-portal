@@ -75,6 +75,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           title: this.courseHierarchy.name, 
           description: this.courseHierarchy.description,
           contentType: this.courseHierarchy.contentType,
+          primaryCategory: this.courseHierarchy.primaryCategory,
           image:this.courseHierarchy.posterImage || 'assets/common-consumption/images/abstract_02.svg',
           keywords: this.courseHierarchy.keywords,
           rating:4.2,
