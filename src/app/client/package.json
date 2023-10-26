@@ -92,6 +92,7 @@
     "compass-collection-editor": "^0.0.6",
     "compass-common-consumption": "^0.0.28",
     "compass-course-editor": "^0.0.2",
+    "compass-pdf-player": "^0.0.1",
     "compass-quml-player-web-component": "^0.0.3",
     "compass-resource-library": "^0.0.1",
     "compass-sb-styles": "^0.0.8",

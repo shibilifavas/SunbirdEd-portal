@@ -14,7 +14,7 @@ import { SharedModule } from '@sunbird/shared';
 import { CoreModule } from '@sunbird/core';
 import { FormsModule } from '@angular/forms';
 import { CommonConsumptionModule } from '@project-sunbird/common-consumption';
-import {SunbirdPdfPlayerModule} from '@project-sunbird/sunbird-pdf-player-v9';
+import {SunbirdPdfPlayerModule} from 'compass-pdf-player';
 import { QumlPlayerService } from './service/quml-player/quml-player.service';
 import { QumlLibraryModule, QuestionCursor } from 'compass-sunbird-quml-player';
 // import { EditorCursor } from '@project-sunbird/sunbird-collection-editor';
