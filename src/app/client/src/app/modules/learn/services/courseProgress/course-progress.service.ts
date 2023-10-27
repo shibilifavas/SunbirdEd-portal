@@ -158,6 +158,10 @@ export class CourseProgressService {
             this.coursesService.updateCourseProgress(req.courseId, req.batchId, this.courseProgress[courseId_batchId].completedCount);
             return this.courseProgress[courseId_batchId];
           }));
+      } else if(index !== -1 && courseProgress.content[index].status == 2 && this.mimeType !== 'application/vnd.sunbird.questionset') {
+        return this.updateContentStateToServer(courseProgress.content[index]).pipe(map((res: any) => {
+          this.courseProgress[courseId_batchId].content[index].lastAccessTime = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ');
+        }))
       } else {
         return observableOf(this.courseProgress[courseId_batchId]);
       }
@@ -171,16 +175,29 @@ export class CourseProgressService {
   updateContentStateToServer(data) {
     let req;
     if(this.mimeType !== 'application/vnd.sunbird.questionset') {
-      req = {
-        contentId: data.contentId,
-        batchId: data.batchId,
-        status: data.status,
-        courseId: data.courseId,
-        lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
-      };
-      req['completionPercentage'] = this.completionPercentage;
-      req['progressdetails'] = this.progressdetails;
-      req['progress'] = this.completionPercentage;
+      if(data.status == 2) {
+        req = {
+          contentId: data.contentId,
+          batchId: data.batchId,
+          status: 2,
+          courseId: data.courseId,
+          lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
+        };
+        req['completionPercentage'] = 100;
+        req['progressdetails'] = this.progressdetails;
+        req['progress'] = 100;
+      } else {
+        req = {
+          contentId: data.contentId,
+          batchId: data.batchId,
+          status: data.status,
+          courseId: data.courseId,
+          lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
+        };
+        req['completionPercentage'] = this.completionPercentage;
+        req['progressdetails'] = this.progressdetails;
+        req['progress'] = this.completionPercentage;
+      }
     } else {
       req = {
         contentId: data.contentId,
@@ -261,10 +278,14 @@ export class CourseProgressService {
             this.progressdetails['max_size'] = edata.totalPages;
             let count = 1;
             this.progressdetails['current'] = [];
-            while(edata.currentPage > 0) {
-              this.progressdetails['current'].push(count)
-              count++;
-              edata.currentPage--;
+            if(edata.currentPage == edata.totalPages) {
+              this.progressdetails['current'].push(1);
+            } else {
+              while(edata.currentPage > 0) {
+                this.progressdetails['current'].push(count)
+                count++;
+                edata.currentPage--;
+              }
             }
           } else if(edata?.currentTime && edata?.totalTime) {
             this.completionPercentage = this.calculateCompletedPercentage(edata.currentTime, edata.totalTime);
