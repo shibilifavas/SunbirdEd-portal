@@ -375,7 +375,12 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
 
   eventHandler(event) {
     if (event.eid === 'END') {
-      const metaDataconfig = event.metaData;
+      let metaDataconfig = event.metaData;
+      const edataConfig = event.edata;
+      if(edataConfig?.currentPage == edataConfig?.totalPages) {
+        metaDataconfig.pagesVisited = [];
+        metaDataconfig.pagesVisited.push(1);
+      }
       this.endEventReached.emit(event)
       if (this.userService.loggedIn) {
         this.userService.userData$.subscribe((user: any) => {
@@ -420,7 +425,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
     const eid = _.get(eventCopy, 'detail.telemetryData.eid');
     const contentId = _.get(eventCopy, 'detail.telemetryData.object.id');
     // this.contentId = contentId;
-    if (eid && (eid === 'START' || eid === 'END') && contentId === _.get(this.playerConfig, 'metadata.identifier')) {
+    if (eid && (eid === 'END') && contentId === _.get(this.playerConfig, 'metadata.identifier')) {
       this.showRatingPopup(eventCopy);
       if (this.contentProgressEvents$) {
         this.contentProgressEvents$.next(eventCopy);
