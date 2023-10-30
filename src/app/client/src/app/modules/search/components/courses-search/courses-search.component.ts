@@ -88,7 +88,7 @@ export class CoursesSearchComponent implements OnInit {
         ]
       },
       fields: [
-        "name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "contentType", "channel", "organisation", "trackable", "lastPublishedOn", "Duration", "targetTaxonomyCategory4Ids"
+        "name", "appIcon", "posterImage", "mimeType", "identifier", "pkgVersion", "resourceType", "contentType", "channel", "organisation", "trackable", "lastPublishedOn", "Duration", "targetTaxonomyCategory4Ids", "primarycategory"
       ],
       facets: [
         "taxonomyCategory4Ids"
