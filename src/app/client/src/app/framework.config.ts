@@ -22,7 +22,7 @@ export const taxonomyEnvironment = {
   token: '',
   frameworkName: 'TLP_FW',
   channelId: 'tarento',
-  authToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0WEFsdFpGMFFhc1JDYlFnVXB4b2RvU2tLRUZyWmdpdCJ9.mXD7cSvv3Le6o_32lJplDck2D0IIMHnv0uJKq98YVwk',
+  authToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNZHNjWU1xdDBTdU84UENuTUVCbVJyUjVkbzhKOFNXWiJ9.FKVUEfXXQXWrjex3n7jWFqgbgmHWjf66WXYW8P_XLec',
   userToken:'',
   isApprovalRequired: false
 };
