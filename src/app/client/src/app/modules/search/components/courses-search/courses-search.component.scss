@@ -9,4 +9,38 @@
     font-size: 24px;
     font-weight: 600;
     color: RGBA(0, 0, 0, 0.87);
-  }
+}
+
+.filter {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: rgb(245, 245, 245);
+    padding: 24px 20px 34px 20px !important;
+
+    h5 {
+        font-family: 'Lato', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.25px;
+        font-weight: 700;
+        margin: 10px 0px 10px;
+    }
+
+    .top-heading {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .sub-heading {
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .checkbox-label {
+        font-family: 'Lato', Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.25px;
+        font-weight: 700;
+        margin: 10px 0px 10px;
+        color: rgba(0, 0, 0, 0.6);
+    }
+    input[type=checkbox] {
+        top: 10px !important;
+    }
+}

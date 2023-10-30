@@ -24,9 +24,31 @@
     </div>
 </div>
 
-<div class="container ui grid">
-    <div class="three wide column" *ngFor="let course of courses">
-        <compass-course-card [routerLink]="['/learn/course', course['identifier']]" [data]="course">
-        </compass-course-card>
+<div class="container ui grid stackable">
+    <div class="nine wide column">
+        <div class="ui grid stackable">
+            <div class="four wide column" *ngFor="let course of courses">
+                <compass-course-card [routerLink]="['/learn/course', course['identifier']]" [data]="course">
+                </compass-course-card>
+            </div>
+        </div>
+    </div>
+    <div class="three wide column">
+        <div class="ui container grid">
+            <div class="twelve wide column">
+                <div class="filter">
+                    <h5 class="top-heading">Filter by</h5>
+                    <h5 class="sub-heading">Type</h5>
+                    <div class="ui container checkbox">
+                        <input type="checkbox" name="assessment" checked="primaryCategories.indexOf('assessment') != -1" (change)="updateCoursesType($event)" />
+                        <label class="checkbox-label">Assessments</label>
+                    </div>
+                    <div class="ui container checkbox">
+                        <input type="checkbox" name="course" checked="primaryCategories.indexOf('course') != -1" (change)="updateCoursesType($event)" />
+                        <label class="checkbox-label">Courses</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

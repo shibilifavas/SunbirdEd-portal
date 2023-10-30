@@ -16,9 +16,11 @@ export class CoursesSearchComponent implements OnInit {
   breadCrumbData = [];
   courses = [];
   public unsubscribe$ = new Subject<void>();
+  public primaryCategories = ["course", "assessment"];
+
 
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
-    public resourceService: ResourceService, private schemaService: SchemaService, 
+    public resourceService: ResourceService, private schemaService: SchemaService,
     private contentSearchService: ContentSearchService, public coursesService: CoursesService) { }
 
   ngOnInit(): void {
@@ -79,7 +81,7 @@ export class CoursesSearchComponent implements OnInit {
   public fetchContents(pageNumber, channelId, key, competency, keyword) {
     const option = {
       filters: {
-        primaryCategory: ["Course"],
+        primaryCategory: this.primaryCategories,
         visibility: ["Default", "Parent"],
         channel: channelId,
         keywords: keyword ?? '',
@@ -108,6 +110,19 @@ export class CoursesSearchComponent implements OnInit {
       this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
       // console.log('Searched Courses', res['result']['content']);
     });
+  }
+
+  updateCoursesType(event) {
+    // console.log(event.target.value);
+    // console.log(event.target.checked);
+    if (event.target.checked == true) {
+      this.primaryCategories.push(event.target.name);
+    } else {
+      this.primaryCategories.forEach((element, index) => {
+        if (element == event.target.name) this.primaryCategories.splice(index, 1);
+      });
+    }
+    this.fetchContentOnParamChange();
   }
 
 }
