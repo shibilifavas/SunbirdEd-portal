@@ -767,4 +767,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   showAllLearnings() {
     this.router.navigateByUrl(`search/Courses/1?learnings=true`)
   }
+
+  redirectToToc(courseId, batchId) {
+    this.router.navigateByUrl(`/learn/course/${courseId}/batch/${batchId}`)
+    console.log(`/learn/course/${courseId}/batch/${batchId}`);
+  }
 }

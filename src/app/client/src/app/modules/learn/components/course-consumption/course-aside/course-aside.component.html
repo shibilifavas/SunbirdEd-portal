@@ -15,6 +15,11 @@
         <button class="com-secondary-btn"> <span class="button-icon"><mat-icon>star</mat-icon></span><label class="button-label">{{configContent.courseAside.rating}}</label></button>
         <button class="com-secondary-btn"><span class="button-icon"><mat-icon>share</mat-icon></span><label class="button-label">{{configContent.courseAside.share}}</label></button>
     </p>
+    <ng-container *ngIf="courseStatus === 2">
+        <p class="aside__share-rating">
+            <button class="com-secondary-btn download-cert-btn" (click)="downloadOldAndRCCert(data)"><span class="button-icon"><mat-icon>download</mat-icon></span><label class="button-label">{{resourceService?.frmelmnts?.btn.downloadCertificate}}</label></button>
+        </p>
+        </ng-container>
     <section class="aside__course-info">
         <h4 class="sub-heading-one">{{configContent.courseAside.title}}</h4>
         <ul>
