@@ -42,6 +42,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   progressToDisplay = 0;
   _routerStateContentStatus: any;
   breadCrumbData;
+  contentTabLabel: string;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -59,6 +60,11 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .subscribe(({ courseHierarchy, enrolledBatchDetails }: any) => {
         this.enrolledBatchInfo = enrolledBatchDetails;
         this.courseHierarchy = courseHierarchy;
+        if(courseHierarchy.primaryCategory == "Course"){
+          this.contentTabLabel = this.resourceService.frmelmnts.toc.tab.courseContent;
+        } else {
+          this.contentTabLabel = this.resourceService.frmelmnts.toc.tab.assessmentContent;
+        }
         this.contentIds = this.courseConsumptionService.parseChildren(this.courseHierarchy);
         this.courseConsumptionService.setContentIds(this.contentIds);
         this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
