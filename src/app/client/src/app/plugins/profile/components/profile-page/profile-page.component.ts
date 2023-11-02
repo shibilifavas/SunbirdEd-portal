@@ -237,6 +237,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  navigateToEditProfile(){
+    this.router.navigate(['profile/edit']);
+  }
+
   setNonCustodianUserLocation() {
     const subOrgs = _.filter(this.userProfile.organisations, (org) => {
       /*istanbul ignore else */

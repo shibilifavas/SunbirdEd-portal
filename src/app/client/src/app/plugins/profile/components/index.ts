@@ -5,3 +5,5 @@ export * from './account-recovery-info/account-recovery-info.component';
 export * from './create-user/create-user.component';
 export * from './choose-user/choose-user.component';
 export * from './submit-teacher-details/submit-teacher-details.component';
+export * from './edit-profile/edit-profile.component';
+export * from './personal-details/personal-details.component';
