@@ -1,0 +1,91 @@
+.form-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    margin-top: 48px;
+  }  
+  .form-column {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    padding: 24px 24px;
+    margin: 0 16px;
+    border: solid 1px var(--com-grey-border);
+  }
+  .submitbtn{
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 16px;
+  }
+  .btn{
+    padding: 12px 32px;
+  }
+  .form-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 36px;
+    label{
+        opacity: 1;
+        color: rgba(0,0,0,0.87);
+        font-size: 14px;
+        font-weight: 700;
+        font-style: normal;
+        letter-spacing: 0.25px;
+        text-align: left;
+        line-height: 20px;
+    }
+    input{
+        height: 60px;
+        border: solid 1px var(--com-grey-border);
+        border-radius: 4px;
+    }
+    textarea{
+        border: solid 1px var(--com-grey-border);
+        border-radius: 4px;
+    }
+    mat-radio-group{
+        mat-radio-button{
+            label{
+                margin: 0;
+            }
+        }
+    }
+  }
+  .mat-radio-inner-circle{
+    background-color: var(--primary-color)
+  }
+  .phone{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  ::ng-deep input::placeholder {
+    color: var(--com-grey-border);
+  }
+  ::ng-deep {
+    .mat-radio-button{
+        padding: 14px 24px;
+        margin: 16px 16px;
+        border: solid 1px var(--com-grey-border);
+      }
+    .mat-radio-checked{
+        border: 1.5px solid rgba(35,134,252, 1);
+        opacity: 1;
+        background-color: rgba(0,116,182, 0.05);
+        .mat-radio-label{
+            .mat-radio-container{
+                .mat-radio-outer-circle{
+                    border-color: var(--primary-color);
+                }
+                .mat-radio-inner-circle{
+                    background-color: var(--primary-color);
+                }
+            }
+        }
+    }   
+    mat-radio-button{
+        label{
+            margin: 0;
+        }
+    }
+  }
