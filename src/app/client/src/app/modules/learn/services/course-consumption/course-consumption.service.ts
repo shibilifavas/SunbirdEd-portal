@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { NavigationHelperService } from '@sunbird/shared';
 import dayjs from 'dayjs';
 import { CourseBatchService } from '../course-batch/course-batch.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class CourseConsumptionService {
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
     private navigationHelperService: NavigationHelperService, private permissionService: PermissionService,
     private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService,
-    private coursesService: CoursesService) {
+    private coursesService: CoursesService, private http: HttpClient) {
     }
 
   getCourseHierarchy(courseId, option: any = { params: {} }) {
@@ -371,6 +372,14 @@ getAllOpenBatches(contents) {
     this.coursesService.getEnrolledCourses().subscribe((data) => {
         console.log("New enrolled data", data);
     });
+  }
+
+  getCourseRating(courseId: string){
+    return this.http.get(`api/ratings/v1/summary/${courseId}/Course`);
+  }
+
+  saveCourseRating(data: any){
+    return this.http.post(`api/ratings/v1/upsert`, data);
   }
 
 }
