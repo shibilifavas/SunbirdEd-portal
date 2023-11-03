@@ -35,7 +35,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   selectedCourseBatches: { onGoingBatchCount: any; expiredBatchCount: any; openBatch: any; inviteOnlyBatch: any; courseId: any; };
   obs$;
   private fetchEnrolledCourses$ = new BehaviorSubject<boolean>(true);
-  config:any;
+  config: any;
   configContent: any;
   tocList = [];
   queryParams: any = {};
@@ -71,55 +71,56 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.getAllBatchDetails();
         this.showLoader = false;
         this.config = {
-          className:'dark-background',
-          title: this.courseHierarchy.name, 
+          className: 'dark-background',
+          title: this.courseHierarchy.name,
           description: this.courseHierarchy.description,
           contentType: this.courseHierarchy.contentType,
           primaryCategory: this.courseHierarchy.primaryCategory,
-          image:this.courseHierarchy.posterImage || 'assets/common-consumption/images/abstract_02.svg',
+          image: this.courseHierarchy.posterImage || 'assets/common-consumption/images/abstract_02.svg',
           keywords: this.courseHierarchy.keywords,
-          rating:4.2,
-          numberOfRating:'123 ratings',
-          duration:this.courseHierarchy.Duration
+          rating: 0,
+          numberOfRating: '0 Ratings',
+          duration: this.courseHierarchy.Duration
         };
         this.breadCrumbData = [
           {
-              "label": "Learn",
-              "status": "inactive",
-              "link": "resources",
-              "icon": "school"
+            "label": "Learn",
+            "status": "inactive",
+            "link": "resources",
+            "icon": "school"
           }
-      ];
-      const stored = localStorage.getItem('breadCrumbForAllComp');
-      if(stored){
-        let param = {};
-        const parsedData = JSON.parse(stored);
-        param['label'] = parsedData.label;
-        param['status'] = "inactive";
-        let channelId = parsedData.channel;
-        let fw = parsedData.framework;
-        param['link'] = parsedData.link;
-        param['showIcon'] = true;
-        this.breadCrumbData.push(param);
-      }
-      const newBreadCrumb = {
-        "label": this.config.title,
-        "status": "active",
-        "link": "",
-        "icon": "play_circle_filled"}
+        ];
+        const stored = localStorage.getItem('breadCrumbForAllComp');
+        if (stored) {
+          let param = {};
+          const parsedData = JSON.parse(stored);
+          param['label'] = parsedData.label;
+          param['status'] = "inactive";
+          let channelId = parsedData.channel;
+          let fw = parsedData.framework;
+          param['link'] = parsedData.link;
+          param['showIcon'] = true;
+          this.breadCrumbData.push(param);
+        }
+        const newBreadCrumb = {
+          "label": this.config.title,
+          "status": "active",
+          "link": "",
+          "icon": "play_circle_filled"
+        }
         this.breadCrumbData.push(newBreadCrumb);
-      
+        // this.59(this.courseId);
       }, err => {
         if (_.get(err, 'error.responseCode') && err.error.responseCode === 'RESOURCE_NOT_FOUND') {
           this.toasterService.error(this.generaliseLabelService.messages.emsg.m0002);
         } else {
           this.toasterService.error(this.resourceService.messages.fmsg.m0003); // fmsg.m0001 for enrolled issue
         }
-        this.navigationHelperService.navigateToResource('/learn');
+        // this.navigationHelperService.navigateToResource('/learn');
       });
-      this.coursePageContentService.getCoursePageContent().subscribe((res:any) => {
-        this.courseTabs = res.courseTabs.data;
-        this.configContent = res;
+    this.coursePageContentService.getCoursePageContent().subscribe((res: any) => {
+      this.courseTabs = res.courseTabs.data;
+      this.configContent = res;
     })
   }
 
@@ -130,7 +131,6 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         const queryParams = this.activatedRoute.snapshot.queryParams;
         this.courseId = routeParams.courseId;
         this.groupId = queryParams.groupId;
-
         if (this.groupId) {
           this.getGroupData();
         } else {
@@ -252,7 +252,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     isRouteChanged && this.fetchEnrolledCourses$.next(true); // update component only if batch is changed.
   }
 
-  addWishList(){
+  addWishList() {
     console.log('Add to wish list');
   }
 
@@ -268,25 +268,25 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   // }
 
   updateCourseContent() {
-  //  if(this.courseConsumptionService.getCourseContent()?.length > 0) {
-      this.tocList = this.courseConsumptionService.getCourseContent();
+    //  if(this.courseConsumptionService.getCourseContent()?.length > 0) {
+    this.tocList = this.courseConsumptionService.getCourseContent();
     //}
   }
 
   contentClicked(event: any) {
-    if(!this.courseConsumptionService.isUserExistInBatch()){
+    if (!this.courseConsumptionService.isUserExistInBatch()) {
       this.courseConsumptionService.enrollToCourse(this.courseHierarchy);
     }
-    this.router.navigate(['/learn/course/play',event.content.collectionId],
-    { 
-      queryParams: { 
-        batchId: this.batchId || this.courseConsumptionService.getBatchId(),
-        courseId: this.courseHierarchy.identifier,
-        courseName: this.courseHierarchy.name,
-        selectedContent:  event.content.selectedContent,
-        parent: event.content.collectionId
-      }
-    });
+    this.router.navigate(['/learn/course/play', event.content.collectionId],
+      {
+        queryParams: {
+          batchId: this.batchId || this.courseConsumptionService.getBatchId(),
+          courseId: this.courseHierarchy.identifier,
+          courseName: this.courseHierarchy.name,
+          selectedContent: event.content.selectedContent,
+          parent: event.content.collectionId
+        }
+      });
   }
 
   getAllBatchDetails() {
@@ -302,26 +302,26 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       offset: 0,
       sort_by: { createdDate: 'desc' }
     };
-    const searchParamsCreator =  _.cloneDeep(searchParams);
-    const searchParamsMentor =  _.cloneDeep(searchParams);
+    const searchParamsCreator = _.cloneDeep(searchParams);
+    const searchParamsMentor = _.cloneDeep(searchParams);
 
-       searchParams.filters.enrollmentType = 'open';
-       this.courseBatchService.getAllBatchDetails(searchParams).pipe(
-        takeUntil(this.unsubscribe$))
-        .subscribe((data: any) => {
-          // this.allBatchDetails.emit(_.get(data, 'result.response'));
-          if (data.result.response.content && data.result.response.content.length > 0) {
-              this.batchList = data.result.response.content;
-              
-            } else {
-              this.showBatchList = true;
-          }
-        },
-        (err:any) => {
-         
+    searchParams.filters.enrollmentType = 'open';
+    this.courseBatchService.getAllBatchDetails(searchParams).pipe(
+      takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        // this.allBatchDetails.emit(_.get(data, 'result.response'));
+        if (data.result.response.content && data.result.response.content.length > 0) {
+          this.batchList = data.result.response.content;
+
+        } else {
+          this.showBatchList = true;
+        }
+      },
+        (err: any) => {
+
         });
-}
-   
+  }
+
 
 
   private getContentState() {
@@ -355,6 +355,12 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       });
   }
 
-
+  getCourseRating(courseId: string) {
+    this.courseConsumptionService.getCourseRating(courseId).subscribe((res: any) => {
+      // console.log('Rating', res);
+      this.config.rating = res["result"]["response"] != null ? res["result"]["response"]["total_number_of_ratings"] : 0;
+      this.config.numberOfRating = res["result"]["response"] != null ? `${res["result"]["response"]["sum_of_total_ratings"]} ratings` : '0 ratings';
+    });
+  }
 
 }

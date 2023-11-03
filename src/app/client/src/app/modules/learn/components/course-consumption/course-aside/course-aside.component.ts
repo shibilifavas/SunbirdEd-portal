@@ -33,12 +33,12 @@ export class CourseAsideComponent implements OnInit {
 
   ngOnInit(): void {
     const firstModule = this.courseConsumptionService.getCourseContent()[0];
-    console.log(firstModule);
+    // console.log(firstModule);
     this.firstContentId = firstModule.body[0].selectedContent;
     this.parentId = firstModule.body[0].collectionId;
     this.courseProgressService.courseStatus.subscribe((status:number) => {
-      // this.courseStatus = status
-      this.courseStatus = 2
+      this.courseStatus = status
+      // this.courseStatus = 2
     })
   }
 
@@ -87,6 +87,20 @@ export class CourseAsideComponent implements OnInit {
         selectedContent: this.firstContentId,
         parent: this.parentId
       } 
+    });
+  }
+
+  saveCourseRating(courseId: string) {
+    let data: any = {
+      activityId: this.courseHierarchy.identifier,
+      userId: "1fc08c1b-39bb-4b53-a25d-12bf9ef99e4f",
+      activityType: "Course",
+      rating: 4,
+      review: "good course"
+  };
+    this.courseConsumptionService.saveCourseRating(data).subscribe((res: any) => {
+      // console.log('Rating', res);
+    
     });
   }
 }
