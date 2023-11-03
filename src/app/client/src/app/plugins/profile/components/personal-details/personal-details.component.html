@@ -4,7 +4,7 @@
       <div class="form-column">
         <!-- First Column -->
             <div class="intials mr-20">
-            DG
+                {{userProfile?.firstName[0] | uppercase }}{{userProfile?.lastName[0] | uppercase }}
             </div>
             <div *ngFor = "let field of formData.colOne.fields" class="form-group">
                 <label for="{{field.value}}">{{field.label}}</label>
