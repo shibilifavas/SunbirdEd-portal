@@ -22,7 +22,7 @@
         <!-- Second Column -->
         <div *ngFor = "let field of formData.colTwo.fields" class="form-group">
             <label for="{{field.value}}">{{field.label}}</label>
-            <input class="input" *ngIf="field.value!='postalAddress'&&field.value2!='mobile'" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+            <input class="input" *ngIf="field.value!='postalAddress'&&field.value2!='mobile'" [type]="(field.value === 'telephone' || field.value === 'pincode') ? 'number' : 'text'" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
             <textarea class="input" type="text" *ngIf="field.value=='postalAddress'" formControlName="{{field.value}}" placeholder="Type here" rows="4"></textarea>
             <div class="phone" *ngIf="field.value2=='mobile'">
                 <input class="input w-10 mr-10" type="number" id="{{field.value1}}" formControlName="{{field.value1}}" placeholder="+91">
