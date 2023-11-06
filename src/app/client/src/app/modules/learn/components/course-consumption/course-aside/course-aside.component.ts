@@ -36,9 +36,9 @@ export class CourseAsideComponent implements OnInit {
       this.courseStatus = status
     });
 
+    //set selected content Id with last visited contentId
     this.courseProgressService.getLastReadContent().subscribe((resumeContent: any) => {
       if(resumeContent !== '' && resumeContent) {
-        // this.resumeContent = content;
         this.courseContent.forEach((resource:any) => {
           resource.body.forEach((content: any) => {
             if(content.selectedContent == resumeContent) {
