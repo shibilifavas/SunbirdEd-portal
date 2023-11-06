@@ -21,16 +21,33 @@ export class CourseAsideComponent implements OnInit {
   parentId: any;
   batchId: any;
   courseStatus:number;
+  resumeContent: any;
+  courseContent: any;
 
   constructor(private router: Router, private courseConsumptionService: CourseConsumptionService,
      private userService: UserService,  public courseProgressService: CourseProgressService) { }
 
   ngOnInit(): void {
-    const firstModule = this.courseConsumptionService.getCourseContent()[0];
-    this.firstContentId = firstModule.body[0].selectedContent;
-    this.parentId = firstModule.body[0].collectionId;
+    this.courseContent = this.courseConsumptionService.getCourseContent();
+    this.resumeContent = this.courseContent[0].body[0].selectedContent;
+    this.parentId = this.courseContent[0].body[0].collectionId;
+
     this.courseProgressService.courseStatus.subscribe((status:number) => {
       this.courseStatus = status
+    });
+
+    this.courseProgressService.getLastReadContent().subscribe((resumeContent: any) => {
+      if(resumeContent !== '' && resumeContent) {
+        // this.resumeContent = content;
+        this.courseContent.forEach((resource:any) => {
+          resource.body.forEach((content: any) => {
+            if(content.selectedContent == resumeContent) {
+              this.parentId = content.collectionId;
+              this.resumeContent = content.selectedContent;
+            }
+          })
+        })
+      }
     })
   }
 
@@ -51,7 +68,7 @@ export class CourseAsideComponent implements OnInit {
         batchId: this.batchId || this.courseConsumptionService.getBatchId(),
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
-        selectedContent: this.firstContentId,
+        selectedContent: this.resumeContent,
         parent: this.parentId
       } 
     });
