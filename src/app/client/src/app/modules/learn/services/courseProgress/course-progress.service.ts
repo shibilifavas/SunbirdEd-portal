@@ -27,6 +27,7 @@ export class CourseProgressService {
   progressdetails: any = {};
   mimeType: string = '';
   contentProgress: any = {};
+  lastReadContentId = new BehaviorSubject<any>('');
 
   private courseStatus$ = new BehaviorSubject<Number>(0);
   courseStatus = this.courseStatus$.asObservable();
@@ -312,6 +313,7 @@ export class CourseProgressService {
           this.contentProgress['content_'+`${content.contentId}`] = content.progressdetails?.current;
         });
       }
+      this.setLastReadContent(response);
     }
 
     updateCourseStatus(response: any, noOfContents?: number){
@@ -363,5 +365,15 @@ export class CourseProgressService {
         this.courseStatus$.next(0);
       }
     }
+
+    setLastReadContent(response: any) {
+      this.lastReadContentId.next(response.lastPlayedContentId);
+    }
+
+    getLastReadContent() {
+      return this.lastReadContentId.asObservable();
+    }
+
+
 
 }
