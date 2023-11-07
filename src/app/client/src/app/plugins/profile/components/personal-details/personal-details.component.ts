@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {UserService} from '@sunbird/core';
+import {IUserData} from '@sunbird/shared';
 
 @Component({
   selector: 'app-personal-details',
@@ -8,11 +10,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class PersonalDetailsComponent implements OnInit {
   form: FormGroup;
-  columnOneData = ["First Name"]
+  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Middle name","value":"middleName"},{"label":"Surname","value":"surname"},{"label":"Date of birth (dd-mm-yy)","value":"dob"},{"label":"Nationality","value":"nationality"}],"radio":[{"label":"Gender","value":"gender","items":[{"label":"Male","value":"male"},{"label":"Female","value":"female"},{"label":"Others","value":"others"}]},{"label":"Marital status","value":"maritalStatus","items":[{"label":"Single","value":"single"},{"label":"Married","value":"married"}]},{"label":"Category","value":"category","items":[{"label":"General","value":"general"},{"label":"OBC","value":"obc"},{"label":"SC","value":"sc"},{"label":"ST","value":"st"}]}]},"colTwo":{"fields":[{"label":"Domicile Medium (Mother Tongue)","value":"motherTongue"},{"label":"Other languages known","value":"otherLanguages"},{"label":"Mobile number","value1":"code","value2":"mobile"},{"label":"Telephone number","value":"telephone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Postal address","value":"postalAddress"},{"label":"Pincode","value":"pincode"}]}}
+  userProfile: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public userService: UserService) { }
 
   ngOnInit(): void {
+    this.userService.userData$.subscribe((user: IUserData) => {
+      if (user.userProfile) {
+        this.userProfile = user.userProfile;
+      }
+    });
     this.form = this.formBuilder.group({
       firstName: ['', Validators.required],
       middleName: [''],

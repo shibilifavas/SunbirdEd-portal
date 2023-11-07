@@ -3,95 +3,36 @@
     <div class="form-container">
       <div class="form-column">
         <!-- First Column -->
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" formControlName="firstName" placeholder="Type here">
+            <div class="intials mr-20">
+                {{userProfile?.firstName[0] | uppercase }}{{userProfile?.lastName[0] | uppercase }}
             </div>
-            <div class="form-group">
-                <label for="middleName">Middle Name</label>
-                <input type="text" id="middleName" formControlName="middleName" placeholder="Type here">
+            <div *ngFor = "let field of formData.colOne.fields" class="form-group">
+                <label for="{{field.value}}">{{field.label}}</label>
+                <input class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
             </div>
-            <div class="form-group">
-                <label for="surname">Surname</label> 
-                <input type="text" id="surname" formControlName="surname" placeholder="Type here">
-            </div>
-            <div class="form-group">
-                <label for="dob">Date of birth (dd-mm-yy)</label> 
-                <input type="text" id="dob" formControlName="dob" placeholder="Type here">
-            </div>
-            <div class="form-group">
-                <label for="nationality">Nationality</label> 
-                <input type="text" id="nationality" formControlName="nationality" placeholder="Type here">
-            </div>
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <mat-radio-group formControlName="gender">
-                  <mat-radio-button value="male">Male</mat-radio-button>
-                  <mat-radio-button value="female">Female</mat-radio-button>
-                  <mat-radio-button value="others">Others</mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <div class="form-group">
-                <label for="maritalStatus">Marital status</label>
-                <mat-radio-group formControlName="maritalStatus">
-                  <mat-radio-button value="single">Single</mat-radio-button>
-                  <mat-radio-button value="married">Married</mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <mat-radio-group formControlName="category">
-                  <mat-radio-button value="male">General</mat-radio-button>
-                  <mat-radio-button value="female">OBC</mat-radio-button>
-                  <mat-radio-button value="others">SC</mat-radio-button>
-                  <mat-radio-button value="others">ST</mat-radio-button>
+            <div *ngFor = "let field of formData.colOne.radio" class="form-group">
+                <label for="{{field.value}}">{{field.label}}</label>
+                <mat-radio-group formControlName="{{field.value}}">
+                  <mat-radio-button *ngFor = "let option of field.items" value="{{option.value}}">{{option.label}}</mat-radio-button>
                 </mat-radio-group>
             </div>
         </div>
-
       <div class="form-column">
         <!-- Second Column -->
-        <div class="form-group">
-            <label for="motherTongue">Domicile Medium (Mother Tongue) </label> 
-            <input type="text" formControlName="motherTongue" placeholder="Type here">
-        </div>
-        <div class="form-group">
-            <label for="otherLanguages">Other languages known</label> 
-            <input type="text" formControlName="otherLanguages" placeholder="Type here">
-        </div>
-        <div class="form-group">
-            <label for="mobile">Mobile number</label> 
-            <div class="phone">
-                <input class="w-10 mr-4" type="text" formControlName="countryCode" placeholder="+91">
-                <input class="w-90" type="text" formControlName="mobile" placeholder="Type here">
+        <div *ngFor = "let field of formData.colTwo.fields" class="form-group">
+            <label for="{{field.value}}">{{field.label}}</label>
+            <input class="input" *ngIf="field.value!='postalAddress'&&field.value2!='mobile'" [type]="(field.value === 'telephone' || field.value === 'pincode') ? 'number' : 'text'" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+            <textarea class="input" type="text" *ngIf="field.value=='postalAddress'" formControlName="{{field.value}}" placeholder="Type here" rows="4"></textarea>
+            <div class="phone" *ngIf="field.value2=='mobile'">
+                <input class="input w-10 mr-10" type="number" id="{{field.value1}}" formControlName="{{field.value1}}" placeholder="+91">
+                <input class="input w-90" type="number" id="{{field.value2}}" formControlName="{{field.value2}}" placeholder="Type here">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="telephone">Telephone number</label> 
-            <input type="text" formControlName="telephone" placeholder="Type here">
-        </div>
-        <div class="form-group">
-            <label for="primaryEmail">Primary email</label> 
-            <input type="text" formControlName="primaryEmail" placeholder="Type here">
-        </div>
-        <div class="form-group">
-            <label for="secondaryEmail">Secondary email</label> 
-            <input type="text" formControlName="secondaryEmail" placeholder="Type here">
-        </div>
-        <div class="form-group">
-            <label for="postalAddress">Postal address</label> 
-            <textarea type="text" formControlName="postalAddress" placeholder="Type here" rows="4"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="pincode">Pincode</label> 
-            <input type="text" formControlName="pincode" placeholder="Type here">
         </div>
       </div>
     </div>
     <div class="submitbtn">
-        <button class="com-primary-btn btn" type="submit">Submit</button>
-    </div>
-    
+        <button class="com-primary-btn btn" type="submit">Submit changes</button>
+    </div>    
 </form>
   
   
