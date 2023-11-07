@@ -73,6 +73,12 @@
       ],
       "@sunbird/location": [
         "app/modules/location"
+      ],
+      "sunbird-collection-editor": [
+        "../node_modules/compass-course-editor"
+      ],
+      "sunbird-collection-editor/*": [
+        "../node_modules/compass-course-editor/*"
       ]
     },
     "types": []
