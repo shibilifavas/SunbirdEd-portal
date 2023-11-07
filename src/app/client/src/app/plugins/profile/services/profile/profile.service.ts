@@ -34,7 +34,8 @@ export class ProfileService {
   public updatePrivateProfile(request) {
     const data = this.formatRequest(request);
     const options = {
-      url: 'portal/user/v2/update',
+      // url: 'portal/user/v2/update',
+      url: this.configService.urlConFig.URLS.USER.UPDATE_PROFILE,
       data: data
     };
     return this.learnerService.patch(options);
