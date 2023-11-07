@@ -377,9 +377,12 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
     if (event.eid === 'END') {
       let metaDataconfig = event.metaData;
       const edataConfig = event.edata;
-      if(edataConfig?.currentPage == edataConfig?.totalPages) {
+      if(edataConfig?.currentPage && edataConfig?.totalPages && edataConfig?.currentPage == edataConfig?.totalPages) {
         metaDataconfig.pagesVisited = [];
         metaDataconfig.pagesVisited.push(1);
+      }
+      if(edataConfig?.currentDuration && edataConfig?.totalDuration && edataConfig?.currentDuration == edataConfig?.totalDuration) {
+        metaDataconfig.currentDuration = 0;
       }
       this.endEventReached.emit(event)
       if (this.userService.loggedIn) {
