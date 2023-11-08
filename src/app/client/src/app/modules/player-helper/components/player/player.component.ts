@@ -269,6 +269,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
 
   loadOldPlayer() {
     this.showNewPlayer = false;
+    this.contentId = _.get(this.playerConfig, 'metadata.identifier');
     if (this.isDesktopApp) {
       this.updateMetadataForDesktop();
       const downloadStatus = Boolean(_.get(this.playerConfig, 'metadata.desktopAppMetadata.isAvailable'));
