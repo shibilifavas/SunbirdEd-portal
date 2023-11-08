@@ -13,6 +13,7 @@ export class PersonalDetailsComponent implements OnInit {
   form: FormGroup;
   formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Surname","value":"surname"},{"label":"Mobile number","value1":"code","value2":"mobile"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"}],"radio":[]},"colTwo":{}}
   userProfile: any;
+  payload: any = {};
 
   constructor(private formBuilder: FormBuilder, public userService: UserService, private profileService: ProfileService,) { }
 
@@ -35,7 +36,9 @@ export class PersonalDetailsComponent implements OnInit {
   onSubmit(request) {
     if (this.form.valid) {
       console.log('Form submitted!', this.form.value);
-      this.profileService.updatePrivateProfile(request).subscribe(res => {
+      this.payload = this.form.value;
+      this.payload.userId = this.userProfile.userId;
+      this.profileService.updatePrivateProfile(this.payload).subscribe(res => {
         console.log("res",res);
     })
     }
