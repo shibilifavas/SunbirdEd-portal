@@ -252,7 +252,7 @@ getAllOpenBatches(contents) {
           }
         })
         if(count > 0) {
-          toc.header['progress'] = this.calculateProgress(count, courseProgress);
+          toc.header['progress'] = this.calculateProgress(toc.body.length, courseProgress);
         }
       })
     }
@@ -280,11 +280,14 @@ getAllOpenBatches(contents) {
   }
 
   calculateProgress(totalCount: number, allCounts:any[]) {
+    if(totalCount == 0) {
+      return 0;
+    }
     let sum = 0;
     for(let i=0; i< allCounts.length; i++) {
       sum = sum + allCounts[i];
     }
-    return sum / totalCount;
+    return Math.round(sum / totalCount);
   }
 
 
