@@ -1,5 +1,5 @@
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
     <div class="form-container">
       <div class="form-column">
         <!-- First Column -->
@@ -8,17 +8,24 @@
             </div>
             <div *ngFor = "let field of formData.colOne.fields" class="form-group">
                 <label for="{{field.value}}">{{field.label}}</label>
-                <input class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+                <input *ngIf="field.value2!='mobile'&&field.value!='primaryEmail'" class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+                <input *ngIf="field.value=='primaryEmail'" class="input" type="text" id="{{c}}" formControlName="{{field.value}}" placeholder="{{userProfile?.email}}" [value]="userProfile?.email"
+                readonly>
+                <div class="phone" *ngIf="field.value2=='mobile'">
+                  <input class="input w-10 mr-10" type="number" id="{{field.value1}}" formControlName="{{field.value1}}" placeholder="+91">
+                  <input class="input w-90" type="number" id="{{field.value2}}" formControlName="{{field.value2}}" placeholder="Type here">
+              </div>
             </div>
-            <div *ngFor = "let field of formData.colOne.radio" class="form-group">
+            <!-- <div *ngFor = "let field of formData.colOne.radio" class="form-group">
                 <label for="{{field.value}}">{{field.label}}</label>
                 <mat-radio-group formControlName="{{field.value}}">
                   <mat-radio-button *ngFor = "let option of field.items" value="{{option.value}}">{{option.label}}</mat-radio-button>
                 </mat-radio-group>
-            </div>
+            </div> -->
         </div>
-      <div class="form-column">
-        <!-- Second Column -->
+
+      <!-- Second Column -->
+      <!-- <div class="form-column">
         <div *ngFor = "let field of formData.colTwo.fields" class="form-group">
             <label for="{{field.value}}">{{field.label}}</label>
             <input class="input" *ngIf="field.value!='postalAddress'&&field.value2!='mobile'" [type]="(field.value === 'telephone' || field.value === 'pincode') ? 'number' : 'text'" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
@@ -28,7 +35,7 @@
                 <input class="input w-90" type="number" id="{{field.value2}}" formControlName="{{field.value2}}" placeholder="Type here">
             </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="submitbtn">
         <button class="com-primary-btn btn" type="submit">Submit changes</button>
