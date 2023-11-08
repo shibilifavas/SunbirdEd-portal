@@ -22,11 +22,12 @@ export class PersonalDetailsComponent implements OnInit {
         this.userProfile = user.userProfile;
       }
     });
+    console.log("user profile", this.userProfile);
     this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      surname: ['', Validators.required],
-      mobile: ['', Validators.required],
-      primaryEmail: ['', Validators.required],
+      firstName: [this.userProfile.firstName, Validators.required],
+      surname: [this.userProfile.lastName, Validators.required],
+      mobile: [this.userProfile.phone, Validators.required],
+      primaryEmail: [{value: this.userProfile.email, disabled: true}, Validators.required],
       secondaryEmail: ['', Validators.required]
     });
   }
@@ -34,7 +35,7 @@ export class PersonalDetailsComponent implements OnInit {
   onSubmit(request) {
     if (this.form.valid) {
       console.log('Form submitted!', this.form.value);
-      this.profileService.updateProfile(request).subscribe(res => {
+      this.profileService.updatePrivateProfile(request).subscribe(res => {
         console.log("res",res);
     })
     }
