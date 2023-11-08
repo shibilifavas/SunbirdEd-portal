@@ -30,9 +30,8 @@
         <button (click)="showAllLearnings()"
           class="com-secondary-btn right-floated">{{resourceService?.frmelmnts?.lbl?.anncmntinboxseeall}}</button></div>
         <div class="ui grid middle aligned stackable">
-          <div class="three wide column" *ngFor="let data of attendedTraining"
-            [routerLink]="['/learn/course', data['content']['identifier']]">
-            <compass-course-card [data]="data"></compass-course-card>
+          <div class="three wide column" *ngFor="let data of attendedTraining">
+            <compass-course-card (click)="redirectToToc(data['contentId'], data['batch']['batchId'])" [data]="data"></compass-course-card>
           </div>
         </div>
       </section>
