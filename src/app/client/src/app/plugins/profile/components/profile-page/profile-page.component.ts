@@ -348,6 +348,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }).subscribe((_res) => {
       if (_res && _res?.certificates?.length > 0) {
         this.otherCertificates = _.get(_res, 'certificates');
+        console.log('Other certificates', this.otherCertificates);
         this.otherCertificatesCounts = (_.get(_res, 'certRegCount') ? _.get(_res, 'certRegCount') : 0) + (_.get(_res, 'rcCount') ? _.get(_res, 'rcCount') : 0);
       }
     }, (error) => {
@@ -400,7 +401,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   downloadOldAndRCCert(courseObj) {
-    // alert('downloadOldAndRCCert');
+    console.log('downloadOldAndRCCert', courseObj);
     let requestBody = {
       certificateId: courseObj.id,
       schemaName: 'certificate',

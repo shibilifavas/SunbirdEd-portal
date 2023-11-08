@@ -109,7 +109,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           "icon": "play_circle_filled"
         }
         this.breadCrumbData.push(newBreadCrumb);
-        // this.59(this.courseId);
+        this.getCourseRating(this.courseId);
       }, err => {
         if (_.get(err, 'error.responseCode') && err.error.responseCode === 'RESOURCE_NOT_FOUND') {
           this.toasterService.error(this.generaliseLabelService.messages.emsg.m0002);
