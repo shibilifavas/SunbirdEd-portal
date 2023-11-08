@@ -269,6 +269,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
 
   loadOldPlayer() {
     this.showNewPlayer = false;
+    this.contentId = _.get(this.playerConfig, 'metadata.identifier');
     if (this.isDesktopApp) {
       this.updateMetadataForDesktop();
       const downloadStatus = Boolean(_.get(this.playerConfig, 'metadata.desktopAppMetadata.isAvailable'));
@@ -427,6 +428,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnChanges, OnDest
     }
     const eid = _.get(eventCopy, 'detail.telemetryData.eid');
     const contentId = _.get(eventCopy, 'detail.telemetryData.object.id');
+    // this.contentId = contentId;
     if (eid && (eid === 'END') && contentId === this.contentId) {
       this.showRatingPopup(eventCopy);
       if (this.contentProgressEvents$) {
