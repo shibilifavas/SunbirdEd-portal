@@ -32,6 +32,8 @@ export class CourseAsideComponent implements OnInit {
   userProfile: any;
   otherCertificates: Array<object>;
   otherCertificatesCounts: number;
+  resumeContent: any;
+  courseContent: any;
 
   constructor(private router: Router, private courseConsumptionService: CourseConsumptionService,
      private userService: UserService,  public courseProgressService: CourseProgressService, public resourceService: ResourceService, public toasterService: ToasterService,
@@ -42,11 +44,26 @@ export class CourseAsideComponent implements OnInit {
     this.firstModule = this.courseConsumptionService.getCourseContent()[0];
     // console.log('courseHierarchy', this.courseHierarchy);
     this.firstContentId = this.firstModule.body[0].selectedContent;
-    this.parentId = this.firstModule.body[0].collectionId;
+    this.courseContent = this.courseConsumptionService.getCourseContent();
+    this.resumeContent = this.courseContent[0].body[0].selectedContent;
+    this.parentId = this.courseContent[0].body[0].collectionId;
     this.courseProgressService.courseStatus.subscribe((status:number) => {
       // alert(status);
       this.courseStatus = status
-      // this.courseStatus = 2
+    });
+
+    //set selected content Id with last visited contentId
+    this.courseProgressService.getLastReadContent().subscribe((resumeContent: any) => {
+      if(resumeContent !== '' && resumeContent) {
+        this.courseContent.forEach((resource:any) => {
+          resource.body.forEach((content: any) => {
+            if(content.selectedContent == resumeContent) {
+              this.parentId = content.collectionId;
+              this.resumeContent = content.selectedContent;
+            }
+          })
+        })
+      }
     })
 
     this.userSubscription = this.userService.userData$.subscribe((user: IUserData) => {
@@ -133,7 +150,7 @@ export class CourseAsideComponent implements OnInit {
         batchId: this.batchId || this.courseConsumptionService.getBatchId(),
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
-        selectedContent: this.firstContentId,
+        selectedContent: this.resumeContent,
         parent: this.parentId
       } 
     });

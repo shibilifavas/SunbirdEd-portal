@@ -19,7 +19,7 @@
       <button class="com-secondary-btn mr-40" appTelemetryInteract appOnlineOnly
         [telemetryInteractEdata]="editProfileInteractEdata"
         attr.aria-label="{{resourceService?.frmelmnts?.lbl?.editPersonalDetails}}" tabindex="0"
-        (click)="showEditUserDetailsPopup=true">Edit Profile</button>
+        (click)="navigateToEditProfile()">Edit Profile</button>
       <button class="com-secondary-btn">Your dashboard</button>
     </div>
   </header>

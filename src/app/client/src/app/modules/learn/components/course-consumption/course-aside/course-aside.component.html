@@ -2,13 +2,13 @@
     <div class="aside__top">
     <button class="com-primary-btn" (click)="navigate()">
         <ng-container *ngIf="courseStatus === 0">
-            {{configContent.courseAside.startCourse || 'Start this course'}}
+            {{configContent.courseAside.start || 'Start'}}
         </ng-container>
         <ng-container *ngIf="courseStatus === 1">
             {{configContent.courseAside.resume || 'Resume'}}
         </ng-container>
         <ng-container *ngIf="courseStatus === 2">
-            {{configContent.courseAside.restartCourse || 'Restart this course'}}
+            {{configContent.courseAside.restart || 'Restart'}}
         </ng-container>
     </button>
     <p class="aside__share-rating">
@@ -21,7 +21,7 @@
         </p>
         </ng-container>
     <section class="aside__course-info">
-        <h4 class="sub-heading-one">{{configContent.courseAside.title}}</h4>
+        <h4 class="sub-heading-one">{{courseHierarchy.primaryCategory == "Course" ? configContent.courseAside.title : configContent.courseAside.assessmentTitle}}</h4>
         <ul>
             <li *ngIf="courseHierarchy.Duration">
                 <mat-icon class="timer-icon">timer</mat-icon>

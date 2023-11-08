@@ -3,12 +3,15 @@ import { map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { UserService, LearnerService, FormService } from '@sunbird/core';
 import { ConfigService, ServerResponse } from '@sunbird/shared';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
+  private httpClient: HttpClient;
+
   constructor(private learnerService: LearnerService,
-    public userService: UserService, public configService: ConfigService, public formService: FormService) { }
+    public userService: UserService, public configService: ConfigService, public formService: FormService, private http: HttpClient) { this.httpClient = http; }
   /**
    * This method invokes learner service to update user profile
    */
@@ -34,10 +37,11 @@ export class ProfileService {
   public updatePrivateProfile(request) {
     const data = this.formatRequest(request);
     const options = {
-      url: 'portal/user/v2/update',
+      // url: 'portal/user/v2/update',
+      url: this.configService.urlConFig.URLS.USER.UPDATE_PROFILE,
       data: data
     };
-    return this.learnerService.patch(options);
+    return this.httpClient.patch(options.url, options.data);
   }
 
   /**
