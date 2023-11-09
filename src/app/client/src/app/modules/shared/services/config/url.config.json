@@ -126,7 +126,7 @@
       "USER_DECLARATION": "user/v1/declarations",
       "GET_SESSION": "get/user/sessionId",
       "USER_SEARCH": "user/v1/search",
-      "UPDATE_PROFILE": "user/private/v1/update"
+      "UPDATE_PROFILE": "api/user/private/v1/update"
     },
     "CERTIFICATE": {
       "FETCH_CERTIFICATES": "v1/certs/search",
