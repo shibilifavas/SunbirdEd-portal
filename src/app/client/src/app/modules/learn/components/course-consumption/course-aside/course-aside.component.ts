@@ -34,6 +34,8 @@ export class CourseAsideComponent implements OnInit {
   otherCertificatesCounts: number;
   resumeContent: any;
   courseContent: any;
+  showRatingModal = false;
+  rating:number = 0;
 
   constructor(private router: Router, private courseConsumptionService: CourseConsumptionService,
      private userService: UserService,  public courseProgressService: CourseProgressService, public resourceService: ResourceService, public toasterService: ToasterService,
@@ -159,14 +161,22 @@ export class CourseAsideComponent implements OnInit {
   saveCourseRating(courseId: string) {
     let data: any = {
       activityId: this.courseHierarchy.identifier,
-      userId: "1fc08c1b-39bb-4b53-a25d-12bf9ef99e4f",
+      userId: _.get(this.userProfile, 'userId'),
       activityType: "Course",
-      rating: 4,
-      review: "good course"
+      rating: this.rating,
+      review: (<HTMLInputElement>document.getElementById("review")).value
   };
     this.courseConsumptionService.saveCourseRating(data).subscribe((res: any) => {
-      // console.log('Rating', res);
-    
+      this.showRatingModal = false;
+      this.rating = 0;
+      (<HTMLInputElement>document.getElementById("review")).value = '';
+      console.log('Rating', res);
     });
+  }
+
+  displayRatingModal() {
+    if (this.courseStatus > 1) {
+      this.showRatingModal = true;
+    }
   }
 }
