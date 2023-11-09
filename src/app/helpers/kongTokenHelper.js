@@ -22,8 +22,8 @@ const KONG_ANONYMOUS_DEVICE_REGISTER_TOKEN  = require('./environmentVariablesHel
 
 const KONG_REFRESH_TOKEN_API                = require('./environmentVariablesHelper.js').sunbird_kong_refresh_token_api;
 const KONG_LOGGEDIN_DEVICE_REGISTER_API     = require('./environmentVariablesHelper.js').sunbird_loggedin_device_register_api;
-const KONG_ANONYMOUS_DEVICE_REGISTER_API    = require('./environmentVariablesHelper.js').sunbird_anonymous_device_register_api;
-
+const KONG_ANONYMOUS_DEVICE_REGISTER_API    = require('./environmentVariablesHelper.js').PORTAL_API_AUTH_TOKEN;
+const PORTAL_API_AUTH_TOKEN                 = require('./environmentVariablesHelper.js').sunbird_auth;
 const BLACKLISTED_URL                       = ['/service/health', '/health', '/assets/images', '/discussion'];
 const KONG_ACCESS_TOKEN                     = 'userAccessToken';
 const KONG_DEVICE_BEARER_TOKEN              = 'apiBearerToken';
@@ -454,6 +454,10 @@ const getBearerToken = (req) => {
     _.get(req, 'session.' + KONG_ACCESS_TOKEN) : req.kauth.grant.access_token.token;
 };
 
+const getPortalBearerAuthToken = () => {
+  return PORTAL_API_AUTH_TOKEN || '';
+}
+
 module.exports = {
   registerDeviceWithKong,
   getPortalAuthToken,
@@ -461,5 +465,6 @@ module.exports = {
   getKongAccessToken,
   generateLoggedInKongToken,
   getBearerToken,
-  getAuthToken
+  getAuthToken,
+  getPortalBearerAuthToken
 };
