@@ -18,6 +18,7 @@ module.exports = function (app) {
     app.all('/api/content/v1/search', proxyObj());
     app.all('/api/composite/v1/search', proxyObj());
     app.all('/api/ratings/v1/summary/*', proxyObj());
+    app.all('/api/ratings/v1/upsert', proxyObj());
 
     // app.all('/api/content/v1/create', proxyObj());
 
