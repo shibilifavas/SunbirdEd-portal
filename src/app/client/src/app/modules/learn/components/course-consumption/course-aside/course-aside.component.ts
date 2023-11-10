@@ -86,6 +86,8 @@ export class CourseAsideComponent implements OnInit {
     let requestBody = { userId: userId, schemaName: 'certificate' };
     if (this.otherCertificatesCounts) {
       requestBody['size'] = this.otherCertificatesCounts;
+    } else {
+      requestBody['size'] = 100;
     }
     this.CsCertificateService.fetchCertificates(requestBody, {
       apiPath: '/learner/certreg/v2',
