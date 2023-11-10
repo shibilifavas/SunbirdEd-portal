@@ -122,6 +122,15 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     fwCategory = [];
     courses: any = {};
     slideConfigNew = { slidesToShow: 4, slidesToScroll: 4 };
+    popularTitle: string = '';
+    popularButton: string = '';
+    dynamicPopularCard = [];
+    browseByCard = [
+        {
+            "iconUrl": "assets/images/topic.png",
+            "title": "Topic"
+        }
+    ]
 
     searchRequest: IContentSearchRequest;
     recentlyPublishedList: IContent[] = [];
@@ -236,7 +245,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.custodianOrg = custodianOrg;
                     this.formData = formConfig;
                     if (this.isUserLoggedIn()) {
-                        this.fetchPopularCompetenciesData();
+                        // this.fetchPopularCompetenciesData();
                         this.fetchPopularTopicsData();
                         // this.defaultFilters = this.cacheService.exists('searchFilters') ? this.getPersistFilters(true) : this.userService.defaultFrameworkFilters;
                         this.defaultFilters = this.userService.defaultFrameworkFilters;
@@ -261,39 +270,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 tap(data => {
                     this.initFilter = true;
                     // console.log('Channel Data', this.contentSearchService.channelData);
-                    let obj = {};
-                    let tempIndex = 0;
-                    for (let i = 0; i < this.contentSearchService.channelData.length; i++) {
-                        for (let j = 0; j < this.contentSearchService.channelData[i]['terms'].length; j++) {
-                            if (this.contentSearchService.channelData[i]['terms'][j]['associations'] !== undefined) {
-                                for (let k = 0; k < this.contentSearchService.channelData[i]['terms'][j]['associations'].length; k++) {
-                                    // console.log('PPG', this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['identifier']);
-                                    let index = this.popularCompetencies.indexOf(this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier']);
-                                    if (index != -1) {
-                                        let obj = {};
-                                        obj['identifier'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier'];
-                                        obj['title'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['name'];
-                                        obj['noOfCourses'] = this.popularCompetenciesData[index]['count'];
-                                        obj['icon'] = '/assets/images/course-icon.png';
-                                        obj['type'] = '';
-                                        obj['associatedCoursesTxt'] = 'Associated Courses';
-                                        this.popularCompetencyMapping.push(obj);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // console.log('Pr == g', this.popularCompetencyMapping);
-                    // Filtering to remove duplicated data 
-                    let tempIds = [], tempData = [];
-                    for (let i = 0; i < this.popularCompetencyMapping.length; i++) {
-                        if (tempIds.indexOf(this.popularCompetencyMapping[i]['identifier']) == -1) {
-                            tempData.push(this.popularCompetencyMapping[i]);
-                        }
-                        tempIds.push(this.popularCompetencyMapping[i]['identifier']);
-                    }
-                    this.popularCompetencyMapping = tempData;
-                    // console.log('Popular competencies mapping', this.popularCompetencyMapping);
+                    this.fetchPopularCompetenciesData();
                 }, err => {
                     this.toasterService.error(get(this.resourceService, 'frmelmnts.lbl.fetchingContentFailed'));
                     // this.navigationhelperService.goBack();
@@ -377,20 +354,66 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             "fields": [
                 "name"
             ],
-            "facets": [
-                "targetTaxonomyCategory4Ids"
-            ],
             "sort_by": {
                 "lastUpdatedOn": "desc"
             }
         };
-        this.searchService.compositePopularSearch(requestData).subscribe(res => {
-            this.popularCompetenciesData = res['result']['facets'][0]['values'];
-            for (let i = 0; i < this.popularCompetenciesData.length; i++) {
-                this.popularCompetencies[i] = this.popularCompetenciesData[i]['name'];
-            }
-            console.log('Popular competencies 1', this.popularCompetenciesData);
-        });
+
+        for(let option=0; option<this.contentSearchService.popularOptions.length; option++) {
+            requestData['facets'] = [this.contentSearchService.popularOptions[option].facets];
+            this.searchService.compositePopularSearch(requestData).subscribe(res => {
+                this.popularCompetenciesData = res['result']['facets'][0]['values'];
+                if(this.popularCompetenciesData.length > 0) {
+                    let popularCard = {};
+                    let popularCardMapping = [];
+                    this.browseByCard.push({
+                        "iconUrl": "assets/images/comp.png",
+                        "title": this.contentSearchService.popularOptions[option].name
+                    })
+                    popularCard['popularTitle'] = 'Popular '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
+                    popularCard['popularButton'] = 'All '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
+                    popularCard['facets'] = this.contentSearchService.popularOptions[option].facets;
+                    popularCard['tenant'] = this.channelId == '0138325860604395527' ? 'compass' : 'other';
+                    for (let i = 0; i < this.popularCompetenciesData.length; i++) {
+                        this.popularCompetencies[i] = this.popularCompetenciesData[i]['name'];
+                    }
+        
+                    for (let i = 0; i < this.contentSearchService.channelData.length; i++) {
+                        for (let j = 0; j < this.contentSearchService.channelData[i]['terms'].length; j++) {
+                            if (this.contentSearchService.channelData[i]['terms'][j]['associations'] !== undefined) {
+                                for (let k = 0; k < this.contentSearchService.channelData[i]['terms'][j]['associations'].length; k++) {
+                                    // console.log('PPG', this.contentSearchService.channelData[i]['terms'][j]['associations'][0]['identifier']);
+                                    let index = this.popularCompetencies.indexOf(this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier']);
+                                    if (index != -1) {
+                                        let obj = {};
+                                        obj['identifier'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['identifier'];
+                                        obj['title'] = this.contentSearchService.channelData[i]['terms'][j]['associations'][k]['name'];
+                                        obj['noOfCourses'] = this.popularCompetenciesData[index]['count'];
+                                        obj['icon'] = '/assets/images/course-icon.png';
+                                        obj['type'] = '';
+                                        obj['associatedCoursesTxt'] = 'Associated Courses';
+                                        popularCardMapping.push(obj);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // console.log('Pr == g', this.popularCompetencyMapping);
+                    // Filtering to remove duplicated data 
+                    let tempIds = [], tempData = [];
+                    for (let i = 0; i < popularCardMapping.length; i++) {
+                        if (tempIds.indexOf(popularCardMapping[i]['identifier']) == -1) {
+                            tempData.push(popularCardMapping[i]);
+                        }
+                        tempIds.push(popularCardMapping[i]['identifier']);
+                    }
+                    // popularCardMapping = tempData;
+                    popularCard['data'] = tempData;
+                    this.dynamicPopularCard.push(popularCard);
+                }
+            });
+        }
+
     }
 
     public fetchPopularTopicsData() {
@@ -472,12 +495,15 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
     }
 
-    public getBrowseByData(title: string) {
-        if (title.toLowerCase() == "competency" || title.toLowerCase() == "popular competencies") {
-            this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
-        } else if (title.toLowerCase() == "popular topics" || title.toLowerCase() == "topic") {
-            // this.router.navigate(['search/Library', 1]);
-            this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}`)
+    public getBrowseByData(id: number, facet?: string) {
+        if (id == 0) {
+            this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&facets=keywords`)
+        } else {
+            if(this.channelId == '0138325860604395527') {
+                this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
+            } else {
+                this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&facets=${facet}`)
+            }
         }
     }
 
