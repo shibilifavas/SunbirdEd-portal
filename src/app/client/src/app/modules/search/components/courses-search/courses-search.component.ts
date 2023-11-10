@@ -65,7 +65,7 @@ export class CoursesSearchComponent implements OnInit {
         map((result) => ({ params: { pageNumber: Number(result[0].pageNumber) }, queryParams: result[1] })),
         takeUntil(this.unsubscribe$))
       .subscribe(({ params, queryParams }) => {
-        console.log(params, queryParams);
+        // console.log(params, queryParams);
         this.fetchContents(params.pageNumber, queryParams.channel, queryParams.key, queryParams.competency, queryParams.keyword);
       });
   }
@@ -122,7 +122,11 @@ export class CoursesSearchComponent implements OnInit {
         if (element == event.target.name) this.primaryCategories.splice(index, 1);
       });
     }
-    this.fetchContentOnParamChange();
+    if (this.primaryCategories.length == 0) {
+      this.courses = [];
+    } else {
+      this.fetchContentOnParamChange();
+    }
   }
 
 }

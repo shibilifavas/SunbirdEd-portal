@@ -331,7 +331,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.attendedTraining = _.reverse(_.sortBy(data.enrolledCourses, val => {
         return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
       })) || [];
-      this.attendedTraining  = this.attendedTraining.slice(0, 4);
+      // this.attendedTraining  = this.attendedTraining.slice(0, 4);
     });
   }
 
@@ -344,6 +344,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     let requestBody = { userId: userId, schemaName: 'certificate' };
     if (this.otherCertificatesCounts) {
       requestBody['size'] = this.otherCertificatesCounts;
+    } else {
+      requestBody['size'] = 100;
     }
     this.CsCertificateService.fetchCertificates(requestBody, {
       apiPath: '/learner/certreg/v2',
@@ -352,7 +354,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     }).subscribe((_res) => {
       if (_res && _res?.certificates?.length > 0) {
         this.otherCertificates = _.get(_res, 'certificates');
-        console.log('Other certificates', this.otherCertificates);
+        // console.log('Other certificates', this.otherCertificates);
         this.otherCertificatesCounts = (_.get(_res, 'certRegCount') ? _.get(_res, 'certRegCount') : 0) + (_.get(_res, 'rcCount') ? _.get(_res, 'rcCount') : 0);
       }
     }, (error) => {
