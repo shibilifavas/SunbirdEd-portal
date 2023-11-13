@@ -9,6 +9,7 @@ const _                                     = require('lodash');
 const uuidv1                                = require('uuid/v1');
 const { logger }                            = require('@project-sunbird/logger');
 const { sendRequest }                       = require('./httpRequestHandler');
+const envVariables = require('./environmentVariablesHelper.js');
 
 const SUNBIRD_DEFAULT_TTL                   = require('./environmentVariablesHelper.js').sunbird_session_ttl;
 const SUNBIRD_ANONYMOUS_TTL                 = require('./environmentVariablesHelper.js').sunbird_anonymous_session_ttl;
@@ -455,7 +456,7 @@ const getBearerToken = (req) => {
 };
 
 const getPortalBearerAuthToken = () => {
-  return PORTAL_API_AUTH_TOKEN || '';
+  return envVariables.PORTAL_API_AUTH_TOKEN || '';
 }
 
 module.exports = {

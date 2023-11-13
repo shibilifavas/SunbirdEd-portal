@@ -20,9 +20,9 @@ export const taxonomyEnvironment = {
   production: false,
   url: '',
   token: '',
-  frameworkName: 'tarento_fw',
+  frameworkName: 'fracing_fw',
   channelId: 'tarento',
-  authToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0WEFsdFpGMFFhc1JDYlFnVXB4b2RvU2tLRUZyWmdpdCJ9.mXD7cSvv3Le6o_32lJplDck2D0IIMHnv0uJKq98YVwk',
+  authToken: '',
   userToken:'',
   isApprovalRequired: false
 };
