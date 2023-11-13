@@ -41,11 +41,6 @@
               },
               {
                 "glob": "**/*",
-                "input": "./node_modules/@project-sunbird/sunbird-collection-editor/lib/assets/",
-                "output": "/assets/"
-              },
-              {
-                "glob": "**/*",
                 "input": "./node_modules/compass-course-editor/lib/assets/",
                 "output": "/assets/"
               },
@@ -99,6 +94,7 @@
             },
             "scripts": [
               "node_modules/compass-quml-player-web-component/sunbird-quml-player.js",
+              "node_modules/@project-sunbird/sunbird-file-upload-library/sunbird-file-upload-library.js",
               "node_modules/epubjs/dist/epub.js",
               "src/assets/libs/iziToast/iziToast.min.js",
               "node_modules/jquery/dist/jquery.min.js",

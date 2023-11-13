@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { NavigationHelperService } from '@sunbird/shared';
 import dayjs from 'dayjs';
 import { CourseBatchService } from '../course-batch/course-batch.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class CourseConsumptionService {
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
     private navigationHelperService: NavigationHelperService, private permissionService: PermissionService,
     private userService: UserService, public generaliselabelService: GeneraliseLabelService, private courseBatchService: CourseBatchService,
-    private coursesService: CoursesService) {
+    private coursesService: CoursesService, private http: HttpClient) {
     }
 
   getCourseHierarchy(courseId, option: any = { params: {} }) {
@@ -252,7 +253,7 @@ getAllOpenBatches(contents) {
           }
         })
         if(count > 0) {
-          toc.header['progress'] = this.calculateProgress(count, courseProgress);
+          toc.header['progress'] = this.calculateProgress(toc.body.length, courseProgress);
         }
       })
     }
@@ -280,11 +281,14 @@ getAllOpenBatches(contents) {
   }
 
   calculateProgress(totalCount: number, allCounts:any[]) {
+    if(totalCount == 0) {
+      return 0;
+    }
     let sum = 0;
     for(let i=0; i< allCounts.length; i++) {
       sum = sum + allCounts[i];
     }
-    return sum / totalCount;
+    return Math.round(sum / totalCount);
   }
 
 
@@ -371,6 +375,14 @@ getAllOpenBatches(contents) {
     this.coursesService.getEnrolledCourses().subscribe((data) => {
         console.log("New enrolled data", data);
     });
+  }
+
+  getCourseRating(courseId: string){
+    return this.http.get(`api/ratings/v1/summary/${courseId}/Course`);
+  }
+
+  saveCourseRating(data: any){
+    return this.http.post(`api/ratings/v1/upsert`, data);
   }
 
 }

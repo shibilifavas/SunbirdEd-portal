@@ -2076,7 +2076,8 @@ const API_LIST = {
     '/learner/course/v1/enrol',
     '/learner/course/v1/batch/participants/list',
     '/learner/user/v1/search',
-    '/learner/course/batch/cert/v1/template/add'
+    '/learner/course/batch/cert/v1/template/add',
+    '/action/asset/v1/create'
   ]
 };
 module.exports = API_LIST;

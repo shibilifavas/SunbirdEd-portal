@@ -36,6 +36,7 @@ export class ContentSearchService {
       .pipe(skipWhile(data => data === undefined || data === null));
   }
   channelData:any;
+  popularOptions: any;
 
   constructor(private frameworkService: FrameworkService, private channelService: ChannelService, @Inject(TaxonomyService) private taxonomyService: TaxonomyService) { }
 
@@ -67,6 +68,9 @@ export class ContentSearchService {
         }
         if (_.get(channelDetails, 'result.channel.publisher')) {
           this._filters.publisher = JSON.parse(_.get(channelDetails, 'result.channel.publisher'));
+        }
+        if (_.get(channelDetails, 'result.channel.popularOptions')) {
+          this.popularOptions = JSON.parse(_.get(channelDetails, 'result.channel.popularOptions'));
         }
         this.updateFrameworkInfo(this._frameworkId,this.channelId);
         return this.frameworkService.getSelectedFrameworkCategories(this._frameworkId, requiredCategories);

@@ -125,7 +125,8 @@
       "USER_EXISTS_GET_USER_BY_KEY": "isUserExists/user/v1/get",
       "USER_DECLARATION": "user/v1/declarations",
       "GET_SESSION": "get/user/sessionId",
-      "USER_SEARCH": "user/v1/search"
+      "USER_SEARCH": "user/v1/search",
+      "UPDATE_PROFILE": "api/user/private/v1/update"
     },
     "CERTIFICATE": {
       "FETCH_CERTIFICATES": "v1/certs/search",

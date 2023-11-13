@@ -139,7 +139,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.previousContent = null;
     this.lastActiveContentBeforeModuleChange = this.activeContent;
       const navigationExtras: NavigationExtras = {
-        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name, parent: collectionUnit?.identifier },
+        queryParams: { batchId: this.batchId, courseId: this.courseId, courseName: this.parentCourse.name, parent: collectionUnit?.identifier, selectedContent: collectionUnit?.children[0]?.identifier },
         state: { contentStatus: this._routerStateContentStatus }
       };
 
