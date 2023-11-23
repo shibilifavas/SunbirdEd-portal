@@ -142,6 +142,7 @@
     "ngx-filesize": "3.0.1",
     "ngx-infinite-scroll": "^8.0.2",
     "ngx-slick-carousel": "^15.0.0",
+    "ngx-timeago": "^3.0.0",
     "npm": "^9.8.1",
     "rxjs": "^6.5.5",
     "sass": "^1.56.1",
