@@ -38,7 +38,9 @@
             <app-course-content [courseDetails]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc"
              [params]="batchId" [tocList]="tocList" (contentClicked)="contentClicked($event)"></app-course-content>
         </mat-tab>
-        <mat-tab label={{resourceService.frmelmnts.toc.tab.discussion}}>{{resourceService.frmelmnts.toc.tab.discussion}}</mat-tab>
+        <mat-tab label={{resourceService.frmelmnts.toc.tab.discussion}}>
+            <course-discussion-forum [courseDetails]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc"></course-discussion-forum>
+        </mat-tab>
         <mat-tab label={{resourceService.frmelmnts.toc.tab.members}}>
             <app-batch-list [courseHierarchy]="courseHierarchy" [configContent]="resourceService.frmelmnts.toc"></app-batch-list>
         </mat-tab>

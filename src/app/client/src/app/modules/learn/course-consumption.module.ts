@@ -37,6 +37,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { BatchListComponent } from './components/batch/batch-list/batch-list.component';
 import { CourseContentComponent } from './components/course-consumption/course-content/course-content.component';
 import { CertificateDirectivesModule } from 'sb-svg2pdf-v13';
+import { CourseDiscussionForumComponent } from './components/course-consumption/course-discussion-forum/course-discussion-forum.component';
+import { TimeagoModule } from "ngx-timeago";
 
 export const csUserServiceFactory = (csLibInitializerService: CsLibInitializerService) => {
   if (!CsModule.instance.isInitialised) {
@@ -67,6 +69,7 @@ export const csCertificateServiceFactory = (csLibInitializerService: CsLibInitia
 @NgModule({
   imports: [
     CommonModule,
+    TimeagoModule.forRoot(),
     SharedModule,
     SharedFeatureModule,
     SuiSelectModule, SuiModalModule, SuiAccordionModule, SuiPopupModule, SuiDropdownModule,
@@ -95,6 +98,6 @@ export const csCertificateServiceFactory = (csLibInitializerService: CsLibInitia
   declarations: [CoursePlayerComponent, CourseConsumptionHeaderComponent, AssessmentPlayerComponent,
     CourseConsumptionPageComponent, BatchDetailsComponent, CurriculumCardComponent, UnEnrollBatchComponent,
     AssessmentPlayerComponent, CourseCompletionComponent, CourseDetailsComponent, CertificateNameUpdatePopupComponent,
-     CourseOverviewComponent, IntialPipe, CourseAsideComponent, BatchListComponent, CourseContentComponent]
+     CourseOverviewComponent, IntialPipe, CourseAsideComponent, BatchListComponent, CourseContentComponent, CourseDiscussionForumComponent]
 })
 export class CourseConsumptionModule { }

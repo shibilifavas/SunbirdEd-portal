@@ -385,4 +385,8 @@ getAllOpenBatches(contents) {
     return this.http.post(`api/ratings/v1/upsert`, data);
   }
 
+  getCourseReviews(data: any){
+    return this.http.post(`api/ratings/v1/ratingLookUp`, data);
+  }
+
 }
