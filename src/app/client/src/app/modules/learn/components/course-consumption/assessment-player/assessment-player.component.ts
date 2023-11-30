@@ -909,7 +909,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
       }
       if (this.activeContent?.mimeType === this.configService.appConfig.PLAYER_CONFIG.MIME_TYPE.questionset) {
         const serveiceRef = this.userService.loggedIn ? this.playerService : this.publicPlayerService;
-        this.courseEvaluable = this.serverValidationCheck(this.activeContent?.eval);
+        this.courseEvaluable = this.serverValidationCheck(this.activeContent?.evalMode);
         if(this.courseEvaluable){
           this.attemptID = this.assessmentScoreService.generateHash();
           const requestBody = {
@@ -926,7 +926,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
             takeUntil(this.unsubscribe))
             .subscribe((response) => {             
               //Call below method for sending questionSetToken in content state update api if eval mode is server
-              this.questionSetEvaluable = this.serverValidationCheck(response.questionset?.eval);
+              this.questionSetEvaluable = this.serverValidationCheck(response.questionset?.evalMode);
               this.assessmentScoreService.setServerEvaluableFields(this.questionSetEvaluable, response.questionset.questionSetToken, this.attemptID);
              this.updatePlayerWithResponse(response,id);
              this.showLoader = false;
@@ -938,7 +938,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
           this.publicPlayerService.getQuestionSetHierarchy(id).pipe(
             takeUntil(this.unsubscribe))
             .subscribe((response) => {
-               this.questionSetEvaluable = this.serverValidationCheck(response.questionset?.eval);
+               this.questionSetEvaluable = this.serverValidationCheck(response.questionset?.evalMode);
                this.assessmentScoreService.setServerEvaluableFields(this.questionSetEvaluable, response.questionset?.questionSetToken, '');
                this.updatePlayerWithResponse(response,id);
               this.showLoader = false;
@@ -986,14 +986,20 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     }
   }
 
-  serverValidationCheck(obj: any) {
-    if(typeof obj == 'string') {
-      this.questionSetEvaluable = JSON.parse(obj);
-      this.questionSetEvaluable = this.questionSetEvaluable?.mode?.toLowerCase() == 'server'
+  serverValidationCheck(mode: any) {
+    // if(typeof obj == 'string') {
+    //   this.questionSetEvaluable = JSON.parse(obj);
+    //   this.questionSetEvaluable = this.questionSetEvaluable?.mode?.toLowerCase() == 'server'
+    // } else {
+    //   this.questionSetEvaluable = obj?.mode?.toLowerCase() == 'server'
+    // }
+    if(mode == 'server') {
+      this.questionSetEvaluable = true;
+      return this.questionSetEvaluable;
     } else {
-      this.questionSetEvaluable = obj?.mode?.toLowerCase() == 'server'
+      this.questionSetEvaluable = false;
+      return this.questionSetEvaluable
     }
-    return this.questionSetEvaluable;
   }
 
   onSelfAssessLastAttempt(event) {
