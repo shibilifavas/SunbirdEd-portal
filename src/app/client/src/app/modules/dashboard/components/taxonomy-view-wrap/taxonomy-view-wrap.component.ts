@@ -15,11 +15,10 @@ export class TaxonomyViewWrapComponent implements OnInit {
   constructor(private taxonomyService: TaxonomyService) { }
 
   ngOnInit(): void {
-    localStorage.removeItem('environment');
+    this.environment = JSON.parse(localStorage.getItem('environment'));
     this.taxonomyService.getPortalToken().subscribe((res) => {
-      this.environment.authToken = 'Bearer ' + res;
+      this.environment.authToken = 'Bearer ' + res; 
       this.loading = true;
-      localStorage.setItem('environment', JSON.stringify(this.environment));
     });
   }
 }
