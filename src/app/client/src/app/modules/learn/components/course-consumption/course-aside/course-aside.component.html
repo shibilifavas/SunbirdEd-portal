@@ -12,7 +12,7 @@
             </ng-container>
         </button>
         <p class="aside__share-rating">
-            <button class="com-secondary-btn" [ngClass]="{'disabled' : courseStatus == 1}" (click)="displayRatingModal()"><span class="button-icon">
+            <button class="com-secondary-btn" [ngClass]="{'disabled' : courseStatus != 2}" (click)="displayRatingModal()"><span class="button-icon">
                     <mat-icon>star</mat-icon>
                 </span><label class="button-label">{{configContent.courseAside.rating}}</label></button>
             <button class="com-secondary-btn disabled"><span class="button-icon">
@@ -95,7 +95,7 @@
                         <span>&times;</span>
                     </button>
                     <div class="sb-modal-header font-weight-normal padding-20-x">
-                        Give Rating
+                        {{resourceService?.frmelmnts?.toc?.overview?.rating}}
                     </div>
                     <div class="rating-stars ui container mt-2em padding-20-x">
                         <p>What would you rate this course?</p>
@@ -118,13 +118,13 @@
                         </p>
                     </div>
                     <div class="ui container padding-20-x mt-2em">
-                        <p>Give your review</p>
+                        <p>{{resourceService?.frmelmnts?.toc?.courseAside?.yourReview}}</p>
                         <div class="sb-input">
                             <textarea rows="5" class="false sb-textbox ng-pristine ng-valid valid ng-touched" name="review" id="review"></textarea>
                         </div>
                     </div>
                     <div class="ui container right aligned padding-20-x">
-                        <button class="com-secondary-btn mt-2em mb-2em" (click)="saveCourseRating()">Submit</button>
+                        <button class="com-secondary-btn mt-2em mb-2em" (click)="saveCourseRating()">{{resourceService?.frmelmnts?.btn?.submit}}</button>
                     </div>
                 </div>
             </div>

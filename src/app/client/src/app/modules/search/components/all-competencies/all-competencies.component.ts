@@ -16,7 +16,8 @@ interface Competency {
   name?: string,
   btnText?: string,
   expand?: boolean,
-  expandData?: any
+  expandData?: any,
+  identifier?: string
 }
 
 @Component({
@@ -41,10 +42,10 @@ export class AllCompetenciesComponent implements OnInit {
   ngOnInit(): void {
     let custodianOrg;
     let defaultBoard;
-    this.contentSearchService.initialize(this.activatedRoute.snapshot.queryParams.channel,custodianOrg, defaultBoard)
-    .subscribe((res: any) =>{
-      this.fetchpopularCompetencies();
-    })
+    this.contentSearchService.initialize(this.activatedRoute.snapshot.queryParams.channel, custodianOrg, defaultBoard)
+      .subscribe((res: any) => {
+        this.fetchpopularCompetencies();
+      })
   }
 
   public setBreadCrumbData() {
@@ -130,6 +131,7 @@ export class AllCompetenciesComponent implements OnInit {
                     for (let term of category.terms) {
                       let competency: Competency = {};
                       if (comp.name == term.identifier) {
+                        competency.identifier = term.identifier;
                         competency.title = term.name;
                         competency.type = ""; //hardcoded
                         competency.noOfCourses = comp.count;
@@ -196,9 +198,12 @@ export class AllCompetenciesComponent implements OnInit {
     } else {
       this.router.navigateByUrl(`learn/course/` + event.identifier);
     }
+  }
 
-
-
+  loadCompetencyCourses(identifier: any) {
+    // console.log('identifier', identifier)
+    this.router.navigateByUrl(`search/Courses/1?channel=${this.activatedRoute.snapshot.queryParams.channel}&competency=${identifier}&framework=${this.contentSearchService.frameworkId}`)
+    console.log('loadCompetencyCourses', identifier);
   }
 
 }
