@@ -2,7 +2,7 @@
 </app-landing-section>
 <compass-banner [loginCallback]="loginClick" [registerCallback]="registerClick" [config]="resourceService?.frmelmnts?.lp?.banner">
 </compass-banner>
-<div class="ui container featured-courses-section">
+<div class="ui container featured-courses-section" *ngIf="courses.length > 0">
     <p class="heading">{{resourceService?.frmelmnts?.lp?.featuredCourses}}</p>
     <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig" (init)="slickInit($event)"
         (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)" (beforeChange)="beforeChange($event)" responsive="breakpoints">
