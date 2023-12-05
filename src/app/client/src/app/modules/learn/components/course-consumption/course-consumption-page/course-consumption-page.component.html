@@ -19,6 +19,11 @@
 <ng-container *ngIf="config">
     <compass-breadcrumb *ngIf="breadCrumbData" [data]="breadCrumbData"></compass-breadcrumb>
     <compass-banner [config]="config" (wishList)="addWishList($event)"></compass-banner>
+    <div class="progress">
+        <div title="{{getText(completionPercentage)}}" class="mat-card__progressbar">
+            <span [ngStyle]="fetchProgress()"></span>
+        </div>
+    </div>
 </ng-container>
 <div *ngIf="courseTabs&&courseHierarchy" class="courseTab">
     <mat-tab-group animationDuration="0ms">

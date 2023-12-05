@@ -107,3 +107,16 @@
         }
     }
 }
+
+.mat-card__progressbar {
+    height: calculateRem(4px);
+    width: 100%;
+    height: 8px;
+    margin-top: -8px;
+    &>span {
+      display: block;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+  }
