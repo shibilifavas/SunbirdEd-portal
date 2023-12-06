@@ -204,10 +204,11 @@ export class CourseProgressService {
         req['progress'] = this.completionPercentage;
       }
     } else {
+      //Is this required? As we are calling content state update in assessment score service
       req = {
         contentId: data.contentId,
         batchId: data.batchId,
-        status: data.status,
+        status: 1,
         courseId: data.courseId,
         lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
       };
@@ -223,6 +224,37 @@ export class CourseProgressService {
     };
     return this.contentService.patch(channelOptions)
       .pipe(map((updateCourseStatesData: any) => ({ updateCourseStatesData })));
+  }
+
+  statusCompletion(res: any, userId: any) {
+    const methodType = 'PATCH';
+    const requestBody = {
+        "request": {
+            "userId": userId,
+            "contents": [
+                {
+                    "contentId": res.contentId,
+                    "batchId": res.batchId,
+                    "status": 2,
+                    "courseId": res.courseId
+                }
+            ],
+            // "assessments": [
+            //     {
+            //         "assessmentTs": assessmentTs,
+            //         "batchId": res.batchId,
+            //         "courseId": res.courseId,
+            //         "userId": userId,
+            //         "attemptId": attemptID,
+            //         "contentId": res.contentId,
+            //         "events": []
+            //     }
+            // ]
+        }
+    }
+    this.sendAssessment({requestBody, methodType}).subscribe(res => {
+      console.log("Assessment status updated with 2");
+    })
   }
 
   sendAssessment(data): Observable<any> {
