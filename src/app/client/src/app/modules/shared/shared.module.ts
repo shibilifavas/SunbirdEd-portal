@@ -56,6 +56,7 @@ import { CompassHeaderComponent } from './components/compass-header/compass-head
 import { LanguageDropdownComponent } from './components/language-dropdown/language-dropdown.component';
 import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/compass-breadcrumb.component';
 import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
+import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
 
 
 @NgModule({
@@ -81,7 +82,7 @@ import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
         SbDatatableComponent, OnDemandReportsComponent, SbDataTablePipe, NetworkStatusComponent, LoadOfflineContentComponent,
         TelemetryEventsDirective, DesktopAppUpdateComponent, AlertModalComponent, SystemWarningComponent, FullPageLoaderComponent, ModalWrapperComponent, ModalContentDirective,
       AutocompletePipe, MaterialAutoCompleteComponent, TransposeTermsPipe, SlickComponent, SummaryCardComponent, SummaryCardContainerComponent,
-                   CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent, MegaMenuComponent
+                   CompassHeaderComponent, LanguageDropdownComponent, CompassBreadcrumbComponent, MegaMenuComponent, SnackBarComponent
     ],
     exports: [AppLoaderComponent, DateFormatPipe, TranslateModule,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe,
