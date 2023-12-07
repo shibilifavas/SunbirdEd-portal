@@ -126,7 +126,8 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   visitedData: any;
   selectedContentId: any;
   contentIds: any;
-  contentTitle: string = ''
+  contentTitle: string = '';
+  courseType: string = '';
 
   @HostListener('window:beforeunload')
   canDeactivate() {
@@ -233,6 +234,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
         this.batchId = queryParams.batchId;
         this.courseId = queryParams.courseId;
         this.courseName = queryParams.courseName;
+        this.courseType = queryParams.courseType;
         this.groupId = _.get(queryParams, 'groupId');
         this.selectedContentId = queryParams.selectedContent;
         let isSingleContent = this.collectionId === this.selectedContentId;
@@ -523,7 +525,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
   onQuestionScoreSubmitEvents(event) {
     /* istanbul ignore else */
     if (event) {
-      this.assessmentScoreService.handleSubmitButtonClickEvent(true);
+      this.assessmentScoreService.handleSubmitButtonClickEvent(true, this.courseType);
       this.contentProgressEvent(event);
     }
   }

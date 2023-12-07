@@ -86,6 +86,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     // let element = document.getElementsByTagName('body')[0];
     // element.style.overflow = "hidden";
     let element = document.getElementsByTagName('footer')[0];
+    if(element)
     element.style.display = "none";
 
     // Telemetry Start
@@ -274,16 +275,27 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
       request: {
         firstName: firstName.value,
         lastName: lastName.value,
-        userName: email.value,
+        password: password.value,
         email: email.value,
-        emailVerified: true,
-        password: password.value
+        profileDetails: {
+              personalDetails: {
+                  email: email.value,
+                  userName: email.value,
+                  channel: this.config.appConfig.channelName,
+                  roles: [
+                      'PUBLIC'
+                  ]
+              },
+              professionalDetails: [],
+              employmentDetails: {},
+              areaOfInterest : []
+          }
       }
-    }
-    data.request['channel'] = this.config.appConfig.channelName;
-    this.registerService.register(data).pipe(catchError(error => {
+  }
+
+  this.registerService.register(data).pipe(catchError(error => {
       // const statusCode = error.status;
-      this.registerErrorMessage = error.error.params.errmsg;
+      this.registerErrorMessage = error?.error?.params?.errmsg;
       return throwError(error);
     })
     ).subscribe(res => {

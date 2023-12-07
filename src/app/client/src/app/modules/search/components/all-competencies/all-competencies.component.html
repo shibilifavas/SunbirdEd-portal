@@ -4,11 +4,13 @@
     <section class="ui container mt-60" *ngIf="popularCompetencies">
       <p class="allCompetencyTitle w-100">{{popularCompetencies.title}}</p>
       <div class="ui grid middle aligned stackable">
+        <div class="three wide column"  *ngFor="let info of popularCompetencies.data">
           <sb-popular-card
-            *ngFor="let info of popularCompetencies.data"
+            (click)="loadCompetencyCourses(info['identifier'])"
             [pillName]="'Competency'" [data]="info"
             class="three wide column"
           ></sb-popular-card>
+        </div>
       </div>
   </section>
     <!-- popular competencies -->

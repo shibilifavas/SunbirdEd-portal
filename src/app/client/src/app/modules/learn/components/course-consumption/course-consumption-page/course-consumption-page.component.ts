@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { GroupsService } from '../../../../groups/services/groups/groups.service';
 import { CoursePageContentService } from "../../../services/course-page-content.service";
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
+import { AssessmentScoreService } from './../../../services';
 
 @Component({
   templateUrl: './course-consumption-page.component.html',
@@ -52,7 +53,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
     public coursePageContentService: CoursePageContentService, private userService: UserService,
     @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
-    private courseProgressService: CourseProgressService,) {
+    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService) {
   }
   ngOnInit() {
     this.initLayout();
@@ -290,7 +291,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           courseId: this.courseHierarchy.identifier,
           courseName: this.courseHierarchy.name,
           selectedContent: event.content.selectedContent,
-          parent: event.content.collectionId
+          parent: event.content.collectionId,
+          courseType: this.courseHierarchy.primaryCategory
         }
       });
   }
@@ -345,6 +347,15 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
+        //generate certificate, if passing criteria meets
+        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment' && res[0].bestScore?.totalScore > 60) {
+          // const attemptID = this.assessmentScoreService.attemptID;
+          // const assessmentTs = this.assessmentScoreService._assessmentTs;
+          // if(attemptID && assessmentTs) {
+          //   this.courseProgressService.statusCompletion(res[0], this.userService.userid, attemptID, assessmentTs )
+          // }
+          this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+        }
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
         const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
         //set completedPercentage for consumed courses
