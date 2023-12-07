@@ -250,6 +250,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         // this.defaultFilters = this.cacheService.exists('searchFilters') ? this.getPersistFilters(true) : this.userService.defaultFrameworkFilters;
                         this.defaultFilters = this.userService.defaultFrameworkFilters;
                         this.userProfile = this.userService.userProfile;
+                        localStorage.setItem("userId",this.userProfile.userId);
                     } else {
                         this.userService.getGuestUser().subscribe((response) => {
                             const guestUserDetails: any = response;
