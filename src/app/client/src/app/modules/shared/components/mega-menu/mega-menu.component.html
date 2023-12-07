@@ -10,6 +10,24 @@
                  </div>
               </a>
         </li>
+        <li>
+          <a href="javascript:void(0);"  (click)="navigateTo('/discussion-forum')" mat-menu-item>
+            <mat-icon>settings_brightness</mat-icon>
+             <div class="display">
+                <h3 class="	sub-heading-two">Discussion Forum</h3>
+                <p>Discussion Forum space</p>
+             </div>
+         </a>
+        </li>
+        <li>
+          <a href="javascript:void(0);"  (click)="navigateTo('/competency-passbook')" mat-menu-item>
+            <mat-icon>extension</mat-icon>
+             <div class="display">
+                <h3 class="	sub-heading-two">Competency passbook</h3>
+                <p>Competency passbook space</p>
+             </div>
+         </a>
+        </li>
     </ul>
     <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
      *ngIf="permissionService.checkRolesPermissions(workSpaceRole) || permissionService.checkRolesPermissions(adminDashboard)"
@@ -30,24 +48,6 @@
            <div class="display">
               <h3 class="	sub-heading-two">Workspace</h3>
               <p>Workspace space access</p>
-           </div>
-       </a>
-      </li>
-      <li>
-        <a href="javascript:void(0);"  (click)="navigateTo('/discussion-forum')" mat-menu-item>
-          <mat-icon>settings_brightness</mat-icon>
-           <div class="display">
-              <h3 class="	sub-heading-two">Discussion Forum</h3>
-              <p>Discussion Forum space</p>
-           </div>
-       </a>
-      </li>
-      <li>
-        <a href="javascript:void(0);"  (click)="navigateTo('/competency-passbook')" mat-menu-item>
-          <mat-icon>extension</mat-icon>
-           <div class="display">
-              <h3 class="	sub-heading-two">Competency passbook</h3>
-              <p>Competency passbook space</p>
            </div>
        </a>
       </li>
