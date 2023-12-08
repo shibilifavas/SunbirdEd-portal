@@ -128,7 +128,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     browseByCard = [
         {
             "iconUrl": "assets/images/topic.png",
-            "title": "Topic"
+            "title": "Topic",
+            "description": "Empower civil servants to learn anywhere, anytime and bridge their competency gaps using impactful and engaging learning products"
         }
     ]
 
@@ -369,7 +370,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     let popularCardMapping = [];
                     this.browseByCard.push({
                         "iconUrl": "assets/images/comp.png",
-                        "title": this.contentSearchService.popularOptions[option].name
+                        "title": this.contentSearchService.popularOptions[option].name,
+                        "description": "Empower civil servants to learn anywhere, anytime and bridge their competency gaps using impactful and engaging learning products"
                     })
                     popularCard['popularTitle'] = 'Popular '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
                     popularCard['popularButton'] = 'All '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
