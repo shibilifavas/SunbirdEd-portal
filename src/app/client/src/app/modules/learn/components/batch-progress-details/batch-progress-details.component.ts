@@ -61,6 +61,7 @@ export class BatchProgressDetailsComponent implements OnInit {
     this.route.params.subscribe(param => {
       this.courseDetails.id = param.courseId;
       this.courseDetails.batchId = param.batchId;
+      this.getBatchParticipentList();
     });
   }
 
