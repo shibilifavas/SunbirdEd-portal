@@ -52,4 +52,18 @@
        </a>
       </li>
     </ul>
+    <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
+    *ngIf="permissionService.checkRolesPermissions(workSpaceRole) || permissionService.checkRolesPermissions(adminDashboard)"
+   >Report and Analysis</h3>
+   <ul class="list">
+      <li *ngIf="permissionService.checkRolesPermissions(adminDashboard)">
+        <a href="javascript:void(0);"  (click)="navigateTo('/learn/batch-progress')" mat-menu-item>
+          <mat-icon> list_alt</mat-icon>
+          <div class="display">
+              <h3 class="sub-heading-two">Course and Assessment progress</h3>
+              <p>Course and Assessment progress</p>
+          </div>
+        </a>
+      </li>
+    </ul>
   </div>
