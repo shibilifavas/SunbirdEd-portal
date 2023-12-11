@@ -155,7 +155,8 @@ export class CourseAsideComponent implements OnInit {
         courseId: this.courseHierarchy.identifier,
         courseName: this.courseHierarchy.name,
         selectedContent: this.resumeContent,
-        parent: this.parentId
+        parent: this.parentId,
+        courseType: this.courseHierarchy.primaryCategory
       } 
     });
   }

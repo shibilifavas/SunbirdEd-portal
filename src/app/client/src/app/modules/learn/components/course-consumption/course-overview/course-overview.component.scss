@@ -36,7 +36,7 @@
         width: 65%;
     }
 
-    .ui.grid {
+    .ui.grid:not(.rating-bar) {
         flex-direction: column-reverse;
 
         .four.wide.column,
@@ -70,7 +70,7 @@
 
 .mat-card__progressbar {
     height: calculateRem(4px);
-    width: 100%;
+    width: 90%;
     height: 8px;
     margin-top: 8px;
     background-color: rgba(0, 0, 0, 0.08);
