@@ -1,0 +1,32 @@
+<div class="course-assessment__wrapper">
+        <header class="course-assessment__header">
+            <div class="container ui course-assessment__tabs">
+                 <span (click)="switchTabs('Course')" class="course-assessment__label" [ngClass]="{'active': primaryCategory === 'Course'}">Courses</span>
+                 <span (click)="switchTabs('Assessment')" class="course-assessment__label" [ngClass]="{'active': primaryCategory === 'Assessment'}">Assessments</span>
+            </div>
+        </header>
+        <section class="container ui">
+            <header class="course-assessment-section__header">
+                <mat-form-field [floatLabel]="'never'">
+                    <mat-label>Select Competency</mat-label>
+                        <mat-select [formControl]="competency" multiple appearance="none" (selectionChange)="onSelect($event.value)">
+                            <mat-option *ngFor="let comp of competenciesList" [value]="comp.identifier">{{comp.name}}</mat-option>
+                        </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="course-assessment__search"  [floatLabel]="'never'"> 
+                    <mat-icon>search</mat-icon>
+                    <input matInput type="text" [(ngModel)]="search" placeholder="Search" appearance="outline" />                       
+                </mat-form-field>
+
+                <!-- <mat-form-field>
+                    <mat-label>Filter|<strong>Custom</strong></mat-label>
+                        <mat-select [formControl]="competency" multiple appearance="none">
+                            <mat-option *ngFor="let comp of competenciesList" [value]="comp">{{comp}}</mat-option>
+                        </mat-select>
+                </mat-form-field> -->
+
+            </header>
+            <data-table [dataSource]="dataSource" [displayedColumns]="displayColumns" (onPageChange)="onPageChange($event)"></data-table>
+        </section>
+</div>
