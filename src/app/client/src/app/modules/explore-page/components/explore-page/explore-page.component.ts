@@ -1648,7 +1648,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['/learn/course', id])
     }
 
-    favoriteIconClicked(option: string) {// Adjust position as neede
+    favoriteIconClicked(option: string) {
         console.log("Icon: ", option)
 
         this.snackBar.openFromComponent(SnackBarComponent, {

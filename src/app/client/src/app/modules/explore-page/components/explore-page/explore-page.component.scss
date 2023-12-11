@@ -260,7 +260,7 @@ body .slick-next {
   color: black;
 }
 
-::ng-deep snack-bar-container .wishlist-snackbar{
+::ng-deep snack-bar-container.wishlist-snackbar{
   background-color: white;
   border-radius: 0px !important;
   min-width: 161px !important;
