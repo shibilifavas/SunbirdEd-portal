@@ -89,7 +89,7 @@ export class BatchProgressDetailsComponent implements OnInit {
               if(memResponse.length>0) {
                 this.memberList = memResponse.map((m:any) => {
                   return {
-                    initials:m.firstName[0]+m.lastName[0]||'',
+                    initials:m.firstName[0]+ m.lastName[0] ? m.lastName[0] : '',
                     name: m.firstName+' '+m.lastName,
                     designation:m.userType,
                     enrolledDate: new Date(m.updatedDate).toLocaleDateString(),
