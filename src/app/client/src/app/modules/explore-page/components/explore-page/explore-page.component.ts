@@ -129,7 +129,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         {
             "iconUrl": "assets/images/topic.png",
             "title": "Topic",
-            "description": "Empower civil servants to learn anywhere, anytime and bridge their competency gaps using impactful and engaging learning products"
+            "description": "Explore a wide range of learning topics to enhance your knowledge and skills."
         }
     ]
 
@@ -371,7 +371,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.browseByCard.push({
                         "iconUrl": "assets/images/comp.png",
                         "title": this.contentSearchService.popularOptions[option].name,
-                        "description": "Empower civil servants to learn anywhere, anytime and bridge their competency gaps using impactful and engaging learning products"
+                        "description": "Assess your competency levels and embark on a journey of continuous improvement."
                     })
                     popularCard['popularTitle'] = 'Popular '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
                     popularCard['popularButton'] = 'All '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
