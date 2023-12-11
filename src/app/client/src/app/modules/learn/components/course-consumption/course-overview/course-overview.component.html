@@ -1,6 +1,6 @@
 <div class="ui container mt-48" *ngIf="courseDetails">
   <div class="ui grid w-100 padded">
-    <div class="first_panel eight wide column pl-0 pt-0">
+    <div class="first_panel eight wide column pl-0 pt-3">
       <div class="headline">
         {{configContent.overview.title}}
       </div>
@@ -53,7 +53,7 @@
               </p>
             </div>
             <div class="eight wide column">
-              <div class="ui grid mb-minus-2">
+              <div class="ui grid mb-minus-2 rating-bar">
                 <div class="two wide column rating-label">5 {{resourceService?.frmelmnts?.toc?.overview?.star}}</div>
                 <div class="progress eight wide column">
                   <div class="mat-card__progressbar">
@@ -63,7 +63,7 @@
                 </div>
                 <div class="two wide column rating-label">{{fiveStarPercentage}}%</div>
               </div>
-              <div class="ui grid mb-minus-2">
+              <div class="ui grid mb-minus-2 rating-bar">
                 <div class="two wide column rating-label">4 {{resourceService?.frmelmnts?.toc?.overview?.star}}</div>
                 <div class="progress eight wide column">
                   <div class="mat-card__progressbar">
@@ -73,7 +73,7 @@
                 </div>
                 <div class="two wide column rating-label">{{fourStarPercentage}}%</div>
               </div>
-              <div class="ui grid mb-minus-2">
+              <div class="ui grid mb-minus-2 rating-bar">
                 <div class="two wide column rating-label">3 {{resourceService?.frmelmnts?.toc?.overview?.star}}</div>
                 <div class="progress eight wide column">
                   <div class="mat-card__progressbar">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="two wide column rating-label">{{threeStarPercentage}}%</div>
               </div>
-              <div class="ui grid mb-minus-2">
+              <div class="ui grid mb-minus-2 rating-bar">
                 <div class="two wide column rating-label">2 {{resourceService?.frmelmnts?.toc?.overview?.star}}</div>
                 <div class="progress eight wide column">
                   <div class="mat-card__progressbar">
@@ -93,7 +93,7 @@
                 </div>
                 <div class="two wide column rating-label">{{twoStarPercentage}}%</div>
               </div>
-              <div class="ui grid mb-minus-2">
+              <div class="ui grid mb-minus-2 rating-bar">
                 <div class="two wide column rating-label">1 {{resourceService?.frmelmnts?.toc?.overview?.star}}</div>
                 <div class="progress eight wide column">
                   <div class="mat-card__progressbar">
