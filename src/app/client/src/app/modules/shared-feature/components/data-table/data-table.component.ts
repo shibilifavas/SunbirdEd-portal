@@ -19,6 +19,8 @@ export class DataTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   @Output() onPageChange = new EventEmitter();
+  @Input() showPagination: boolean = true;
+  @Input() count: number;
   constructor() {
   
   }

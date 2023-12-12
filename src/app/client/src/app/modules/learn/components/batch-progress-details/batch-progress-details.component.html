@@ -1,9 +1,9 @@
-<div class="batch-progress__wrapper" *ngIf="memberList.length>0">
+<div class="batch-progress__wrapper" >
     <header class="batch-progress__bread-crumb" *ngIf="breadCrumbData.length>0">
         <compass-breadcrumb  [data]="breadCrumbData"></compass-breadcrumb>
     </header>
     <header class="container ui batch-progress__header">
-        <h1>Members ({{this.memberList.length}})</h1>
+        <h1 class="headline">Members ({{this.memberList.length}})</h1>
         <div class="batch-progress__filters">
             <mat-form-field class="search"  [floatLabel]="'never'">
                 <mat-icon>search</mat-icon>
@@ -48,8 +48,8 @@
                 </mat-form-field>
         </div>
     </header>
-    <section class="container ui">
-        <data-table [dataSource]="memberList" [displayedColumns]="displayColumns" (onPageChange)="onPageChange($event)"></data-table>
+    <section class="container ui" *ngIf="memberList.length>0">
+        <data-table [dataSource]="memberList" [displayedColumns]="displayColumns" (onPageChange)="onPageChange($event)" [showPagination]="false"></data-table>
     </section>
 </div>
 <div *ngIf="memberList.length===0" class="notAvailable">

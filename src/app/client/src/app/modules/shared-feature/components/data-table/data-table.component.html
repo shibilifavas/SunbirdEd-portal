@@ -44,7 +44,7 @@
       </tr>
     </table>
   
-    <mat-paginator #paginator [pageSizeOptions]="[15, 20, 30]" [length]="1000" aria-label="Select page of users"></mat-paginator>
+    <mat-paginator *ngIf="showPagination" #paginator [pageSizeOptions]="[15, 20, 30]" [length]="count" aria-label="Select page of users"></mat-paginator>
   </div>
   
   
