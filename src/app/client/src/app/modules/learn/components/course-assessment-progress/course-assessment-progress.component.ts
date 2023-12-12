@@ -33,7 +33,9 @@ export class CourseAssessmentProgressComponent implements OnInit {
   sortBy:string;
   count: number;
   primaryCategory = 'Course';
-  selectedCompetenciesList = [];
+  competencyModel:any = {
+    selectedCompetenciesList: <Array<any>>[]
+  }
 
   constructor( public userService: UserService, private searchService: SearchService, 
     private contentSearchService: ContentSearchService, private orgDetailsService: OrgDetailsService) { 
@@ -52,7 +54,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
     this.fetchRequestContents(0,15);
   }
 
-  fetchRequestContents(pageNumber, limit) {
+  fetchRequestContents(pageNumber?:number, limit?:number) {
         let searchRequest = { 
               "request": {
                   "fields": [
@@ -78,15 +80,16 @@ export class CourseAssessmentProgressComponent implements OnInit {
               }
           };
           let option = { ...searchRequest.request };
-          if(this.selectedCompetenciesList.length){
-            option.filters['targetTaxonomyCategory4Ids'] = this.selectedCompetenciesList;
+          if(this.competencyModel.selectedCompetenciesList.length){
+            option.filters['targetTaxonomyCategory4Ids'] = this.competencyModel.selectedCompetenciesList.map(comp => comp.identifier);
           }
           const params = { orgdetails: 'orgName,email', framework: this.contentSearchService.frameworkId };
           option['params'] = params;
+          if(this.search){option['query'] = this.search;}
           this.searchService.contentSearch(option).subscribe((res: any) => {
               this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
               this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
-              // this.count = res.count;
+              this.count = res.result.count;
               console.log('recentlyPublishedList', this.recentlyPublishedList);
               this.dataSource = this.recentlyPublishedList.map((data:any) => { 
               return {
@@ -140,9 +143,12 @@ export class CourseAssessmentProgressComponent implements OnInit {
   }
 
   onSelect(value){
-    console.log(value);
-    this.selectedCompetenciesList = value;
+    this.competencyModel.selectedCompetenciesList = value;
     this.fetchRequestContents(0,15);
+  }
+
+  searchQuery(event) {
+    this.fetchRequestContents();
   }
 
   covertTime(time) {
@@ -165,4 +171,10 @@ export class CourseAssessmentProgressComponent implements OnInit {
     } 
   }
 
+  removeCompetencies(selected){
+    this.competencyModel.selectedCompetenciesList = this.competencyModel.selectedCompetenciesList.filter(comp => {
+      return selected !== comp.identifier;
+    })
+    this.fetchRequestContents(0,15);
+  }
 }
