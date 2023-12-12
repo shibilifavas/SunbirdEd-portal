@@ -12,7 +12,7 @@ import _ from 'lodash';
 })
 export class PersonalDetailsComponent implements OnInit {
   form: FormGroup;
-  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Last name","value":"lastName"},{"label":"Mobile number","value1":"code","value":"phone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Department name","value":"departmentName"},{"label":"Designation","value":"designation"},{"label":"Date of joining","value":"doj"}],"radio":[]},"colTwo":{}}
+  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Last name","value":"lastName"},{"label":"Mobile number","value1":"countryCode","value":"phone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Department name","value":"departmentName"},{"label":"Designation","value":"designation"},{"label":"Date of joining","value":"doj"}],"radio":[]},"colTwo":{}}
   userProfile: any;
   payload: any = {};
 
@@ -31,6 +31,7 @@ export class PersonalDetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       firstName: [{value : this.userProfile?.firstName, disabled: true}],
       lastName: [{value : this.userProfile?.lastName,disabled: true}],
+      countryCode : [this.userProfile?.countryCode],
       phone: [this.userProfile?.phone],
       primaryEmail: [{ value: this.userProfile?.email, disabled: true }],
       secondaryEmail: [this.userProfile?.secondaryEmail],

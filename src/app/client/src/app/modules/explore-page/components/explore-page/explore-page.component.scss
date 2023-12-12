@@ -172,6 +172,10 @@
   cursor: pointer;
 }
 
+.browseByCard{
+  cursor: pointer;
+}
+
 .browseTitle {
   font-weight: 600;
   font-size: 20px;
@@ -242,4 +246,7 @@ body .slick-next {
 .grey-bg {
   background-color: whitesmoke;
   padding: 40px 0px 50px;
+}
+.comp-card-container{
+  margin-bottom: 4.5rem;
 }
