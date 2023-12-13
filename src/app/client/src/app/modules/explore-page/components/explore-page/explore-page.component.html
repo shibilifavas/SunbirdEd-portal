@@ -173,7 +173,7 @@
                 (beforeChange)="beforeChange($event)">
                 <div ngxSlickItem class="slide" *ngFor='let course of enrolledCourses;'>
                   <compass-course-card [routerLink]="['/learn/course', course['content']['identifier']]" class=""
-                    [data]="course" [showFavorite]="showFavorite"></compass-course-card>
+                    [data]="course" [showIcon]="showIcon"></compass-course-card>
                 </div>
               </ngx-slick-carousel>
             </div>

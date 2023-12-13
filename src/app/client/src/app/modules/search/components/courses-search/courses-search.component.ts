@@ -146,17 +146,19 @@ export class CoursesSearchComponent implements OnInit {
     }
   }
 
-  courseCardClicked(event: any, course: any) {
+  courseCardClicked(course: any) {
     this.router.navigate(['/learn/course', course['contentId'] ?? course['identifier']]);
   }
 
   favoriteIconClicked(option: string) {
     console.log("Icon: ", option)
 
-    this.snackBar.openFromComponent(SnackBarComponent, {
-        duration: 2000,
-        panelClass: ['wishlist-snackbar']
-    });
+    if(option === 'selected') {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+          duration: 2000,
+          panelClass: ['wishlist-snackbar']
+      });
+    }
   }
 
 }

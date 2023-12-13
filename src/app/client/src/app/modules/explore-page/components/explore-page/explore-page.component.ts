@@ -168,7 +168,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     popularCompetenciesData = [];
     popularCompetencyMapping = [];
     breadCrumbData = [];
-    showFavorite: boolean = false;
+    showIcon: boolean = false;
 
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
@@ -1651,9 +1651,11 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     favoriteIconClicked(option: string) {
         console.log("Icon: ", option)
 
-        this.snackBar.openFromComponent(SnackBarComponent, {
-            duration: 2000,
-            panelClass: ['wishlist-snackbar']
-        });
+        if(option === 'selected') {
+            this.snackBar.openFromComponent(SnackBarComponent, {
+                duration: 2000,
+                panelClass: ['wishlist-snackbar']
+            });
+          }
     }
 }
