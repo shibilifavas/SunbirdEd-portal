@@ -193,21 +193,3 @@
 .display-grid {
   display: grid;
 }
-
-@media screen and (max-width: 768px) {
-  .member {
-      min-width: 60%;
-      width: 65%;
-  }
-
-  .ui.grid {
-      flex-direction: column-reverse;
-
-      .four.wide.column,
-      .eight.wide.column {
-          width: 80% !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-      }
-  }
-}

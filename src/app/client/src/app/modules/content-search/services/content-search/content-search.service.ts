@@ -78,7 +78,6 @@ export class ContentSearchService {
 
         const frameworkCategories: any[] = _.get(frameworkDetails, 'result.framework.categories');
         this.channelData = frameworkCategories;
-        localStorage.setItem('channelData', JSON.stringify(this.channelData));
         // console.log('frameworkCategories', frameworkCategories);
         frameworkCategories.forEach(category => {
           if ([this.taxonomyCategories[1], this.taxonomyCategories[2], this.taxonomyCategories[3]].includes(category.code)) {
@@ -142,9 +141,6 @@ export class ContentSearchService {
   }
 
   mapCourseCompetencyIdwithTerms(course) {
-    if(!this.channelData){
-      this.channelData = JSON.parse(localStorage.getItem('channelData'));
-    }
     let competencyIdsMapping = [];
     if(course.targetTaxonomyCategory4Ids) {
         course.targetTaxonomyCategory4Ids.forEach(id => {
@@ -154,10 +150,5 @@ export class ContentSearchService {
     course.competencyIdsMapping = competencyIdsMapping;
     return course
   }
-  getCompatencyList(){
-    if(!this.channelData){
-      this.channelData = JSON.parse(localStorage.getItem('channelData'));
-    }
-    return this.channelData[3]?.terms.map((term:any) => {return { identifier:term.identifier, name:term.name}});
-  }
+
 }

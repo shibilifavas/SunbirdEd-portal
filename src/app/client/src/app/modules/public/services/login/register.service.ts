@@ -1,24 +1,19 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PublicDataService } from '@sunbird/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
 
-  constructor(private http: HttpClient, public publicDataService: PublicDataService) { }
+  constructor(private http: HttpClient) { }
 
   register(data: any) {
     // const httpHeaders: HttpHeaders = new HttpHeaders({
     //   'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0WEFsdFpGMFFhc1JDYlFnVXB4b2RvU2tLRUZyWmdpdCJ9.mXD7cSvv3Le6o_32lJplDck2D0IIMHnv0uJKq98YVwk',
     //   'Content-Type': 'application/json',
     // });
-    const option = {
-      url: 'user/v1/create',
-      data: data
-    };
-    return this.publicDataService.post(option);
+    return this.http.post(`api/user/v1/create`, data);
   }
 
 }

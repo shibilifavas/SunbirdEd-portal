@@ -114,13 +114,6 @@ export class WorkSpace {
         };
         return this.workSpaceService.deleteContent(DeleteParam);
     }
-
-     /**
-    * Delete question set  Api call .
-    */
-    retire(id) {
-        return this.workSpaceService.retireQuestionSet(id);
-    }
     /**
     * Method to remove content localcaly
     */

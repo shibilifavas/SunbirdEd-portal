@@ -36,7 +36,7 @@
       "fields": "rootOrgId,rootOrgName"
     },
     "contentGet": "transcripts,ageGroup,appIcon,artifactUrl,attributions,attributions,audience,author,badgeAssertions,board,body,channel,code,concepts,contentCredits,contentType,contributors,copyright,copyrightYear,createdBy,createdOn,creator,creators,description,displayScore,domain,editorState,flagReasons,flaggedBy,flags,framework,gradeLevel,identifier,itemSetPreviewUrl,keywords,language,languageCode,lastUpdatedOn,license,mediaType,medium,mimeType,name,originData,osId,owner,pkgVersion,publisher,questions,resourceType,scoreDisplayConfig,status,streamingUrl,subject,template,templateId,totalQuestions,totalScore,versionKey,visibility,year,primaryCategory,additionalCategories,interceptionPoints,interceptionType",
-    "questionSetRead": "instructions,outcomeDeclaration",
+    "questionSetRead": "instructions",
     "enrolledCourses": {
       "fields": "contentType,topic,name,channel,mimeType,appIcon,posterImage,Duration,gradeLevel,resourceType,identifier,medium,pkgVersion,board,subject,trackable,primaryCategory,organisation",
       "batchDetails": "name,endDate,startDate,status,enrollmentType,createdBy,certificates"
@@ -348,8 +348,7 @@
       "CREATE": "questionset/v2/create",
       "READ": "questionset/v2/read",
       "HIERARCHY_READ": "questionset/v2/hierarchy",
-      "COPY": "questionset/v2/copy",
-      "RETIRE": "questionset/v1/retire"
+      "COPY": "questionset/v2/copy"
     },
     "OBJECTCATEGORY": {
       "READ": "object/category/definition/v1/read"

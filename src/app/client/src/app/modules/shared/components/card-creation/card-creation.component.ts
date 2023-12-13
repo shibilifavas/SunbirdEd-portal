@@ -3,7 +3,6 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ICard } from '../../interfaces';
 import {IInteractEventObject, IInteractEventEdata } from '@sunbird/telemetry';
 import * as _ from 'lodash-es';
-import { WorkSpaceService } from '../../../workspace/services/work-space/workspace.service';
 @Component({
   selector: 'app-card-creation',
   templateUrl: './card-creation.component.html',
@@ -19,7 +18,7 @@ export class CardCreationComponent implements OnInit {
   telemetryInteractEdata: IInteractEventEdata;
   telemetryInteractObject: IInteractEventObject;
 
-  constructor(public resourceService: ResourceService, public workspaceService: WorkSpaceService) {
+  constructor(public resourceService: ResourceService) {
   }
 
   ngOnInit() {

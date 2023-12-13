@@ -12,7 +12,7 @@ import _ from 'lodash';
 })
 export class PersonalDetailsComponent implements OnInit {
   form: FormGroup;
-  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Last name","value":"lastName"},{"label":"Mobile number","value1":"countryCode","value":"phone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Department name","value":"departmentName"},{"label":"Designation","value":"designation"},{"label":"Date of joining","value":"doj"}],"radio":[]},"colTwo":{}}
+  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Last name","value":"lastName"},{"label":"Mobile number","value1":"code","value":"phone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Department name","value":"departmentName"},{"label":"Designation","value":"designation"},{"label":"Date of joining","value":"doj"}],"radio":[]},"colTwo":{}}
   userProfile: any;
   payload: any = {};
 
@@ -27,13 +27,13 @@ export class PersonalDetailsComponent implements OnInit {
     this.formData.colOne.fields.map((item)=>{
       item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
     })
+    console.log("user data", this.userProfile);
     this.form = this.formBuilder.group({
       firstName: [{value : this.userProfile?.firstName, disabled: true}],
       lastName: [{value : this.userProfile?.lastName,disabled: true}],
-      countryCode : [this.userProfile?.countryCode],
       phone: [this.userProfile?.phone],
       primaryEmail: [{ value: this.userProfile?.email, disabled: true }],
-      secondaryEmail: [this.userProfile?.profileDetails?.personalDetails?.secondaryEmail],
+      secondaryEmail: [this.userProfile?.secondaryEmail],
       departmentName: [
         this.userProfile?.profileDetails?.employmentDetails?.departmentName || '',
         Validators.required

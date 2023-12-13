@@ -128,8 +128,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     browseByCard = [
         {
             "iconUrl": "assets/images/topic.png",
-            "title": "Topic",
-            "description": "Explore a wide range of learning topics to enhance your knowledge and skills."
+            "title": "Topic"
         }
     ]
 
@@ -251,7 +250,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         // this.defaultFilters = this.cacheService.exists('searchFilters') ? this.getPersistFilters(true) : this.userService.defaultFrameworkFilters;
                         this.defaultFilters = this.userService.defaultFrameworkFilters;
                         this.userProfile = this.userService.userProfile;
-                        localStorage.setItem("userId",this.userProfile.userId);
                     } else {
                         this.userService.getGuestUser().subscribe((response) => {
                             const guestUserDetails: any = response;
@@ -370,8 +368,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                     let popularCardMapping = [];
                     this.browseByCard.push({
                         "iconUrl": "assets/images/comp.png",
-                        "title": this.contentSearchService.popularOptions[option].name,
-                        "description": "Assess your competency levels and embark on a journey of continuous improvement."
+                        "title": this.contentSearchService.popularOptions[option].name
                     })
                     popularCard['popularTitle'] = 'Popular '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
                     popularCard['popularButton'] = 'All '+ this.contentSearchService.popularOptions[option].name.toLowerCase();

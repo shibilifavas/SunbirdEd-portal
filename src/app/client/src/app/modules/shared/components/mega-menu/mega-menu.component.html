@@ -1,6 +1,6 @@
 <div class="container ui">
     <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();">Spaces</h3> 
-    <ul class="list">
+    <ul class="list" (click)="$event.stopPropagation();">
         <li>
             <a href="javascript:void(0);" (click)="navigateToHomepage()" mat-menu-item>
                 <mat-icon>school</mat-icon>
@@ -9,24 +9,6 @@
                     <p>Learn space</p>
                  </div>
               </a>
-        </li>
-        <li>
-          <a href="javascript:void(0);"  (click)="navigateTo('/discussion-forum')" mat-menu-item>
-            <mat-icon>settings_brightness</mat-icon>
-             <div class="display">
-                <h3 class="	sub-heading-two">Discussion Forum</h3>
-                <p>Discussion Forum space</p>
-             </div>
-         </a>
-        </li>
-        <li>
-          <a href="javascript:void(0);"  (click)="navigateTo('/competency-passbook')" mat-menu-item>
-            <mat-icon>extension</mat-icon>
-             <div class="display">
-                <h3 class="	sub-heading-two">Competency passbook</h3>
-                <p>Competency passbook space</p>
-             </div>
-         </a>
         </li>
     </ul>
     <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
@@ -51,19 +33,23 @@
            </div>
        </a>
       </li>
-    </ul>
-    <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
-    *ngIf="permissionService.checkRolesPermissions(workSpaceRole) || permissionService.checkRolesPermissions(adminDashboard)"
-   >Report and Analysis</h3>
-   <ul class="list">
-      <li *ngIf="permissionService.checkRolesPermissions(adminDashboard)">
-        <a href="javascript:void(0);"  (click)="navigateTo('/learn/batch-progress')" mat-menu-item>
-          <mat-icon> list_alt</mat-icon>
-          <div class="display">
-              <h3 class="sub-heading-two">Course and Assessment progress</h3>
-              <p>Course and Assessment progress</p>
-          </div>
-        </a>
+      <li>
+        <a href="javascript:void(0);"  (click)="navigateTo('/discussion-forum')" mat-menu-item>
+          <mat-icon>settings_brightness</mat-icon>
+           <div class="display">
+              <h3 class="	sub-heading-two">Discussion Forum</h3>
+              <p>Discussion Forum space</p>
+           </div>
+       </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);"  (click)="navigateTo('/competency-passbook')" mat-menu-item>
+          <mat-icon>extension</mat-icon>
+           <div class="display">
+              <h3 class="	sub-heading-two">Competency passbook</h3>
+              <p>Competency passbook space</p>
+           </div>
+       </a>
       </li>
     </ul>
   </div>

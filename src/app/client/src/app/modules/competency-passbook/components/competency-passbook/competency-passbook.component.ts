@@ -24,6 +24,20 @@ export class CompetencyPassbookComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    // this.breadCrumbData = [
+    //   {
+    //     "label": "Learn",
+    //     "status": "inactive",
+    //     "link": "resources",
+    //     "icon": "school"
+    //   },
+    //   {
+    //     "label": "Competency passbook",
+    //     "status": "active",
+    //     "link": "competency-passbook",
+    //     "icon": "extension"
+    //   }
+    // ];
   }
 
 }
