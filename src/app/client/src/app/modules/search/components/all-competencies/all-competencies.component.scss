@@ -9,3 +9,22 @@
 .popular-comp-container {
     flex-direction: row;
 }
+.popular-card {
+    width: 25%;
+    padding: 1rem 1rem 1rem 1rem;
+}
+@media only screen and (max-width: 1127px) {
+    .popular-card {
+        width: 33%;
+    }
+}
+@media only screen and (max-width: 876px) {
+    .popular-card {
+        width: 50%;
+    }
+}
+@media only screen and (max-width: 608px) {
+    .popular-card {
+        width: 100%;
+    }
+}

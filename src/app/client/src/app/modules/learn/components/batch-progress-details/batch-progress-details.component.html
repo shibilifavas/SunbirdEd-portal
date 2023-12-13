@@ -1,0 +1,58 @@
+<div class="batch-progress__wrapper" >
+    <header class="batch-progress__bread-crumb" *ngIf="breadCrumbData.length>0">
+        <compass-breadcrumb  [data]="breadCrumbData"></compass-breadcrumb>
+    </header>
+    <header class="container ui batch-progress__header">
+        <h1 class="headline">Members ({{this.memberList.length}})</h1>
+        <div class="batch-progress__filters">
+            <mat-form-field class="search"  [floatLabel]="'never'">
+                <mat-icon>search</mat-icon>
+                <input matInput type="text" [(ngModel)]="search" placeholder="Search" />                       
+            </mat-form-field>
+            <div class="batch-progress__dateDropdown">
+                <div class="batch-progress__button" (click)="showDatedropdown=!showDatedropdown">
+                    Sort by Date <mat-icon>keyboard_arrow_down</mat-icon>
+                </div>
+                <div class="batch-progress__dateDropdown-list" *ngIf="showDatedropdown">
+                   <div class="startAndend">
+                    <mat-form-field appearance="outline">
+                        <mat-label> From </mat-label>
+                        <input matInput [matDatepicker]="picker" [(ngMOdel)]="startDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field appearance="outline">
+                        <mat-label> To </mat-label>
+                        <input matInput [matDatepicker]="picker" [(ngMOdel)]="endDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    <!-- <mat-form-field class="search"  [floatLabel]="'never'" appearance="none">
+                        <mat-label>From</mat-label>
+                        <input matInput type="text" [(ngModel)]="startDate" placeholder="Start Date" />    
+                    </mat-form-field>
+                    <mat-form-field class="search"  [floatLabel]="'never'" appearance="none">
+                            <mat-label>To</mat-label>
+                        <input matInput type="text" [(ngModel)]="endDate" placeholder="End Date" />   
+                    </mat-form-field> -->
+                   </div>
+                   <button mat-stroked-button class="com-basic-btn"> Today </button>
+                   <button mat-stroked-button class="com-basic-btn"> Tomorrow </button>
+                </div>
+            </div>
+                <mat-form-field [floatLabel]="'never'">
+                    <mat-label>All Members</mat-label>
+                        <mat-select [formControl]="status" multiple appearance="none" (selectionChange)="onSelect($event.value)">
+                            <mat-option *ngFor="let comp of statusList" [value]="comp">{{comp}}</mat-option>
+                        </mat-select>
+                </mat-form-field>
+        </div>
+    </header>
+    <section class="container ui" *ngIf="memberList.length>0">
+        <data-table [dataSource]="memberList" [displayedColumns]="displayColumns" (onPageChange)="onPageChange($event)" [showPagination]="false"></data-table>
+    </section>
+</div>
+<div *ngIf="memberList.length===0" class="notAvailable">
+    Members list is not available.
+</div>
+

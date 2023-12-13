@@ -349,7 +349,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         //generate certificate, if passing criteria meets
-        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment' && res[0].bestScore?.totalScore > 60) {
+        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment' && res[0]?.bestScore?.totalScore > 60) {
           // const attemptID = this.assessmentScoreService.attemptID;
           // const assessmentTs = this.assessmentScoreService._assessmentTs;
           // if(attemptID && assessmentTs) {
