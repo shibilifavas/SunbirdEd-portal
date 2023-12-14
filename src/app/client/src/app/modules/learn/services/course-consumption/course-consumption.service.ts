@@ -32,6 +32,7 @@ export class CourseConsumptionService {
   progressdetails: any = {};
   mimeType: string = '';
   contentIds: any;
+  AvgPercentage: any = 0
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -313,9 +314,9 @@ getAllOpenBatches(contents) {
       })
     }
     if(totalCount == 0) {
-      return
+      this.AvgPercentage = 0;
     }
-    return Math.round(avgCourseProgress / totalCount);
+    this.AvgPercentage = Math.round(avgCourseProgress / totalCount);
   }
 
 

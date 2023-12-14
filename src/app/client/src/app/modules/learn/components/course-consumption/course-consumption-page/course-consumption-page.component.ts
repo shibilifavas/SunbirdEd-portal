@@ -357,13 +357,14 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           // }
           this.courseProgressService.statusCompletion(res[0], this.userService.userid)
         }
-        this.completionPercentage = this.courseConsumptionService.calculateAvgCourseProgress(res);
+        this.courseConsumptionService.calculateAvgCourseProgress(res);
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
         const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
         //set completedPercentage for consumed courses
         this.courseProgressService.storeVisitedContent(_parsedResponse);
         this.courseProgressService.updateCourseStatus(res, this.contentIds.length);
       }, error => {
+        this.courseConsumptionService.calculateAvgCourseProgress([]);
         this.courseProgressService.updateCourseStatus(0);
         console.log('Content state read CSL API failed ', error);
       });
@@ -375,31 +376,6 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       this.config.rating = res["result"]["response"] != null ? res["result"]["response"]["total_number_of_ratings"] : 0;
       this.config.numberOfRating = res["result"]["response"] != null ? `${res["result"]["response"]["sum_of_total_ratings"]} ratings` : '0 ratings';
     });
-  }
-
-  fetchProgress() {
-    var bgColor = "#024f9d";
-    if (this.completionPercentage == 100) {
-      bgColor = "#07bc81"; // green
-    }
-    let widthStyle = this.completionPercentage + "%";
-    return {
-      width: widthStyle,
-      'background-color': bgColor
-    };
-  }
-
-  getText(percentage: any) {
-    if (!percentage) {
-      return 'Not started'
-    }
-    if (percentage == 0) {
-      return 'Not started'
-    } else if (percentage == 100) {
-      return 'Completed'
-    } else {
-      return percentage + '% completed'
-    }
   }
 
 }
