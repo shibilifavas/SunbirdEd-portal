@@ -182,4 +182,11 @@ export class CourseAsideComponent implements OnInit {
       this.showRatingModal = true;
     }
   }
+
+  getPercentageCompleted() {
+    if(this.courseConsumptionService.AvgPercentage) {
+      return this.courseConsumptionService.AvgPercentage;
+    }
+    return 0;
+  }
 }
