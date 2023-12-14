@@ -71,6 +71,9 @@
     flex-direction: row;
     width: 100%;
   }
+  .required{
+    color: red;
+  }
   .intials {
     background: var(--black);
     color: var(--white);

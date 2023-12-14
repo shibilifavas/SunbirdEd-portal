@@ -34,13 +34,13 @@ export class PersonalDetailsComponent implements OnInit {
       countryCode : [this.userProfile?.countryCode],
       phone: [this.userProfile?.phone],
       primaryEmail: [{ value: this.userProfile?.email, disabled: true }],
-      secondaryEmail: [this.userProfile?.secondaryEmail],
+      secondaryEmail: [this.userProfile?.profileDetails?.personalDetails?.secondaryEmail],
       departmentName: [
         this.userProfile?.profileDetails?.employmentDetails?.departmentName || '',
         Validators.required
       ],
       designation: [this.userProfile?.profileDetails?.professionalDetails[0]?.designation || '', Validators.required],
-      doj: [this.userProfile?.profileDetails?.professionalDetails[0]?.doj || '', Validators.required]
+      doj: [this.userProfile?.profileDetails?.professionalDetails[0]?.doj || '']
     });
   }
 
