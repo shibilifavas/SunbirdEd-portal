@@ -18,16 +18,9 @@
 
                     <mat-form-field class="course-assessment__search"  [floatLabel]="'never'"> 
                         <mat-icon>search</mat-icon>
-                        <input matInput type="text" [(ngModel)]="search" (keyup.enter)="searchQuery($event)" (blur)="searchQuery($event)" placeholder="Search" appearance="outline" />                       
+                        <input matInput type="text" [(ngModel)]="search" (keyup.enter)="searchQuery()" (blur)="searchQuery()" placeholder="Search" appearance="outline" />                       
                     </mat-form-field>
                 </div>
-                <!-- <mat-form-field>
-                    <mat-label>Filter|<strong>Custom</strong></mat-label>
-                        <mat-select [formControl]="competency" multiple appearance="none">
-                            <mat-option *ngFor="let comp of competenciesList" [value]="comp">{{comp}}</mat-option>
-                        </mat-select>
-                </mat-form-field> -->
-               
             </header>
             <mat-chip-list #chipList aria-label="competency selection">
                 <mat-chip
