@@ -117,7 +117,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
       let payload = {
         request:{
           batch: {
-            batchId:batchList.filter((b:any) => b!=='')
+            batchId:batchList.filter((b:any) => b!=='' && b !== '01392170577311334432')
           }
         }
       }

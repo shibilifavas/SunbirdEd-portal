@@ -86,6 +86,10 @@
                         right: -12px;
                         top: -6px;
                 }
+                .mat-form-field-label {
+                    top:12;
+                    left:0;
+                }
             }
             ::ng-deep .mat-form-field-label{
                 padding:3px 20px;
