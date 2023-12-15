@@ -92,24 +92,10 @@ export class CourseAssessmentProgressComponent implements OnInit {
               this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
               this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
               this.count = res.result.count;
-              console.log('recentlyPublishedList', this.recentlyPublishedList);
-              const batchList = this.recentlyPublishedList.map(c => {
+             const batchList = this.recentlyPublishedList.map(c => {
                 return c.batches?c.batches[0].batchId:'';
               });
-              this.getAllparicipentsList(batchList);
-              this.dataSource = this.recentlyPublishedList.map((data:any) => { 
-              return {
-                id:data.identifier,
-                appIcon:data.appIcon,
-                name:data.name,
-                competency:data.competencyIdsMapping[0],
-                publishedDate: new Date(data.lastPublishedOn).toLocaleDateString(),
-                Duration:this.covertTime(data.Duration),
-                totalMembers:100,
-                batchId:data.batches?data.batches[0].batchId:'',
-                link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
-              }}); 
-             
+              this.getAllparicipentsList(batchList);           
           });  
   }
 
@@ -122,13 +108,20 @@ export class CourseAssessmentProgressComponent implements OnInit {
         }
       }
       this.courseBatchService.getAllParticipantList(payload).subscribe((res:any) => {
-        if(this.dataSource){
-          this.dataSource.forEach((value, i) => {
-            const batchList = res.result.batch.filter((b:any) => b.batchId === value.batchId)
-            value.totalMembers = batchList?.participants?.length||''
-          });
-        }
-      });
+        this.dataSource = this.recentlyPublishedList.map((data:any) => { 
+          let courseBatch = data.batches?res.filter((b:any) => b.batchId === data.batches[0].batchId):[];
+          return {
+            id:data.identifier,
+            appIcon:data.appIcon,
+            name:data.name,
+            competency:data.competencyIdsMapping[0],
+            publishedDate: new Date(data.lastPublishedOn).toLocaleDateString(),
+            Duration:this.covertTime(data.Duration),
+            totalMembers:courseBatch.length>0?courseBatch[0].count:'NA',
+            batchId:data.batches?data.batches[0].batchId:'',
+            link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
+          }}); 
+    });
   }
 
   getChannelId(): Observable<{ channelId: string, custodianOrg: boolean }> {
@@ -159,20 +152,20 @@ export class CourseAssessmentProgressComponent implements OnInit {
     this.fetchRequestContents(event.pageIndex+1,event.pageSize);
   }
 
-  public sort = (key) => {
-      return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
+  public sort = (key:any) => {
+      return (a:any, b:any) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
   }
 
   public isUserLoggedIn(): boolean {
       return this.userService && (this.userService.loggedIn || false);
   }
 
-  onSelect(value){
+  onSelect(value:any){
     this.competencyModel.selectedCompetenciesList = value;
     this.fetchRequestContents(0,15);
   }
 
-  searchQuery(event) {
+  searchQuery() {
     this.fetchRequestContents();
   }
 
@@ -196,7 +189,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
     } 
   }
 
-  removeCompetencies(selected){
+  removeCompetencies(selected) {
     this.competencyModel.selectedCompetenciesList = this.competencyModel.selectedCompetenciesList.filter(comp => {
       return selected !== comp.identifier;
     })
