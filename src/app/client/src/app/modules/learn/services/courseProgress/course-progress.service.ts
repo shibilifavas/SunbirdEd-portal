@@ -203,15 +203,6 @@ export class CourseProgressService {
         req['progressdetails'] = this.progressdetails;
         req['progress'] = this.completionPercentage;
       }
-    } else {
-      //Is this required? As we are calling content state update in assessment score service
-      req = {
-        contentId: data.contentId,
-        batchId: data.batchId,
-        status: 1,
-        courseId: data.courseId,
-        lastAccessTime: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss:SSSZZ')
-      };
     }
     const channelOptions = {
       url: this.configService.urlConFig.URLS.COURSE.USER_CONTENT_STATE_UPDATE,
