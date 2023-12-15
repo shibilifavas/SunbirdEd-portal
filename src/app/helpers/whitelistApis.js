@@ -2082,7 +2082,8 @@ const API_LIST = {
     '/learner/user/v1/search',
     '/learner/course/batch/cert/v1/template/add',
     '/action/asset/v1/create',
-    'course/v1/batch/allparticipants/list'
+    'course/v1/batch/allparticipants/list',
+    '/learner/user/v1/create'
   ]
 };
 module.exports = API_LIST;

@@ -7,6 +7,8 @@ import * as _ from 'lodash-es';
 import { UserService } from '../../../core/services';
 import { CsLibInitializerService } from '../../../../service/CsLibInitializer/cs-lib-initializer.service';
 import { CsModule } from '@project-sunbird/client-services';
+// import { IUserData } from '@sunbird/shared';
+// import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-general-discussion',
@@ -14,13 +16,14 @@ import { CsModule } from '@project-sunbird/client-services';
   styleUrls: ['./general-discussion.component.scss']
 })
 export class GeneralDiscussionComponent implements OnInit {
-// TODO : Publishing as a independent npm module by taking the below properties as input
+  // TODO : Publishing as a independent npm module by taking the below properties as input
   // icon, name, context data, output event (click)
   @Input() fetchForumIdReq: IFetchForumId;
   @Input() forumIds: Array<number>;
   @Output() routerData = new EventEmitter();
   showLoader = false;
   private discussionCsService: any;
+  userId;
 
   constructor(
     private resourceService: ResourceService,
@@ -42,71 +45,91 @@ export class GeneralDiscussionComponent implements OnInit {
    *                If it is not coming then it will make an api call to get the forum IDs
    */
   ngOnInit() {
-    this.router.navigate(['/discussion-forum'], {
-      queryParams: {
-        categories: JSON.stringify({ result: [5] }),
-        userId: 6
-      }
-    });
+    this.getUserId();
     // if (!this.forumIds) {
     // this.fetchForumIds();
     // }
   }
-  /**
-   * @description - fetch all the forumIds attached to a course/group/batch
-   * @param - req as  {identifier: "" , type: ""}
-   */
-  fetchForumIds() {
-    this.fetchForumIdReq = {
-      type: "group",
-      identifier: ['Category Owner']
-  };
-    this.discussionCsService.getForumIds(this.fetchForumIdReq).subscribe(forumDetails => {
-      this.forumIds = _.map(_.get(forumDetails, 'result'), 'cid');
-      alert(this.forumIds);
-    }, error => {
-      this.toasterService.error(this.resourceService.messages.emsg.m0005);
+
+  navigateToDF() {
+    this.router.navigate(['/discussion-forum'], {
+      queryParams: {
+        categories: JSON.stringify({ result: [5] }),
+        userId: this.userId
+      }
     });
   }
 
   /**
+   * @description - fetch all the forumIds attached to a course/group/batch
+   * @param - req as  {identifier: "" , type: ""}
+   */
+  // fetchForumIds() {
+  //   this.fetchForumIdReq = {
+  //     type: "group",
+  //     identifier: ['Category Owner']
+  // };
+  //   this.discussionCsService.getForumIds(this.fetchForumIdReq).subscribe(forumDetails => {
+  //     this.forumIds = _.map(_.get(forumDetails, 'result'), 'cid');
+  //   }, error => {
+  //     this.toasterService.error(this.resourceService.messages.emsg.m0005);
+  //   });
+  // }
+
+  /**
    * @description - register/create the user in nodebb while navigating to discussionForum
    */
-  navigateToDiscussionForum() {
+
+  getUserId() {
     this.showLoader = true;
     const createUserReq = {
       username: _.get(this.userService.userProfile, 'userName'),
       identifier: _.get(this.userService.userProfile, 'userId'),
     };
-    this.discussionTelemetryService.contextCdata = [
-      {
-        id: this.fetchForumIdReq.identifier.toString(),
-        type: this.fetchForumIdReq.type
-      }
-    ];
-    const event = {
-      context: {
-        cdata: this.discussionTelemetryService.contextCdata,
-        object: {}
-      },
-      edata: {
-        pageid: 'group-details',
-        type: 'CLICK',
-        id: 'forum-click'
-      },
-      eid: 'INTERACT'
-    };
-    this.discussionTelemetryService.logTelemetryEvent(event);
-    this.navigationHelperService.setNavigationUrl({ url: this.router.url });
     this.discussionCsService.createUser(createUserReq).subscribe((response) => {
-      const routerData = {
-        userId: _.get(response, 'result.userId.uid'),
-        forumIds: this.forumIds
-      };
-      this.routerData.emit(routerData);
+      this.userId = _.get(response, 'result.userId.uid');
+      this.navigateToDF();
     }, (error) => {
       this.showLoader = false;
       this.toasterService.error(this.resourceService.messages.emsg.m0005);
     });
   }
+
+  // navigateToDiscussionForum() {
+  //   this.showLoader = true;
+  //   const createUserReq = {
+  //     username: _.get(this.userService.userProfile, 'userName'),
+  //     identifier: _.get(this.userService.userProfile, 'userId'),
+  //   };
+  //   this.discussionTelemetryService.contextCdata = [
+  //     {
+  //       id: this.fetchForumIdReq.identifier.toString(),
+  //       type: this.fetchForumIdReq.type
+  //     }
+  //   ];
+  //   const event = {
+  //     context: {
+  //       cdata: this.discussionTelemetryService.contextCdata,
+  //       object: {}
+  //     },
+  //     edata: {
+  //       pageid: 'group-details',
+  //       type: 'CLICK',
+  //       id: 'forum-click'
+  //     },
+  //     eid: 'INTERACT'
+  //   };
+  //   this.discussionTelemetryService.logTelemetryEvent(event);
+  //   this.navigationHelperService.setNavigationUrl({ url: this.router.url });
+  //   this.discussionCsService.createUser(createUserReq).subscribe((response) => {
+  //     const routerData = {
+  //       userId: _.get(response, 'result.userId.uid'),
+  //       forumIds: this.forumIds
+  //     };
+  //     this.routerData.emit(routerData);
+  //   }, (error) => {
+  //     this.showLoader = false;
+  //     this.toasterService.error(this.resourceService.messages.emsg.m0005);
+  //   });
+  // }
 }
