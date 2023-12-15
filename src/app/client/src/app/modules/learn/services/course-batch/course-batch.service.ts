@@ -114,7 +114,7 @@ export class CourseBatchService {
       data: data
     };
     return this.learnerService.post(options).pipe(map((response: any) => {
-      return _.get(response, 'result.batch.participants') || [];
+      return _.get(response, 'result.batch') || [];
     }));
   }
 
