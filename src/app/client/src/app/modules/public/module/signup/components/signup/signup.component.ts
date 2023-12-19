@@ -238,8 +238,6 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.passwordFieldError = false;
     this.confirmPasswordFieldError = false;
     this.confirmPasswordFieldError = false;
-    this.designationFieldError = false;
-    this.departmentNameFieldError = false;
     if (firstName.value === "" && lastName.value === "" && password.value === "") {
       this.registerErrorMessage = "All the fields are required";
       this.firstNameFieldError = true;
