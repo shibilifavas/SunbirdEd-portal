@@ -54,8 +54,6 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   emailFieldError = false;
   passwordFieldError = false;
   confirmPasswordFieldError = false;
-  designationFieldError = false;
-  departmentNameFieldError = false;
 
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
@@ -231,8 +229,6 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     let username: any = document.getElementById("username");
     let password: any = document.getElementById("password");
     let confirmPassword: any = document.getElementById("confirm_password");
-    let designation: any = document.getElementById("designation");
-    let departmentName: any = document.getElementById("departmentName");
 
     // Validation block
 
@@ -257,13 +253,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     } else if (lastName.value === "") {
       this.lastNameFieldError = true;
       this.registerErrorMessage = "Please enter last name";
-    } else if (designation.value === "") {
-      this.designationFieldError = true;
-      this.registerErrorMessage = "Please enter designation";
-    } else if (departmentName.value === "") {
-      this.departmentNameFieldError = true;
-      this.registerErrorMessage = "Please enter department name";
-     } else if (email.value === "") {
+    } else if (email.value === "") {
       this.emailFieldError = true;
       this.registerErrorMessage = "Please enter email id";
     } else if (password.value === "") {
@@ -299,14 +289,8 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
                       'PUBLIC'
                   ]
               },
-              professionalDetails: [
-                {
-                  designation: designation.value
-                }
-              ],
-              employmentDetails: {
-                departmentName: departmentName.value
-              },
+              professionalDetails: [],
+              employmentDetails: {},
               areaOfInterest : []
           }
       }
