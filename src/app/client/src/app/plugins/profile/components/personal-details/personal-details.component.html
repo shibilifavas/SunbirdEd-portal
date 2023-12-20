@@ -13,6 +13,9 @@
                 <div class="required" *ngIf="form.get(field.value).hasError('required')">
                   This field is required.
                 </div>
+                <select *ngSwitchCase="'designation'" class="input select" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Select designation">
+                  <option class="select" *ngFor="let option of positions" [value]="option.name">{{option.name}}</option>
+                </select>
                 <input *ngSwitchCase="'primaryEmail'" class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="{{userProfile?.email}}" [value]="userProfile?.email" readonly>
                 <input *ngSwitchCase="'doj'" class="input" type="date" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
                 <div *ngSwitchCase="'phone'" class="phone">
