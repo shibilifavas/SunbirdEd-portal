@@ -7,6 +7,8 @@ import { ContentSearchService } from '@sunbird/content-search';
 import _ from 'lodash';
 import { FrameworkService } from '../../../../modules/core/services/framework/framework.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-personal-details',
@@ -72,6 +74,10 @@ export class PersonalDetailsComponent implements OnInit {
       this.payload.userId = this.userProfile.userId;
       const maskingPattern = /^\*{6}\d{4}$/;
       if(maskingPattern.test(this.payload.phone)){delete this.payload.phone;}
+      else if(this.payload.phone == ""){
+        const emptyString = " ";
+        this.payload.phone = emptyString;
+      }
       let profileDetails: any = {};
       let personalDetails: any = {};
       personalDetails.firstName = this.payload.firstName;
@@ -92,7 +98,16 @@ export class PersonalDetailsComponent implements OnInit {
       delete this.payload.doj;
       profileDetails.professionalDetails = professionalDetails;
       this.payload.profileDetails = profileDetails;
-      this.profileService.updatePrivateProfile(this.payload).subscribe(res => {
+      this.profileService.updatePrivateProfile(this.payload)
+      .pipe(
+        catchError((error) => {
+          console.error('Error:', error);
+          const errorMessage = error.error && error.error.params ? error.error.params.errmsg : 'An error occurred. Please try again.';
+          this.toasterService.error(errorMessage);
+          return throwError(error);
+        })
+      )
+      .subscribe(res => {
         console.log("res",res);
         this.toasterService.success(_.get(this.resourceService, 'messages.smsg.m0059'));
     })

@@ -44,7 +44,6 @@ export class ProfileService {
     return this.getPortalToken().pipe(
       switchMap((res) => {
         this.authToken = 'Bearer ' + res;
-        console.log("auth token", this.authToken);
         const headers = new HttpHeaders({
           'Authorization': this.authToken
         });
