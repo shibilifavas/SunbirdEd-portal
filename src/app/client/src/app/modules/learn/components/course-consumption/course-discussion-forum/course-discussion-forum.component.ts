@@ -30,6 +30,7 @@ export class CourseDiscussionForumComponent implements OnInit {
      courseId: string;
      enrolledCourse = false;
      batchId: any;
+     forumIds: any;
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, 
     private userService: UserService, public permissionService: PermissionService, 
@@ -73,9 +74,23 @@ export class CourseDiscussionForumComponent implements OnInit {
         cid: 6
       };
     }
+  }
 
-    this.discussionService.createForum(this.fetchForumIdReq).subscribe(resp => {
-      console.log('Create forum:', resp);
+  /**
+   * @description - fetch all the forumIds attached to a course/group/batch
+   * @param - req as  {identifier: "" , type: ""}
+   */
+   fetchForumIds() {
+    this.discussionService.getForumIds(this.fetchForumIdReq).subscribe(forumDetails => {
+      console.log('Get forum:', forumDetails);
+      this.forumIds = _.map(_.get(forumDetails, 'result'), 'cid');
+      if (this.forumIds === undefined || this.forumIds === null || this.forumIds === '') {
+        this.discussionService.createForum(this.fetchForumIdReq).subscribe(resp => {
+          console.log('Create forum:', resp);
+        }, error => {
+          this.toasterService.error(this.resourceService.messages.emsg.m0005);
+        });
+      }
     }, error => {
       this.toasterService.error(this.resourceService.messages.emsg.m0005);
     });
