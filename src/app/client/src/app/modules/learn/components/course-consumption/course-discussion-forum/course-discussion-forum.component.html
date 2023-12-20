@@ -1,4 +1,4 @@
-<div class="ui container mt-48" *ngIf="courseDetails">
+<!-- <div class="ui container mt-48" *ngIf="courseDetails">
     <div class="ui grid stackable w-100 padded">
         <div class="first_panel eight wide column pl-0 pt-0">
             <div class="headline">
@@ -7,19 +7,14 @@
 
             <div class="center aligned search-container">
                 <div class="ui input w-100">
-                    <!-- <img src="assets/images/search_icon.svg" class="search-left-icon"/> -->
                     <input type="text" id="create-discussion" name="discussion" [(ngModel)]="discussionText"
                         placeholder="Have questions, suggestions or, ideas in your mind? Post it.">
-                    <!-- <img src="assets/images/manage-search.svg" class="search-right-icon pointing"/> -->
                 </div>
             </div>
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class="sb-field post-type">
                         <mat-form-field appearance="fill" class="sb-mat__dropdown">
-                          <!-- <mat-label>{{( field?.translation || field?.label) | frameworkCatLabelTranslate | transposeTerms: ( field?.translation || field?.label) : resourceService?.selectedLang}}
-                            <span class="mr-8 sb-color-red" *ngIf="field.required"> * </span>
-                          </mat-label> -->
                           <mat-select name="post-type" role="listbox" [(ngModel)]="selectedField">
                             <mat-option class="mat-dropdown__options" role="option" *ngFor="let option of fields | sortBy:'name':'asc'" [value]="option"
                             attr.aria-label="{{option}}">{{option}}</mat-option>
@@ -33,7 +28,6 @@
                             <img src="assets/images/search_icon.svg" class="search-left-icon"/>
                             <input type="text" id="search-discussion" name="search-discussion" [(ngModel)]="searchText"
                                 placeholder="Search">
-                            <!-- <img src="assets/images/manage-search.svg" class="search-right-icon pointing"/> -->
                         </div>
                     </div>
                 </div>
@@ -81,12 +75,10 @@
                         </p>
                         <div class="center aligned search-container no-padding-top" *ngIf="writeComment">
                             <div class="ui input w-100">
-                                <!-- <img src="assets/images/search_icon.svg" class="search-left-icon"/> -->
                                 <input type="text" id="create-comment" name="comment" [(ngModel)]="postText"
                                     placeholder="Write your comment & post it." />
                             </div>
                             <p class="inline-flex">
-                                <!-- <img src="assets/images/manage-search.svg" class="search-right-icon pointing"/> -->
                                 <button class="com-secondary-btn">Post</button>
                                 <button (click)="writeComment = false" class="com-secondary-btn cancel">Cancel</button>
                             </p>
@@ -173,4 +165,5 @@
         <div class="second_pannel four wide column">
             <app-course-aside [courseHierarchy]="courseDetails" [configContent]="configContent"></app-course-aside>
         </div>
-    </div>
+    </div> -->
+    <app-access-discussion [fetchForumIdReq]="fetchForumIdReq"> </app-access-discussion>
