@@ -238,7 +238,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   navigateToEditProfile(){
-    this.router.navigate(['profile/edit']);
+    const channel = this.activatedRoute.snapshot.queryParams.channel;
+    this.router.navigate(['profile/edit'],{queryParams : {channel}});
   }
 
   setNonCustodianUserLocation() {

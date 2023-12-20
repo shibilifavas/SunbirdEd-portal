@@ -401,7 +401,7 @@
             </app-content-type>
           </div>
 
-          <li class="list-item" tabindex="0" role="link" (click)="toggleSideMenu(false)" routerLink="profile">
+          <li class="list-item" tabindex="0" role="link" (click)="toggleSideMenu(false)" routerLink="profile" [queryParams]="{ channel: channelId }">
             <i class="icon-svg icon-svg--sm icon-profileuser mr-8">
               <!-- <svg class="icon icon-svg--primary">
                 <use xlink:href="./assets/images/sprite.svg#profileuser"></use>
