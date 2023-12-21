@@ -43,9 +43,15 @@ export class AccessDiscussionComponent implements OnInit {
    *                If it is not coming then it will make an api call to get the forum IDs
    */
   ngOnInit() {
-      setTimeout(() => {
-        this.fetchForumIds();
-      }, 1000);
+      // setTimeout(() => {
+      //   this.fetchForumIds();
+      // }, 1000);
+  }
+
+  ngOnChanges(changes: any) {
+    if (this.fetchForumIdReq) {
+      this.fetchForumIds();
+    }
   }
   /**
    * @description - fetch all the forumIds attached to a course/group/batch
