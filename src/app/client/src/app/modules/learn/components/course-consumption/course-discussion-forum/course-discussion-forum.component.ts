@@ -20,6 +20,7 @@ export class CourseDiscussionForumComponent implements OnInit {
   @Input() courseDetails: any;
   @Input() configContent: any;
   @Input() courseHierarchy: any;
+  @Input() isActive: boolean;
   discussionText: string = '';
   postText: string = '';
   searchText: string = '';
@@ -41,7 +42,12 @@ export class CourseDiscussionForumComponent implements OnInit {
     private resourceService: ResourceService) { }
 
   ngOnInit(): void {
-    this.generateDataForDF();
+  }
+
+  ngOnChanges(changes: any) {
+    if (this.isActive) {
+      this.generateDataForDF();
+    }
   }
 
   generateDataForDF() {
@@ -77,7 +83,7 @@ export class CourseDiscussionForumComponent implements OnInit {
         // cid: 6
       };
     }
-    // this.fetchForumIds();
+    this.fetchForumIds();
   }
 
   /**
