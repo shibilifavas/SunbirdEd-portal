@@ -43,10 +43,9 @@ export class AccessDiscussionComponent implements OnInit {
    *                If it is not coming then it will make an api call to get the forum IDs
    */
   ngOnInit() {
-    // if (!this.forumIds) {
-      // alert('ADF')
-      this.fetchForumIds();
-    // }
+      setTimeout(() => {
+        this.fetchForumIds();
+      }, 1000);
   }
   /**
    * @description - fetch all the forumIds attached to a course/group/batch
@@ -90,16 +89,25 @@ export class AccessDiscussionComponent implements OnInit {
     //   eid: 'INTERACT'
     // };
     // this.discussionTelemetryService.logTelemetryEvent(event);
-    this.navigationHelperService.setNavigationUrl({ url: this.router.url });
+    // this.navigationHelperService.setNavigationUrl({ url: this.router.url });
     this.discussionCsService.createUser(createUserReq).subscribe((response) => {
       const routerData = {
         userId: _.get(response, 'result.userId.uid'),
         forumIds: this.forumIds
       };
-      this.routerData.emit(routerData);
+      this.navigateToDF(routerData.userId);
     }, (error) => {
       this.showLoader = false;
       this.toasterService.error(this.resourceService.messages.emsg.m0005);
+    });
+  }
+
+  navigateToDF(userId: any) {
+    this.router.navigate(['/discussion-forum'], {
+      queryParams: {
+        categories: JSON.stringify({ result: [this.forumIds] }),
+        userId: userId
+      }
     });
   }
 }
