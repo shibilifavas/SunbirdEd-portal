@@ -77,7 +77,7 @@ export class CourseDiscussionForumComponent implements OnInit {
         // cid: 6
       };
     }
-    // this.fetchForumIds();
+    this.fetchForumIds();
   }
 
   /**

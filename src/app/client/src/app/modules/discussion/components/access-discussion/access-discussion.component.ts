@@ -22,6 +22,7 @@ export class AccessDiscussionComponent implements OnInit {
   @Output() routerData = new EventEmitter();
   showLoader = false;
   private discussionCsService: any;
+  url: any;
 
   constructor(
     private resourceService: ResourceService,
@@ -50,7 +51,9 @@ export class AccessDiscussionComponent implements OnInit {
 
   ngOnChanges(changes: any) {
     if (this.fetchForumIdReq) {
-      this.fetchForumIds();
+      setTimeout(() => {
+        this.fetchForumIds();
+      }, 1000);
     }
   }
   /**
@@ -109,11 +112,12 @@ export class AccessDiscussionComponent implements OnInit {
   }
 
   navigateToDF(userId: any) {
-    this.router.navigate(['/discussion-forum'], {
-      queryParams: {
-        categories: JSON.stringify({ result: [this.forumIds] }),
-        userId: userId
-      }
-    });
+    // this.router.navigate(['/discussion-forum'], {
+    //   queryParams: {
+    //     categories: JSON.stringify({ result: [this.forumIds] }),
+    //     userId: userId
+    //   }
+    // });
+    this.url = '/discussion-forum?categories='+JSON.stringify({ result: [this.forumIds] })+'&userId='+userId;
   }
 }
