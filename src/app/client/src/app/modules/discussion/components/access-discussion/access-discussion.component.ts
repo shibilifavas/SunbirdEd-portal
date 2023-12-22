@@ -118,6 +118,6 @@ export class AccessDiscussionComponent implements OnInit {
     //     userId: userId
     //   }
     // });
-    this.url = '/discussion-forum?categories='+JSON.stringify({ result: [this.forumIds] })+'&userId='+userId;
+    this.url = 'https://compass-dev.tarento.com/discussion-forum?categories='+JSON.stringify({ result: [this.forumIds] })+'&userId='+userId;
   }
 }
