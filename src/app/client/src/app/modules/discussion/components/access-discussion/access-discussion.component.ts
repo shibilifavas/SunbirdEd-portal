@@ -127,10 +127,10 @@ export class AccessDiscussionComponent implements OnInit {
   }
 
   hideElements() {
-    const iframeElement: any = document.getElementById('df-iframe');
-    const header: any = iframeElement.getElementsByTagName('compass-header')[0];
-    header.style = "display: none";
-    const footer: any = iframeElement.getElementsByTagName('main-footer')[0];
-    footer.style = "display: none";
+    var myIframe: any = document.getElementById("df-iframe");
+    var divElement1: any = myIframe.contentWindow.document.querySelector("compass-header");
+    divElement1.style.display = "none";
+    var divElement2: any = myIframe.contentWindow.document.querySelector("main-footer");
+    divElement2.style.display = "none";
   }
 }
