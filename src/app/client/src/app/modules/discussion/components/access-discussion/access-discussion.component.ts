@@ -7,7 +7,7 @@ import * as _ from 'lodash-es';
 import { UserService } from '../../../core/services';
 import { CsLibInitializerService } from '../../../../service/CsLibInitializer/cs-lib-initializer.service';
 import { CsModule } from '@project-sunbird/client-services';
-import {DomSanitizer,SafeResourceUrl,} from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-access-discussion',
@@ -33,7 +33,7 @@ export class AccessDiscussionComponent implements OnInit {
     private navigationHelperService: NavigationHelperService,
     private userService: UserService,
     private csLibInitializerService: CsLibInitializerService,
-    public sanitizer:DomSanitizer
+    public sanitizer: DomSanitizer
   ) {
     if (!CsModule.instance.isInitialised) {
       this.csLibInitializerService.initializeCs();
@@ -46,9 +46,9 @@ export class AccessDiscussionComponent implements OnInit {
    *                If it is not coming then it will make an api call to get the forum IDs
    */
   ngOnInit() {
-      // setTimeout(() => {
-      //   this.fetchForumIds();
-      // }, 1000);
+    // setTimeout(() => {
+    //   this.fetchForumIds();
+    // }, 1000);
   }
 
   ngOnChanges(changes: any) {
@@ -120,9 +120,16 @@ export class AccessDiscussionComponent implements OnInit {
     //     userId: userId
     //   }
     // });
-    let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum?categories='+JSON.stringify({result:[this.forumIds]})+'&userId='+userId;
+    let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum?categories=' + JSON.stringify({ result: [this.forumIds] }) + '&userId=' + userId;
     console.log('unsanitized', discussionUrl);
-    this.discussionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(discussionUrl); 
+    this.discussionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(discussionUrl);
     console.log('sanitized', this.discussionUrl);
+  }
+
+  hideElements() {
+    const header: any = document.getElementsByTagName('compass-header')[0]
+    header.style = "display: none";
+    const footer: any = document.getElementsByTagName('main-footer')[0]
+    footer.style = "display: none";
   }
 }
