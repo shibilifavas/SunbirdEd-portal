@@ -38,6 +38,13 @@
     top:calculateRem(50px);
     padding: calculateRem(15px);
     background: var(--white);
+    .mat-icon{
+      cursor: pointer;
+      position: absolute;
+      right: calculateRem(5px);
+      top: calculateRem(5px);
+    }
   }
+
 }
 
