@@ -78,6 +78,7 @@ export class InAppNotificationComponent implements OnInit, OnDestroy {
 
   toggleInAppNotifications() {
     if (!this.showNotificationModel && !this.notificationList.length) {
+      this.showNotificationModel = !this.showNotificationModel;
       return;
     }
     this.generateInteractEvent('show-in-app-notifications');
