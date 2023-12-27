@@ -13,6 +13,7 @@
       <!-- <div mat-dialog-title class="mb-0">
         <button aria-label="close dialog" mat-dialog-close class="close-btn"></button>
       </div> -->
+      <mat-icon (click)="showNotificationModel = !showNotificationModel">close</mat-icon>
       <div class="sb-mat__modal__content" tabindex="0">
         <sb-notification tabindex="0" [notificationList]="notificationList"
           [inAppNotificationConfig]="inAppNotificationConfig" (showMore)="handleShowMore($event)"
