@@ -83,6 +83,17 @@ export class BatchProgressDetailsComponent implements OnInit {
         }
         this.userSerivce.getEnrolledUsers(requestBody).subscribe((memResponse:any) => {
               if(memResponse.length>0) {
+                this.memberList = memResponse.map((m:any) => {
+                  return {
+                    initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
+                    name: m.firstName+' '+m.lastName,
+                    designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
+                    department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
+                    progress: 80,
+                    link:{path:'/profile', text:'profile'}
+                  }
+                })
+                 // progress: courseList.filters(course => course.identifier === this.courseDetails.id && course.userId === m.id)[0].completionPercentage,
               this.updateProgress(res,memResponse);
              }
         })
