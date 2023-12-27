@@ -15,9 +15,13 @@
       </div> -->
       <mat-icon (click)="showNotificationModel = !showNotificationModel">close</mat-icon>
       <div class="sb-mat__modal__content" tabindex="0">
-        <sb-notification tabindex="0" [notificationList]="notificationList"
+      
+        <sb-notification tabindex="0" *ngIf = 'notificationList.length>0; else showNoNotification' [notificationList]="notificationList"
           [inAppNotificationConfig]="inAppNotificationConfig" (showMore)="handleShowMore($event)"
           (showLess)="handleShowLess($event)"></sb-notification>
+          <ng-template #showNoNotification>
+              No notifications.
+          </ng-template>
       </div>
       <div class="sb-mat__modal__actions"></div>
     </div>
