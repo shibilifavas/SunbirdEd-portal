@@ -56,6 +56,7 @@ import { CompassHeaderComponent } from './components/compass-header/compass-head
 import { LanguageDropdownComponent } from './components/language-dropdown/language-dropdown.component';
 import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/compass-breadcrumb.component';
 import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
+import { NotificationModule } from '../notification/notification.module';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
         MatAutocompleteModule, MatFormFieldModule, MatInputModule,
         MatChipsModule, MatIconModule, MatSelectModule, MatListModule, MatButtonModule, MatCheckboxModule, MaterialModule,
     CommonConsumptionModule, MatMenuModule,
-    RouterModule
+    RouterModule,
+    NotificationModule
     ],
     declarations: [AppLoaderComponent, DateFormatPipe,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe, InterpolatePipe,

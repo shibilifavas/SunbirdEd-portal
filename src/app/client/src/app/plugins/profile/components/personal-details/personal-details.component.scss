@@ -74,6 +74,13 @@
   .required{
     color: red;
   }
+  .select{
+    height: 60px;
+    border: solid 1px var(--com-grey-border);
+    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
   .intials {
     background: var(--black);
     color: var(--white);
