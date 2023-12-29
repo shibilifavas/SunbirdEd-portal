@@ -461,7 +461,7 @@ const API_LIST = {
     },
     '/learner/user/v2/signup': {
       checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC]
+      ROLE_CHECK: [ROLE.ANONYMOUS]
     },
     '/learner/user/v1/feed/:userId': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
@@ -1671,7 +1671,7 @@ const API_LIST = {
       description: 'QuestionSet retire',
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [
-        ROLE.PUBLIC
+        ROLE.CONTENT_CREATOR
       ]
     },
     '/action/question/v2/read/:do_id': {
