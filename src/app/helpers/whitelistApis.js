@@ -2096,7 +2096,8 @@ const API_LIST = {
     'course/v1/batch/allparticipants/list',
     '/learner/user/v1/create',
     '/action/questionset/v2/retire/:do_id',
-    '/api/course/v2/users/list'
+    '/api/course/v2/users/list',
+    '/learner/user/v2/signup'
   ]
 };
 module.exports = API_LIST;
