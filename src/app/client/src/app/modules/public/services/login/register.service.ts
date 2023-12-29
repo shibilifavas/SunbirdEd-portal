@@ -15,7 +15,7 @@ export class RegisterService {
     //   'Content-Type': 'application/json',
     // });
      const option = {
-      url: 'user/v1/create',
+      url: 'user/v2/signup',
       data: data
     };
     return this.learnerService.post(option);
