@@ -95,7 +95,7 @@
       "CREATE": "review/comment/v1/create/comment"
     },
     "USER": {
-      "SIGNUP": "user/v1/create",
+      "SIGNUP": "user/v2/signup",
       "TNC_ACCEPT": "user/v1/tnc/accept",
       "UPDATE_USER_PROFILE": "user/v3/update",
       "GET_PROFILE": "user/v5/read/",
@@ -109,7 +109,7 @@
       "GET_USER_BY_KEY": "user/v1/get",
       "CHECK_USER_EXISTS": "user/v1/exists",
       "CREATE_V2": "user/v2/create",
-      "SIGN_UP_V1": "user/v2/signup",
+      "SIGN_UP_V1": "user/v1/signup",
       "LOCATION_SEARCH": "data/v1/location/search",
       "TYPE": "user/v1/type/list",
       "VALIDATE_CERTIFICATE": "certreg/v1/certs/validate",
