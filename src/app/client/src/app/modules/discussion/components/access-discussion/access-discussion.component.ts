@@ -120,8 +120,8 @@ export class AccessDiscussionComponent implements OnInit {
     //     userId: userId
     //   }
     // });
-    // let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum?categories=' + JSON.stringify({ result: [this.forumIds] }) + '&userId=' + userId;
-    let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum/category/6?categories=' + JSON.stringify({ result: [this.forumIds] }) + '&userId=' + userId;
+    let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum?categories=' + JSON.stringify({ result: [this.forumIds] }) + '&userId=' + userId;
+    // let discussionUrl = 'https://compass-dev.tarento.com/discussion-forum/category/6?categories=' + JSON.stringify({ result: [this.forumIds] }) + '&userId=' + userId;
     console.log('unsanitized', discussionUrl);
     this.discussionUrl = this.sanitizer.bypassSecurityTrustResourceUrl(discussionUrl);
     console.log('sanitized', this.discussionUrl);
