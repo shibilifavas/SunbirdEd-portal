@@ -103,6 +103,7 @@ export class BatchProgressDetailsComponent implements OnInit {
   }
 
   updateProgress(res, memResponse){
+    let updatedMemberList = [];
     const option = {
       url: this.configService.urlConFig.URLS.COURSE.COURSE_USERS,
       data: { 
@@ -115,17 +116,23 @@ export class BatchProgressDetailsComponent implements OnInit {
       }
     }
     this.learnerService.post(option).subscribe((courseList:any) => {
-      // console.log(courseList);
-      this.memberList = memResponse.map((m:any) => {
-          return {
-            initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
-            name: m.firstName+' '+m.lastName,
-            designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
-            department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-            progress: courseList.result.courses.filter((cos:any) => cos.identifier === this.courseDetails.id && cos.userId === m.id)[0]?.completionPercentage||'',
-            link:{path:'/profile', text:'profile'}
-          }
-        })
+        updatedMemberList = memResponse.map((m:any) => {
+            const perValue = courseList.result.courses.filter((cos:any) => {
+               if(cos.courseId === this.courseDetails.id && cos.userId === m.id) {
+                return cos;
+               }
+            });
+      
+            return {
+              initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
+              name: m.firstName+' '+m.lastName,
+              designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
+              department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
+              progress:perValue.length>0?perValue[0].completionPercentage:0,
+              link:{path:'/profile', text:'profile'}
+            }
+          });
+          this.memberList = [...updatedMemberList];
     });
   }
 
