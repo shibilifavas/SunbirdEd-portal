@@ -52,8 +52,8 @@ export class GeneralDiscussionComponent implements OnInit {
   }
 
   navigateToDF() {
-    // this.router.navigate(['/discussion-forum'], {
-    this.router.navigate(['/discussion-forum/category/5'], {
+    this.router.navigate(['/discussion-forum'], {
+    // this.router.navigate(['/discussion-forum/category/5'], {
       queryParams: {
         categories: JSON.stringify({ result: [5] }),
         userId: this.userId
