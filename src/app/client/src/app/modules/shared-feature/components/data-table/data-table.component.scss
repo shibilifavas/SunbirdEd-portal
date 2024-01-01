@@ -97,3 +97,13 @@ table {
   height: 8px !important;
 }
 
+.progress {
+  &-red {
+    color:var(--accessibility-red2);
+    font-weight: 600;
+  }
+  &-green{
+    color:var(--com-progress-green);
+    font-weight: 600;
+  }
+}
