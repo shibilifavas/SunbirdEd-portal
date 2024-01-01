@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseBatchService } from '../../services';
-import { UserService, PublicDataService} from '@sunbird/core';
+import { UserService, PublicDataService, LearnerService} from '@sunbird/core';
 import { ConfigService } from '@sunbird/shared';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/internal/operators/map';
@@ -39,6 +39,7 @@ export class BatchProgressDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
     private courseBatchService: CourseBatchService, 
     private publicDataService: PublicDataService,
+    private learnerService: LearnerService,
     private configService: ConfigService,
     private userSerivce: UserService, private httpClient: HttpClient) {
    }
@@ -108,12 +109,12 @@ export class BatchProgressDetailsComponent implements OnInit {
         request: {
           filters: {
             "courseIds": [this.courseDetails.id],
-            "userIds": [...res]
-          }
+           },
+           "userIds": [...res]
         }
       }
     }
-    this.publicDataService.post(option).subscribe((courseList:any) => {
+    this.learnerService.post(option).subscribe((courseList:any) => {
       // console.log(courseList);
       this.memberList = memResponse.map((m:any) => {
           return {
