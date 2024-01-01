@@ -122,7 +122,7 @@ export class BatchProgressDetailsComponent implements OnInit {
             name: m.firstName+' '+m.lastName,
             designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
             department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-            progress: courseList.filters(course => course.identifier === this.courseDetails.id && course.userId === m.id)[0].completionPercentage,
+            progress: courseList.result.courses.filter((cos:any) => cos.identifier === this.courseDetails.id && cos.userId === m.id)[0]?.completionPercentage||'',
             link:{path:'/profile', text:'profile'}
           }
         })
