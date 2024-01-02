@@ -11,6 +11,7 @@ import { GroupsService } from '../../../../groups/services/groups/groups.service
 import { CoursePageContentService } from "../../../services/course-page-content.service";
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { AssessmentScoreService } from './../../../services';
+import { PublicPlayerService } from '@sunbird/public';
 
 @Component({
   templateUrl: './course-consumption-page.component.html',
@@ -44,6 +45,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   _routerStateContentStatus: any;
   breadCrumbData;
   contentTabLabel: string;
+  // questionSetEvaluable: any;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -53,7 +55,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
     public coursePageContentService: CoursePageContentService, private userService: UserService,
     @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
-    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService) {
+    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService,
+    public publicPlayerService: PublicPlayerService) {
   }
   ngOnInit() {
     this.initLayout();
@@ -347,14 +350,10 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        //generate certificate, if passing criteria meets
-        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment' && res[0]?.bestScore?.totalScore > 60 && res[0].status !== 2) {
-          // const attemptID = this.assessmentScoreService.attemptID;
-          // const assessmentTs = this.assessmentScoreService._assessmentTs;
-          // if(attemptID && assessmentTs) {
-          //   this.courseProgressService.statusCompletion(res[0], this.userService.userid, attemptID, assessmentTs )
-          // }
-          this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+
+        //generate certificate, if passing criteria meets for assessment
+        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment') {
+          this.checkPassingCriteria(res)
         }
         this.courseConsumptionService.calculateAvgCourseProgress(res);
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
@@ -367,6 +366,42 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.courseProgressService.updateCourseStatus(0);
         console.log('Content state read CSL API failed ', error);
       });
+  }
+
+  checkPassingCriteria(res: any) {
+    // let courseEvaluable = this.serverValidationCheck( _.get(this.courseHierarchy, 'children')[0].children[0].evalMode);
+    let contentId = _.get(this.courseHierarchy, 'children')[0].children[0].identifier;
+    let collectionId = _.get(this.courseHierarchy, 'children')[0].identifier;
+      const requestBody = {
+        request: {
+          questionset: {
+            contentID: contentId,
+            collectionID: collectionId, 
+            userID: this.userService._userid,
+            attemptID: this.assessmentScoreService.generateHash()
+          }
+        }
+      }
+      this.publicPlayerService.getQuestionSetHierarchyByPost(requestBody).pipe(
+        takeUntil(this.unsubscribe$))
+        .subscribe((response) => {  
+          //calculate percentage here
+          if(res[0]?.bestScore) {
+            let totalPercentage = this.getTotalPercentage(res[0].bestScore);   
+            if(totalPercentage > response?.questionset?.minimumPassPercentage && res[0].status !== 2) {
+              this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+            }
+          }
+        }, (err) => {
+          this.toasterService.error(this.resourceService.messages.stmsg.m0009);
+        });
+  }
+
+  getTotalPercentage(score: any) {
+    if(score.totalMaxScore == 0) {
+      return 0
+    }
+    return score.totalScore / score.totalMaxScore * 100
   }
 
   getCourseRating(courseId: string) {
