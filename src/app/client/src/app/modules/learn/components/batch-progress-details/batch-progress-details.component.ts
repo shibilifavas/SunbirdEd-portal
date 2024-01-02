@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseBatchService } from '../../services';
-import { UserService, PublicDataService} from '@sunbird/core';
+import { UserService, PublicDataService, LearnerService} from '@sunbird/core';
 import { ConfigService } from '@sunbird/shared';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/internal/operators/map';
@@ -39,6 +39,7 @@ export class BatchProgressDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
     private courseBatchService: CourseBatchService, 
     private publicDataService: PublicDataService,
+    private learnerService: LearnerService,
     private configService: ConfigService,
     private userSerivce: UserService, private httpClient: HttpClient) {
    }
@@ -102,29 +103,36 @@ export class BatchProgressDetailsComponent implements OnInit {
   }
 
   updateProgress(res, memResponse){
+    let updatedMemberList = [];
     const option = {
       url: this.configService.urlConFig.URLS.COURSE.COURSE_USERS,
       data: { 
         request: {
           filters: {
             "courseIds": [this.courseDetails.id],
-            "userIds": [...res]
-          }
+           },
+           "userIds": [...res]
         }
       }
     }
-    this.publicDataService.post(option).subscribe((courseList:any) => {
-      // console.log(courseList);
-      this.memberList = memResponse.map((m:any) => {
-          return {
-            initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
-            name: m.firstName+' '+m.lastName,
-            designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
-            department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-            progress: courseList.filters(course => course.identifier === this.courseDetails.id && course.userId === m.id)[0].completionPercentage,
-            link:{path:'/profile', text:'profile'}
-          }
-        })
+    this.learnerService.post(option).subscribe((courseList:any) => {
+        updatedMemberList = memResponse.map((m:any) => {
+            const perValue = courseList.result.courses.filter((cos:any) => {
+               if(cos.courseId === this.courseDetails.id && cos.userId === m.id) {
+                return cos;
+               }
+            });
+      
+            return {
+              initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
+              name: m.firstName+' '+m.lastName,
+              designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
+              department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
+              progress:perValue.length>0?perValue[0].completionPercentage:0,
+              link:{path:'/profile', text:'profile'}
+            }
+          });
+          this.memberList = [...updatedMemberList];
     });
   }
 

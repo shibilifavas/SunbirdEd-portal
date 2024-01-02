@@ -461,7 +461,7 @@ const API_LIST = {
     },
     '/learner/user/v2/signup': {
       checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC]
+      ROLE_CHECK: [ROLE.ANONYMOUS]
     },
     '/learner/user/v1/feed/:userId': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
@@ -1667,11 +1667,11 @@ const API_LIST = {
         ROLE.CONTENT_CREATOR
       ]
     },
-    '/api/questionset/v1/retire/:do_id': {
+    '/action/questionset/v2/retire/:do_id': {
       description: 'QuestionSet retire',
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [
-        ROLE.PUBLIC
+        ROLE.CONTENT_CREATOR
       ]
     },
     '/action/question/v2/read/:do_id': {
@@ -1936,7 +1936,7 @@ const API_LIST = {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     },
-    "/api/course/v2/users/list": {
+    "/learner/course/v2/users/list": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     }
@@ -2095,8 +2095,9 @@ const API_LIST = {
     '/action/asset/v1/create',
     'course/v1/batch/allparticipants/list',
     '/learner/user/v1/create',
-    '/api/questionset/v1/retire/:do_id',
-    '/api/course/v2/users/list'
+    '/action/questionset/v2/retire/:do_id',
+    '/learner/user/v2/signup',
+    '/learner/course/v2/users/list'
   ]
 };
 module.exports = API_LIST;
