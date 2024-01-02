@@ -351,8 +351,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
 
+        //generate certificate, if passing criteria meets for assessment
         if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment') {
-          //generate certificate, if passing criteria meets for assessment
           this.checkPassingCriteria(res)
         }
         this.courseConsumptionService.calculateAvgCourseProgress(res);
@@ -387,7 +387,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         .subscribe((response) => {  
           //calculate percentage here
           if(res[0]?.bestScore) {
-            let totalPercentage = this.getTotalPercentage(res[0]);   
+            let totalPercentage = this.getTotalPercentage(res[0].bestScore);   
             if(totalPercentage > response?.questionset?.minimumPassPercentage && res[0].status !== 2) {
               this.courseProgressService.statusCompletion(res[0], this.userService.userid)
             }
@@ -403,17 +403,6 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     }
     return score.totalScore / score.totalMaxScore * 100
   }
-
-
-  // serverValidationCheck(mode: any) {
-  //   if(mode == 'server') {
-  //     this.questionSetEvaluable = true;
-  //     return this.questionSetEvaluable;
-  //   } else {
-  //     this.questionSetEvaluable = false;
-  //     return this.questionSetEvaluable
-  //   }
-  // }
 
   getCourseRating(courseId: string) {
     this.courseConsumptionService.getCourseRating(courseId).subscribe((res: any) => {
