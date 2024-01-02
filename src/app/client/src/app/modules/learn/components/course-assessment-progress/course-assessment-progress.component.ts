@@ -117,7 +117,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
             competency:data.competencyIdsMapping[0],
             publishedDate: new Date(data.lastPublishedOn).toLocaleDateString(),
             Duration:this.covertTime(data.Duration),
-            totalMembers:courseBatch.length>0?courseBatch[0].count:'NA',
+            totalMembers:courseBatch.length>0?courseBatch[0].count:'0',
             batchId:data.batches?data.batches[0].batchId:'',
             link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
           }}); 
