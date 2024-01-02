@@ -6,7 +6,8 @@ import { IImpressionEventInput } from '@sunbird/telemetry';
 import { WorkSpaceService } from './../../services';
 @Component({
   selector: 'app-create-content',
-  templateUrl: './create-content.component.html'
+  templateUrl: './create-content.component.html',
+  styleUrls: ['./create-content.component.scss']
 })
 export class CreateContentComponent implements OnInit, AfterViewInit {
 
