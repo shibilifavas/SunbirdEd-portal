@@ -461,7 +461,7 @@ const API_LIST = {
     },
     '/learner/user/v2/signup': {
       checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC]
+      ROLE_CHECK: [ROLE.ANONYMOUS]
     },
     '/learner/user/v1/feed/:userId': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
@@ -1667,6 +1667,27 @@ const API_LIST = {
         ROLE.CONTENT_CREATOR
       ]
     },
+    '/api/questionset/v2/retire/:do_id': {
+      description: 'QuestionSet retire',
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [
+        ROLE.CONTENT_CREATOR
+      ]
+    },
+    '/action/questionset/v2/retire/:do_id': {
+      description: 'QuestionSet retire',
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [
+        ROLE.CONTENT_CREATOR
+      ]
+    },
+    '/content/questionset/v2/retire/:do_id': {
+      description: 'QuestionSet retire',
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [
+        ROLE.CONTENT_CREATOR
+      ]
+    },
     '/action/question/v2/read/:do_id': {
       description: 'Question read',
       checksNeeded: ['ROLE_CHECK'],
@@ -1924,6 +1945,14 @@ const API_LIST = {
     "/learner/course/batch/cert/v1/template/add": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/learner/course/v1/batch/allparticipants/list" : {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/learner/course/v2/users/list": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     }
   },
   URL_PATTERN: [
@@ -2077,7 +2106,13 @@ const API_LIST = {
     '/learner/course/v1/batch/participants/list',
     '/learner/user/v1/search',
     '/learner/course/batch/cert/v1/template/add',
-    '/action/asset/v1/create'
+    '/action/asset/v1/create',
+    'course/v1/batch/allparticipants/list',
+    '/learner/user/v1/create',
+    '/action/questionset/v2/retire/:do_id',
+    '/content/questionset/v2/retire/:do_id',
+    '/learner/user/v2/signup',
+    '/learner/course/v2/users/list'
   ]
 };
 module.exports = API_LIST;

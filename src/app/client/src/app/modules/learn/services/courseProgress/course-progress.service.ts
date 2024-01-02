@@ -204,7 +204,6 @@ export class CourseProgressService {
         req['progress'] = this.completionPercentage;
       }
     } else {
-      //Is this required? As we are calling content state update in assessment score service
       req = {
         contentId: data.contentId,
         batchId: data.batchId,

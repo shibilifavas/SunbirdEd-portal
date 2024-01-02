@@ -1,3 +1,5 @@
+@use "compass-sb-styles/assets/mixins/mixins"as *;
+
 .aside {
     display: flex;
     flex-direction: column;
@@ -151,4 +153,98 @@ textarea {
 
 .active-star {
     color: var(--com-primary-color);
+}
+
+.avg-progress {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.08);
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+    align-items: center;
+
+    .completed-icon {
+        height: 24px;
+
+        .icon-svg {
+            top: 0;
+        }
+    }
+}
+
+[data-percentage="100"] {
+    .progress-circle__stroke:nth-child(2) {
+        stroke: none !important;
+        stroke-dasharray: 314.1592%;
+    }
+}
+
+.progress-circle {
+    height: calculateRem(40px);
+    width: calculateRem(40px);
+    position: relative;
+
+    span {
+        position: absolute;
+        font-size: calculateRem(8px);
+        font-weight: bold;
+        margin: 0 auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    &__svg {
+        border-radius: 50%;
+        height: 110%;
+        transform: scaleX(-1) rotate(-90deg);
+        width: 110%;
+        text {
+            transform-origin: 50% 50%;
+            transform: scaleX(-1) rotate(270deg);
+        }
+    }
+
+    &__stroke {
+        fill: none;
+        stroke-width: calculateRem(14px);
+
+        &:nth-child(1) {
+            stroke: var(--com-grey-16);
+        }
+
+        &:nth-child(2) {
+            stroke: rgb(35, 134, 252);
+            stroke-dasharray: 314.1592%;
+        }
+    }
+
+    &--xs {
+        span {
+            display: none;
+        }
+    }
+
+    &--xs {
+        height: calculateRem(40px);
+        width: calculateRem(40px);
+
+        .progress-circle__stroke {
+            stroke-width: calculateRem(14px);
+        }
+    }
+
+    @for $i from 0 to 100 {
+        &[data-percentage="#{$i}"] {
+            .progress-circle__stroke:nth-child(2) {
+                stroke-dashoffset: calc(-314.1592% * (#{$i} / 100));
+            }
+        }
+    }
+
+    &--success {
+        img.icon_progress_check {
+            width: 100%;
+        }
+    }
 }

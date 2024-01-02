@@ -172,6 +172,10 @@
   cursor: pointer;
 }
 
+.browseByCard{
+  cursor: pointer;
+}
+
 .browseTitle {
   font-weight: 600;
   font-size: 20px;
@@ -268,4 +272,7 @@ body .slick-next {
   text-align: center;
   justify-content: center;
   display: flex !important;
+}
+.comp-card-container{
+  margin-bottom: 4.5rem;
 }

@@ -57,6 +57,7 @@ import { LanguageDropdownComponent } from './components/language-dropdown/langua
 import { CompassBreadcrumbComponent } from './components/compass-breadcrumb/compass-breadcrumb.component';
 import { MegaMenuComponent } from './components/mega-menu/mega-menu.component';
 import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
+import { NotificationModule } from '../notification/notification.module';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { SnackBarComponent } from './components/snack-bar/snack-bar.component';
         MatAutocompleteModule, MatFormFieldModule, MatInputModule,
         MatChipsModule, MatIconModule, MatSelectModule, MatListModule, MatButtonModule, MatCheckboxModule, MaterialModule,
     CommonConsumptionModule, MatMenuModule,
-    RouterModule
+    RouterModule,
+    NotificationModule
     ],
     declarations: [AppLoaderComponent, DateFormatPipe,
         BatchCardComponent, NoResultComponent, CardComponent, CardCreationComponent, FilterPipe, InterpolatePipe,

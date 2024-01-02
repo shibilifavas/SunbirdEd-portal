@@ -868,6 +868,7 @@ export class AssessmentPlayerComponent implements OnInit, OnDestroy, ComponentCa
     this.playerConfig = serveiceRef.getConfig(contentDetails);
     this.publicPlayerService.getQuestionSetRead(id).subscribe((data: any) => {
       this.playerConfig['metadata']['instructions'] = _.get(data, 'result.questionset.instructions');
+      this.playerConfig['metadata']['outcomeDeclaration'] = _.get(data, 'result.questionset.outcomeDeclaration');
       this.showPlayer = true;
     }, (error) => {
       this.showPlayer = true;

@@ -258,6 +258,7 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
                     const metaData = this.config.appConfig.WORKSPACE.Draft.metaData;
                     const dynamicFields = this.config.appConfig.WORKSPACE.Draft.dynamicFields;
                     this.draftList = this.workSpaceService.getDataForCard(allContent, constantData, dynamicFields, metaData);
+                    console.log("draftList",this.draftList);
                     this.showLoader = false;
                 } else {
                     this.showError = false;
@@ -275,11 +276,13 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
                 this.toasterService.error(this.resourceService.messages.fmsg.m0006);
             }
         );
+        console.log("draftList",this.draftList);
     }
     /**
      * This method launch the content editior
     */
     contentClick(param) {
+        console.log("after delete click", param);
         if (_.size(param.data.lockInfo) && this.userService.userid !== param.data.lockInfo.createdBy) {
             this.lockPopupData = param.data;
             this.showLockedContentModal = true;
@@ -290,7 +293,7 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
                     type: param.data.metaData.contentType,
                     ver: '1.0'
                 };
-                this.deleteConfirmModal(param.data.metaData.identifier);
+                this.deleteConfirmModal(param.data.metaData.identifier, param.data.metaData.primaryCategory);
             } else {
                 this.workSpaceService.navigateToContent(param.data.metaData, this.state);
             }
@@ -301,7 +304,10 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
         this.showLockedContentModal = false;
     }
 
-    public deleteConfirmModal(contentIds) {
+    public deleteConfirmModal(contentIds, primaryCategory) {
+        console.log("after confirm modal");
+        console.log("contentIds ",contentIds);
+        console.log("primaryCategory ",primaryCategory);
         const config = new TemplateModalConfig<{ data: string }, string, string>(this.modalTemplate);
         config.isClosable = false;
         config.size = 'small';
@@ -319,21 +325,40 @@ export class DraftComponent extends WorkSpace implements OnInit, AfterViewInit {
                 this.loaderMessage = {
                     'loaderMessage': this.resourceService.messages.stmsg.m0034,
                 };
-                this.delete(contentIds).subscribe(
-                    (data: ServerResponse) => {
-                        this.showLoader = false;
-                        this.draftList = this.removeContent(this.draftList, contentIds);
-                        // after delete if current page results are zero
-                        if (this.draftList.length === 0) {
-                            this.fetchDrafts(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber);
+                if(primaryCategory == "Practice Question Set"){
+                    this.retire(contentIds).subscribe(
+                        (data: ServerResponse) => {
+                            this.showLoader = false;
+                            this.draftList = this.removeContent(this.draftList, contentIds);
+                            // after delete if current page results are zero
+                            if (this.draftList.length === 0) {
+                                this.fetchDrafts(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber);
+                            }
+                            this.toasterService.success(this.resourceService.messages.smsg.m0006);
+                        },
+                        (err: ServerResponse) => {
+                            this.showLoader = false;
+                            this.toasterService.error(this.resourceService.messages.fmsg.m0022);
                         }
-                        this.toasterService.success(this.resourceService.messages.smsg.m0006);
-                    },
-                    (err: ServerResponse) => {
-                        this.showLoader = false;
-                        this.toasterService.error(this.resourceService.messages.fmsg.m0022);
+                        );
+                    } 
+                    else {
+                        this.delete(contentIds).subscribe(
+                            (data: ServerResponse) => {
+                                this.showLoader = false;
+                                this.draftList = this.removeContent(this.draftList, contentIds);
+                                // after delete if current page results are zero
+                                if (this.draftList.length === 0) {
+                                    this.fetchDrafts(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber);
+                                }
+                                this.toasterService.success(this.resourceService.messages.smsg.m0006);
+                            },
+                            (err: ServerResponse) => {
+                                this.showLoader = false;
+                                this.toasterService.error(this.resourceService.messages.fmsg.m0022);
+                            }
+                        );
                     }
-                );
             })
             .onDeny(result => {
             });

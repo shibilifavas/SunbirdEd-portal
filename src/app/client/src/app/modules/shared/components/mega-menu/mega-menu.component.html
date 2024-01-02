@@ -1,6 +1,6 @@
 <div class="container ui">
     <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();">Spaces</h3> 
-    <ul class="list" (click)="$event.stopPropagation();">
+    <ul class="list">
         <li>
             <a href="javascript:void(0);" (click)="navigateToHomepage()" mat-menu-item>
                 <mat-icon>school</mat-icon>
@@ -11,11 +11,11 @@
               </a>
         </li>
         <li>
-          <a href="javascript:void(0);"  (click)="navigateTo('/discussion-forum')" mat-menu-item>
+          <a href="javascript:void(0);"  (click)="navigateTo('/discussion')" mat-menu-item>
             <mat-icon>settings_brightness</mat-icon>
              <div class="display">
-                <h3 class="	sub-heading-two">Discussion Forum</h3>
-                <p>Discussion Forum space</p>
+                <h3 class="	sub-heading-two">Discussion</h3>
+                <p>Discussion space</p>
              </div>
          </a>
         </li>
@@ -62,7 +62,7 @@
       </li>
     </ul>
     <h3 class="	sub-heading-mobile" (click)="$event.stopPropagation();"
-    *ngIf="permissionService.checkRolesPermissions(workSpaceRole) || permissionService.checkRolesPermissions(adminDashboard)"
+    *ngIf="permissionService.checkRolesPermissions(adminDashboard)"
    >Report and Analysis</h3>
    <ul class="list">
       <li *ngIf="permissionService.checkRolesPermissions(adminDashboard)">
@@ -71,6 +71,15 @@
           <div class="display">
               <h3 class="sub-heading-two">Course and Assessment progress</h3>
               <p>Course and Assessment progress</p>
+          </div>
+        </a>
+      </li>
+      <li *ngIf="permissionService.checkRolesPermissions(adminDashboard)">
+        <a href="javascript:void(0);"  (click)="navigateTo('/manage')" mat-menu-item>
+          <mat-icon>perm_data_setting</mat-icon>
+          <div class="display">
+              <h3 class="sub-heading-two">Manage Users</h3>
+              <p>Manage Users: add, update roles to users</p>
           </div>
         </a>
       </li>

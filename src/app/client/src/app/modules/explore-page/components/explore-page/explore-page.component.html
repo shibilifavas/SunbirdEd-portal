@@ -291,7 +291,7 @@
 
   <ng-container *ngIf="dynamicPopularCard.length>0">
     <ng-container *ngFor="let card of dynamicPopularCard; let i=index">
-      <div *ngIf="card.data.length > 0" class="ui container mt-4rem">
+      <div *ngIf="card.data.length > 0" class="ui container mt-4rem comp-card-container">
         <div class="popular-card">
           <div class="popular-card-title">{{card.popularTitle}}</div>
           <button class="com-secondary-btn"

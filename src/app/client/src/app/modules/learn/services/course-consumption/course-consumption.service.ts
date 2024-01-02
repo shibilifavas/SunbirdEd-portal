@@ -32,6 +32,7 @@ export class CourseConsumptionService {
   progressdetails: any = {};
   mimeType: string = '';
   contentIds: any;
+  AvgPercentage: any = 0
 
   constructor(private playerService: PlayerService, private courseProgressService: CourseProgressService,
     private toasterService: ToasterService, private resourceService: ResourceService, private router: Router,
@@ -289,6 +290,33 @@ getAllOpenBatches(contents) {
       sum = sum + allCounts[i];
     }
     return Math.round(sum / totalCount);
+  }
+
+  calculateAvgCourseProgress(response: any) {
+    let avgCourseProgress = 0;
+    let totalCount = 0;
+    if(this.tocList.length > 0) {
+      this.tocList.forEach((toc: any) => {
+        toc.body.forEach((body: any) => {
+          totalCount++;
+          if(response?.length > 0) {
+            response.filter((res: any) => {
+              if(body.selectedContent == res.contentId) {
+                if(body.mimeType == 'application/vnd.sunbird.questionset' || body.mimeType == 'application/vnd.ekstep.content-collection' || body.mimeType == 'application/vnd.ekstep.ecml-archive') {
+                  avgCourseProgress = avgCourseProgress + res.progress
+                } else {
+                  avgCourseProgress = avgCourseProgress + res.completionPercentage
+                }
+              }
+            })
+          }
+        })
+      })
+    }
+    if(totalCount == 0) {
+      this.AvgPercentage = 0;
+    }
+    this.AvgPercentage = Math.round(avgCourseProgress / totalCount);
   }
 
 

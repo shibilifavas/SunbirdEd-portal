@@ -12,12 +12,19 @@
                 <span *ngIf="col !== 'appIcon' && col !== 'initials'">
                   <img *ngIf="col === 'name'" [src]="row['appIcon']" />
                   <span *ngIf="col === 'name' && row['initials']" class="initials">{{row['initials']}}</span>
-
                        <ng-container *ngIf="col === 'progress'">
-                        <span class="progress-bar">
-                          <mat-progress-bar class='members-status' mode="determinate" value="{{row[col]}}" color="none"></mat-progress-bar>
-                        </span> {{row[col]}} %
-                       </ng-container>
+                        <ng-container *ngIf="row[col] > 0 && row[col] < 100">
+                          <span class="progress-bar">
+                            <mat-progress-bar class='members-status' mode="determinate" value="{{row[col]}}" color="none"></mat-progress-bar>
+                          </span> {{row[col]}} %
+                      </ng-container>
+                      <ng-container *ngIf="row[col] == 0">
+                        <span class="progress-red">Not started</span>
+                      </ng-container>
+                      <ng-container *ngIf="row[col] == 100">
+                          <span class="progress-green">Completed</span>
+                      </ng-container>
+                        </ng-container>
                        <ng-container *ngIf="col !== 'progress'">
                         {{row[col]}}
                        </ng-container>
@@ -44,7 +51,7 @@
       </tr>
     </table>
   
-    <mat-paginator #paginator [pageSizeOptions]="[15, 20, 30]" [length]="1000" aria-label="Select page of users"></mat-paginator>
+    <mat-paginator *ngIf="showPagination" #paginator [pageSizeOptions]="[15, 20, 30]" [length]="count" aria-label="Select page of users"></mat-paginator>
   </div>
   
   

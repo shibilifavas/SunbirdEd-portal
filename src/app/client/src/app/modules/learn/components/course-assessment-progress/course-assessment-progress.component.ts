@@ -6,6 +6,7 @@ import { ContentSearchService } from '@sunbird/content-search';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/internal/operators/map';
 import {get} from 'lodash-es';
+import { CourseBatchService } from '../../services';
 
 export interface CourseData {
   id: string;
@@ -15,6 +16,7 @@ export interface CourseData {
   Duration: string;
   publishedDate: string;
   totalMembers: number;
+  batchId:any[];
   link: any;
 }
 
@@ -33,10 +35,12 @@ export class CourseAssessmentProgressComponent implements OnInit {
   sortBy:string;
   count: number;
   primaryCategory = 'Course';
-  selectedCompetenciesList = [];
+  competencyModel:any = {
+    selectedCompetenciesList: <Array<any>>[]
+  }
 
   constructor( public userService: UserService, private searchService: SearchService, 
-    private contentSearchService: ContentSearchService, private orgDetailsService: OrgDetailsService) { 
+    private contentSearchService: ContentSearchService, private orgDetailsService: OrgDetailsService, private courseBatchService: CourseBatchService) { 
       
   }
 
@@ -52,7 +56,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
     this.fetchRequestContents(0,15);
   }
 
-  fetchRequestContents(pageNumber, limit) {
+  fetchRequestContents(pageNumber?:number, limit?:number) {
         let searchRequest = { 
               "request": {
                   "fields": [
@@ -78,30 +82,47 @@ export class CourseAssessmentProgressComponent implements OnInit {
               }
           };
           let option = { ...searchRequest.request };
-          if(this.selectedCompetenciesList.length){
-            option.filters['targetTaxonomyCategory4Ids'] = this.selectedCompetenciesList;
+          if(this.competencyModel.selectedCompetenciesList.length){
+            option.filters['targetTaxonomyCategory4Ids'] = this.competencyModel.selectedCompetenciesList.map(comp => comp.identifier);
           }
           const params = { orgdetails: 'orgName,email', framework: this.contentSearchService.frameworkId };
           option['params'] = params;
+          if(this.search){option['query'] = this.search;}
           this.searchService.contentSearch(option).subscribe((res: any) => {
               this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
               this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
-              // this.count = res.count;
-              console.log('recentlyPublishedList', this.recentlyPublishedList);
-              this.dataSource = this.recentlyPublishedList.map((data:any) => { 
-              return {
-                id:data.identifier,
-                appIcon:data.appIcon,
-                name:data.name,
-                competency:data.competencyIdsMapping[0],
-                publishedDate: new Date(data.lastPublishedOn).toLocaleDateString(),
-                Duration:this.covertTime(data.Duration),
-                totalMembers:100,
-                link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
-              }}); 
+              this.count = res.result.count;
+             const batchList = this.recentlyPublishedList.map(c => {
+                return c.batches?c.batches[0].batchId:'';
+              });
+              this.getAllparicipentsList(batchList);           
           });  
   }
 
+  getAllparicipentsList(batchList){
+      let payload = {
+        request:{
+          batch: {
+            batchId:batchList.filter((b:any) => b!=='' && b !== '01392170577311334432')
+          }
+        }
+      }
+      this.courseBatchService.getAllParticipantList(payload).subscribe((res:any) => {
+        this.dataSource = this.recentlyPublishedList.map((data:any) => { 
+          let courseBatch = data.batches?res.filter((b:any) => b.batchId === data.batches[0].batchId):[];
+          return {
+            id:data.identifier,
+            appIcon:data.appIcon,
+            name:data.name,
+            competency:data.competencyIdsMapping[0],
+            publishedDate: new Date(data.lastPublishedOn).toLocaleDateString(),
+            Duration:this.covertTime(data.Duration),
+            totalMembers:courseBatch.length>0?courseBatch[0].count:'0',
+            batchId:data.batches?data.batches[0].batchId:'',
+            link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
+          }}); 
+    });
+  }
 
   getChannelId(): Observable<{ channelId: string, custodianOrg: boolean }> {
     if (this.isUserLoggedIn()) {
@@ -131,18 +152,21 @@ export class CourseAssessmentProgressComponent implements OnInit {
     this.fetchRequestContents(event.pageIndex+1,event.pageSize);
   }
 
-  public sort = (key) => {
-      return (a, b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
+  public sort = (key:any) => {
+      return (a:any, b:any) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0);
   }
 
   public isUserLoggedIn(): boolean {
       return this.userService && (this.userService.loggedIn || false);
   }
 
-  onSelect(value){
-    console.log(value);
-    this.selectedCompetenciesList = value;
+  onSelect(value:any){
+    this.competencyModel.selectedCompetenciesList = value;
     this.fetchRequestContents(0,15);
+  }
+
+  searchQuery() {
+    this.fetchRequestContents();
   }
 
   covertTime(time) {
@@ -165,4 +189,10 @@ export class CourseAssessmentProgressComponent implements OnInit {
     } 
   }
 
+  removeCompetencies(selected) {
+    this.competencyModel.selectedCompetenciesList = this.competencyModel.selectedCompetenciesList.filter(comp => {
+      return selected !== comp.identifier;
+    })
+    this.fetchRequestContents(0,15);
+  }
 }

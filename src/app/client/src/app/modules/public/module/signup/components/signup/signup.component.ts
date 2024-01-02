@@ -52,6 +52,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   firstNameFieldError = false;
   lastNameFieldError = false;
   emailFieldError = false;
+  phoneFieldError = false;
   passwordFieldError = false;
   confirmPasswordFieldError = false;
 
@@ -227,6 +228,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     let lastName: any = document.getElementById("last_name");
     let email: any = document.getElementById("email");
     let username: any = document.getElementById("username");
+    let phone: any = document.getElementById("phone");
     let password: any = document.getElementById("password");
     let confirmPassword: any = document.getElementById("confirm_password");
 
@@ -235,8 +237,10 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     this.firstNameFieldError = false;
     this.lastNameFieldError = false;
     this.emailFieldError = false;
+    this.phoneFieldError = false;
     this.passwordFieldError = false;
-    this.confirmPasswordFieldError = false
+    this.confirmPasswordFieldError = false;
+    this.confirmPasswordFieldError = false;
     if (firstName.value === "" && lastName.value === "" && password.value === "") {
       this.registerErrorMessage = "All the fields are required";
       this.firstNameFieldError = true;
@@ -253,6 +257,9 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     } else if (email.value === "") {
       this.emailFieldError = true;
       this.registerErrorMessage = "Please enter email id";
+    }else if (phone.value === "") {
+      this.phoneFieldError = true;
+      this.registerErrorMessage = "Please enter phone number";
     } else if (password.value === "") {
       this.passwordFieldError = true;
       this.registerErrorMessage = "Please enter password";
@@ -274,22 +281,13 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     let data = {
       request: {
         firstName: firstName.value,
+        email: email.value,
+        phone: phone.value,
+        userName: email.value,
         lastName: lastName.value,
         password: password.value,
-        email: email.value,
-        profileDetails: {
-              personalDetails: {
-                  email: email.value,
-                  userName: email.value,
-                  channel: this.config.appConfig.channelName,
-                  roles: [
-                      'PUBLIC'
-                  ]
-              },
-              professionalDetails: [],
-              employmentDetails: {},
-              areaOfInterest : []
-          }
+
+        channel: this.config.appConfig.channelName
       }
   }
 
@@ -302,6 +300,7 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
       firstName.value = "";
       lastName.value = "";
       email.value = "";
+      phone.value = "";
       password.value = "";
       confirmPassword.value = "";
       this.registerSuccessMessage = "Registration successfull, please login."

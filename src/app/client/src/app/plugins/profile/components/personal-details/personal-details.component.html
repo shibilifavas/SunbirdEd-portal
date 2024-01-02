@@ -6,16 +6,23 @@
             <div class="intials mr-20">
                 {{userProfile?.firstName[0] | uppercase }}{{userProfile?.lastName[0] | uppercase }}
             </div>
-            <div *ngFor = "let field of formData.colOne.fields" class="form-group">
-                <label for="{{field.value}}">{{field.label}}</label>
-                <input *ngIf="field.value!='phone'&&field.value!='primaryEmail'&&field.value!='doj'" class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
-                <input *ngIf="field.value=='primaryEmail'" class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="{{userProfile?.email}}" [value]="userProfile?.email"
-                readonly>
-                <input *ngIf="field.value=='doj'" class="input" type="date" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
-                <div class="phone" *ngIf="field.value=='phone'">
-                  <input class="input w-10 mr-10" type="number" id="{{field.value1}}" formControlName="{{field.value1}}" placeholder="+91">
+            <div *ngFor="let field of formData.colOne.fields" class="form-group">
+              <label for="{{field.value}}">{{field.label}}</label>
+              <ng-container [ngSwitch]="field.value">
+                <input *ngSwitchDefault class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+                <div class="required" *ngIf="form.get(field.value).hasError('required')">
+                  This field is required.
+                </div>
+                <select *ngSwitchCase="'designation'" class="input select" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Select designation">
+                  <option class="select" *ngFor="let option of positions" [value]="option.name">{{option.name}}</option>
+                </select>
+                <input *ngSwitchCase="'primaryEmail'" class="input" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="{{userProfile?.email}}" [value]="userProfile?.email" readonly>
+                <input *ngSwitchCase="'doj'" class="input" type="date" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
+                <div *ngSwitchCase="'phone'" class="phone">
+                  <input class="input w-10 mr-10" type="text" id="{{field.value1}}" formControlName="{{field.value1}}" placeholder="+91">
                   <input class="input w-90" type="text" id="{{field.value}}" formControlName="{{field.value}}" placeholder="Type here">
-              </div>
+                </div>
+              </ng-container>
             </div>
             <!-- <div *ngFor = "let field of formData.colOne.radio" class="form-group">
                 <label for="{{field.value}}">{{field.label}}</label>

@@ -6,8 +6,10 @@
     }
     &__header{
         background: var(--white);
+        display: flex;
+        justify-content: space-between;
     }
-    
+       
     &__tabs{
 
     }
@@ -23,10 +25,12 @@
     }
     &-section__header{
         display: flex;
-        justify-content: flex-end;
-        margin: 24px 0;
-
-
+        justify-content:space-between;
+        margin: 24px 0 0;
+       
+        &-filter {
+            display: flex;
+        }
         ::ng-deep .mat-form-field {
             width:300px;
             margin-right: 20px;
@@ -60,6 +64,7 @@
             }
         }
     }
+   
 
     &__search {
        ::ng-deep .mat-form-field-label{
@@ -71,4 +76,12 @@
 
 *:focus-visible {
     border:none !important
+}
+
+::ng-deep .mat-chip-list {
+    margin:0 0 10px;
+    display: flex;
+    .mat-standard-chip {
+        background: var(--white);
+    }
 }

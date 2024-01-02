@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-competency-passbook',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./competency-passbook.component.scss']
 })
 export class CompetencyPassbookComponent implements OnInit {
+  public sanitizedUrl: SafeResourceUrl;
 
   breadCrumbData: any = [
     {
@@ -21,23 +23,11 @@ export class CompetencyPassbookComponent implements OnInit {
       "icon": "extension"
     }
   ];
-  constructor() { }
+  constructor(private sanitizer: DomSanitizer) {
+    const url = `https://compass.samagra.io?userId=${localStorage.getItem('userId')}`;
+    this.sanitizedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+   }
 
-  ngOnInit(): void {
-    // this.breadCrumbData = [
-    //   {
-    //     "label": "Learn",
-    //     "status": "inactive",
-    //     "link": "resources",
-    //     "icon": "school"
-    //   },
-    //   {
-    //     "label": "Competency passbook",
-    //     "status": "active",
-    //     "link": "competency-passbook",
-    //     "icon": "extension"
-    //   }
-    // ];
-  }
+  ngOnInit(): void {}
 
 }

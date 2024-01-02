@@ -19,6 +19,8 @@ export class DataTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   @Output() onPageChange = new EventEmitter();
+  @Input() showPagination: boolean = true;
+  @Input() count: number;
   constructor() {
   
   }
@@ -31,9 +33,9 @@ export class DataTableComponent implements OnInit {
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-    this.paginator.page.subscribe(r => {
+    this.paginator?.page.subscribe(r => {
       this.onPageChange.emit(r);
-    })
+    });
   }
 
   applyFilter(event: Event) {
