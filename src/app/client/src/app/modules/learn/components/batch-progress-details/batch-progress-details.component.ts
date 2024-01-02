@@ -28,13 +28,14 @@ export class BatchProgressDetailsComponent implements OnInit {
   authToken : [];
   displayColumns = ['initials', 'name', 'designation', 'department','progress', 'link'];
   breadCrumbData = [];
-  search:string;
+  search:string = '';
   startDate = new FormControl();
   endDate = new FormControl();
   showDatedropdown = false;
   statusList = ['All members', 'Completed', 'Not started'];
   status = new FormControl('');
   dateRange;
+  updatedMemberList = [];
 
   constructor(private route: ActivatedRoute, 
     private courseBatchService: CourseBatchService, 
@@ -79,7 +80,8 @@ export class BatchProgressDetailsComponent implements OnInit {
                 userId: [
                     ...res
                 ]
-              }
+              },
+            query:this.search.length>0?this.search:'',
           }
         }
         this.userSerivce.getEnrolledUsers(requestBody).subscribe((memResponse:any) => {
@@ -90,7 +92,7 @@ export class BatchProgressDetailsComponent implements OnInit {
                     name: m.firstName+' '+m.lastName,
                     designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
                     department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-                    progress: 80,
+                    progress: 0,
                     link:{path:'/profile', text:'profile'}
                   }
                 })
@@ -103,7 +105,8 @@ export class BatchProgressDetailsComponent implements OnInit {
   }
 
   updateProgress(res, memResponse){
-    let updatedMemberList = [];
+    this.updatedMemberList = [];
+    let filteredCourseList = [];
     const option = {
       url: this.configService.urlConFig.URLS.COURSE.COURSE_USERS,
       data: { 
@@ -116,27 +119,23 @@ export class BatchProgressDetailsComponent implements OnInit {
       }
     }
     this.learnerService.post(option).subscribe((courseList:any) => {
-        updatedMemberList = memResponse.map((m:any) => {
-            const perValue = courseList.result.courses.filter((cos:any) => {
-               if(cos.courseId === this.courseDetails.id && cos.userId === m.id) {
-                return cos;
-               }
-            });
-      
-            return {
+        filteredCourseList = courseList.result.courses.filter((c:any) => c.courseId === this.courseDetails.id);
+        this.updatedMemberList = memResponse.map((m:any) => {
+            const perValue = filteredCourseList.filter((cos:any) => cos.userId === m.id);
+        return {
               initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
               name: m.firstName+' '+m.lastName,
-              designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
-              department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-              progress:perValue.length>0?perValue[0].completionPercentage:0,
-              link:{path:'/profile', text:'profile'}
+              designation:m.profileDetails!==null? m.profileDetails.professionalDetails[0].designation : '',
+              department:m.profileDetails !== null? m.profileDetails.employmentDetails.departmentName : '',
+              progress:perValue.length>0? perValue[0].completionPercentage : 0,
+              link:{ path:'/profile', text:'profile' }
             }
           });
-          this.memberList = [...updatedMemberList];
+          this.memberList = [...this.updatedMemberList];
     });
   }
 
-  OnDateChange(e){
+  OnDateChange(e) {
     console.log(this.startDate.value.format('DD/MM/yyyy'));
     console.log(this.endDate.value.format('DD/MM/yyyy'));
   }
@@ -145,13 +144,29 @@ export class BatchProgressDetailsComponent implements OnInit {
     console.log(e);
   }
 
-  onSelect(event){
-    console.log(event);
+  onSelect(event:any) {
+    let filtedList = [];
+      switch(event) {
+      case 'Not started' :  filtedList = this.updatedMemberList.filter(m => m.progress === 0);
+                            console.log(filtedList);
+                              break;
+      case 'Completed' :    filtedList = this.updatedMemberList.filter(m => m.progress === 100);
+                              console.log(filtedList);
+                              break;
+      case 'All members' :  filtedList = this.updatedMemberList; 
+                              console.log(filtedList);
+                              break;
+      default:break;         
+    }
+    this.memberList = [...filtedList];
   }
 
+  searchQuery() {
+    this.getBatchParticipentList();
+  }
 
   bulkDateFilter(data) {
-    switch(data){
+    switch(data) {
       case 'today': let dateRange = new Date().toUTCString();
                     console.log(new Date(dateRange).toLocaleDateString());
                       break;
@@ -175,5 +190,6 @@ export class BatchProgressDetailsComponent implements OnInit {
     let lastDay = new Date(y, m, 0);
     return {firstDay:firstDay, lastDay: lastDay};
   }
+
 
 }
