@@ -387,6 +387,7 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
           this.deleteContent(this.currentContentId, this.currentPrimaryCategory);
           return;
         }
+        this.deleteContent(this.currentContentId, this.currentPrimaryCategory);
         this.showCollectionLoader = true;
         const collections = _.get(response, 'result.content', []);
 
