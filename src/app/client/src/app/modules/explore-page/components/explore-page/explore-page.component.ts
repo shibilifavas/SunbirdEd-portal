@@ -20,6 +20,7 @@ import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
 import { IContent } from '@project-sunbird/common-consumption';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { WishlistedService } from '../../../../service/wishlisted.service';
 
 interface IContentSearchRequest {
     request: {
@@ -202,7 +203,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         private browserCacheTtlService: BrowserCacheTtlService, private profileService: ProfileService,
         private segmentationTagService: SegmentationTagService, private observationUtil: ObservationUtilService,
         private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef, private taxonomyService: TaxonomyService,
-        private learnPageContentService: publicService.LearnPageContentService, private snackBar: MatSnackBar) {
+        private learnPageContentService: publicService.LearnPageContentService, private snackBar: MatSnackBar,
+        private wishlistedService: WishlistedService) {
         this.genericResourceService.initialize();
         this.instance = (<HTMLInputElement>document.getElementById('instance'))
             ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
@@ -1651,14 +1653,31 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['/learn/course', id])
     }
 
-    favoriteIconClicked(option: string) {
-        console.log("Icon: ", option)
+    favoriteIconClicked(option: string, courseId: any) {
+        console.log("Icon: ", option);
+
+        let payload = {
+            "request": {
+                "userId": this.userService._userid,
+                "courseId": courseId
+            }
+        }
 
         if(option === 'selected') {
-            this.snackBar.openFromComponent(SnackBarComponent, {
-                duration: 2000,
-                panelClass: ['wishlist-snackbar']
+            this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
+                }
             });
-          }
+        } else {
+            this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    console.log("un wishlisted");
+                }
+            });
+        }
     }
 }
