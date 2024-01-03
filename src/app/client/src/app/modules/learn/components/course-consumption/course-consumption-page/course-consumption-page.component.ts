@@ -1,6 +1,6 @@
 import { combineLatest, Subject, throwError, BehaviorSubject } from 'rxjs';
 import { map, mergeMap, first, takeUntil, delay, switchMap } from 'rxjs/operators';
-import { ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService } from '@sunbird/shared';
+import { ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService, SnackBarComponent } from '@sunbird/shared';
 import { CourseConsumptionService, CourseBatchService, CourseProgressService } from './../../../services';
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { GroupsService } from '../../../../groups/services/groups/groups.service
 import { CoursePageContentService } from "../../../services/course-page-content.service";
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { AssessmentScoreService } from './../../../services';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { PublicPlayerService } from '@sunbird/public';
 
 @Component({
@@ -55,7 +56,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
     public coursePageContentService: CoursePageContentService, private userService: UserService,
     @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
-    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService,
+    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService, private snackBar: MatSnackBar,
     public publicPlayerService: PublicPlayerService) {
   }
   ngOnInit() {
@@ -262,8 +263,15 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     isRouteChanged && this.fetchEnrolledCourses$.next(true); // update component only if batch is changed.
   }
 
-  addWishList() {
-    console.log('Add to wish list');
+  addWishList(option: string) {
+    console.log("Icon: ", option)
+
+    if(option === 'selected') {
+        this.snackBar.openFromComponent(SnackBarComponent, {
+            duration: 2000,
+            panelClass: ['wishlist-snackbar']
+        });
+      }
   }
 
   // updateCourseContent(hierarchy?: any) {

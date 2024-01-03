@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService, SchemaService, CoursesService } from '@sunbird/core';
-import { ResourceService } from '@sunbird/shared';
+import { ResourceService, SnackBarComponent } from '@sunbird/shared';
 import { ContentSearchService } from '@sunbird/content-search';
-import { ActivatedRoute } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject, of, Observable } from 'rxjs';
 import { takeUntil, map, delay, debounceTime, tap, mergeMap } from 'rxjs/operators';
 import { FrameworkService } from '../../../core/services/framework/framework.service';
 import * as _ from 'lodash-es';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-courses-search',
@@ -23,7 +24,8 @@ export class CoursesSearchComponent implements OnInit {
 
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
     public resourceService: ResourceService, private schemaService: SchemaService,
-    private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService) { }
+    private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService, private snackBar: MatSnackBar,
+     private router: Router) { }
 
   ngOnInit(): void {
     if (this.activatedRoute.snapshot.queryParams.learnings == 'true') {
@@ -141,6 +143,21 @@ export class CoursesSearchComponent implements OnInit {
       this.courses = [];
     } else {
       this.fetchContentOnParamChange();
+    }
+  }
+
+  courseCardClicked(course: any) {
+    this.router.navigate(['/learn/course', course['contentId'] ?? course['identifier']]);
+  }
+
+  favoriteIconClicked(option: string) {
+    console.log("Icon: ", option)
+
+    if(option === 'selected') {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+          duration: 2000,
+          panelClass: ['wishlist-snackbar']
+      });
     }
   }
 

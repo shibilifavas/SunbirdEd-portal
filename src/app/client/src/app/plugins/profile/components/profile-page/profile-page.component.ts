@@ -17,7 +17,8 @@ import {
   ServerResponse,
   ToasterService,
   UtilService,
-  ConnectionService
+  ConnectionService,
+  SnackBarComponent
 } from '@sunbird/shared';
 import * as _ from 'lodash-es';
 import { Subject, Subscription } from 'rxjs';
@@ -30,6 +31,7 @@ import { CsCourseService } from '@project-sunbird/client-services/services/cours
 import { FieldConfig, FieldConfigOption } from '@project-sunbird/common-form-elements-full';
 import { CsCertificateService } from '@project-sunbird/client-services/services/certificate/interface';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   templateUrl: './profile-page.component.html',
@@ -124,7 +126,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     private playerService: PlayerService, private activatedRoute: ActivatedRoute, public orgDetailsService: OrgDetailsService,
     public navigationhelperService: NavigationHelperService, public certRegService: CertRegService,
     private telemetryService: TelemetryService, public layoutService: LayoutService, private formService: FormService,
-    private certDownloadAsPdf: CertificateDownloadAsPdfService, private connectionService: ConnectionService,
+    private certDownloadAsPdf: CertificateDownloadAsPdfService, private connectionService: ConnectionService, private snackBar: MatSnackBar,
     @Inject('CS_CERTIFICATE_SERVICE') private CsCertificateService: CsCertificateService, private taxonomyService: TaxonomyService) {
     this.getNavParams();
   }
@@ -779,5 +781,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   redirectToToc(courseId, batchId) {
     this.router.navigateByUrl(`/learn/course/${courseId}/batch/${batchId}`)
     console.log(`/learn/course/${courseId}/batch/${batchId}`);
+  }
+
+  favoriteIconClicked(option: string) {
+    console.log("Icon: ", option)
+
+    if(option === 'selected') {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+          duration: 2000,
+          panelClass: ['wishlist-snackbar']
+      });
+    }
   }
 }

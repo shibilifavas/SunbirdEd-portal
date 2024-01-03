@@ -4,7 +4,7 @@ import { PublicPlayerService } from '@sunbird/public';
 import { Component, OnInit, OnDestroy, HostListener, AfterViewInit, ChangeDetectorRef, Inject } from '@angular/core';
 import {
     ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService, COLUMN_TYPE, UtilService,
-    OfflineCardService, BrowserCacheTtlService, IUserData, GenericResourceService
+    OfflineCardService, BrowserCacheTtlService, IUserData, GenericResourceService, SnackBarComponent
 } from '@sunbird/shared';
 import { Router, ActivatedRoute } from '@angular/router';
 import { cloneDeep, get, find, map as _map, pick, omit, groupBy, sortBy, replace, uniqBy, forEach, has, uniq, flatten, each, isNumber, toString, partition, toLower, includes } from 'lodash-es';
@@ -19,6 +19,8 @@ import { SegmentationTagService } from '../../../core/services/segmentation-tag/
 import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
 import { IContent } from '@project-sunbird/common-consumption';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { WishlistedService } from '../../../../service/wishlisted.service';
 
 interface IContentSearchRequest {
     request: {
@@ -168,6 +170,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     popularCompetenciesData = [];
     popularCompetencyMapping = [];
     breadCrumbData = [];
+    showIcon: boolean = false;
 
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
@@ -200,7 +203,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         private browserCacheTtlService: BrowserCacheTtlService, private profileService: ProfileService,
         private segmentationTagService: SegmentationTagService, private observationUtil: ObservationUtilService,
         private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef, private taxonomyService: TaxonomyService,
-        private learnPageContentService: publicService.LearnPageContentService) {
+        private learnPageContentService: publicService.LearnPageContentService, private snackBar: MatSnackBar,
+        private wishlistedService: WishlistedService) {
         this.genericResourceService.initialize();
         this.instance = (<HTMLInputElement>document.getElementById('instance'))
             ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
@@ -1643,5 +1647,37 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     loadTopicCourses(keyword: string) {
         this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keyword=${keyword}`)
         console.log('loadKeywordCourses', keyword);
+    }
+
+    courseCardClicked(event: any, id: any) {
+        this.router.navigate(['/learn/course', id])
+    }
+
+    favoriteIconClicked(option: string, courseId: any) {
+        console.log("Icon: ", option);
+
+        let payload = {
+            "request": {
+                "userId": this.userService._userid,
+                "courseId": courseId
+            }
+        }
+
+        if(option === 'selected') {
+            this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
+                }
+            });
+        } else {
+            this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    console.log("un wishlisted");
+                }
+            });
+        }
     }
 }

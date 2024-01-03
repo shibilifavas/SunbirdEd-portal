@@ -16,6 +16,7 @@ export class LandingPageComponent implements OnInit {
   courses: any = {};
 
   layoutConfiguration;
+  showIcon: boolean = false;
 
   constructor(public layoutService: LayoutService, public searchService: SearchService,
     private router: Router, public resourceService: ResourceService,

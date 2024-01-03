@@ -1,6 +1,6 @@
 import {
   PaginationService, ResourceService, ConfigService, ToasterService, INoResultMessage, ILoaderMessage, UtilService, BrowserCacheTtlService, NavigationHelperService, IPagination,
-  LayoutService, COLUMN_TYPE, OfflineCardService
+  LayoutService, COLUMN_TYPE, OfflineCardService, SnackBarComponent
 } from '@sunbird/shared';
 import { SearchService, PlayerService, CoursesService, UserService, ISort, OrgDetailsService, SchemaService } from '@sunbird/core';
 import { combineLatest, Subject, of, Observable } from 'rxjs';
@@ -16,6 +16,8 @@ import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
 import { FrameworkService } from '../../../core/services/framework/framework.service';
 import { ContentSearchService } from '@sunbird/content-search';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 interface Competency {
   title?: string,
   type?: string,
@@ -94,7 +96,7 @@ export class HomeSearchComponent implements OnInit, OnDestroy, AfterViewInit {
     public navigationhelperService: NavigationHelperService, public layoutService: LayoutService, private schemaService: SchemaService,
     public contentManagerService: ContentManagerService, public telemetryService: TelemetryService,
     private offlineCardService: OfflineCardService, private taxonomyService: TaxonomyService, private learnPageContentService : publicService.LearnPageContentService, private contentSearchService : ContentSearchService,
-    private frameworkService: FrameworkService) {
+    private frameworkService: FrameworkService, private snackBar: MatSnackBar) {
     this.paginationDetails = this.paginationService.getPager(0, 1, this.configService.appConfig.SEARCH.PAGE_LIMIT);
     this.filterType = this.configService.appConfig.home.filterType;
     // this.redirectUrl = this.configService.appConfig.courses.searchPageredirectUrl;
@@ -705,6 +707,21 @@ getInteractEdata(event) {
   };
   this.telemetryService.interact(cardClickInteractData);
 }
+
+  redirectToToc(content: any) {
+    this.router.navigate(['/learn/course', content['identifier']])
+  }
+
+  favoriteIconClicked(option: string) {
+    console.log("Icon: ", option);
+
+    if(option === 'selected') {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+          duration: 2000,
+          panelClass: ['wishlist-snackbar']
+      });
+    }
+  }
 
 }
 
