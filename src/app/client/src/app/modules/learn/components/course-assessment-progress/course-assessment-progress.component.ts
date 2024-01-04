@@ -38,7 +38,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
   competencyModel:any = {
     selectedCompetenciesList: <Array<any>>[]
   }
-
+  
   constructor( public userService: UserService, private searchService: SearchService, 
     private contentSearchService: ContentSearchService, private orgDetailsService: OrgDetailsService, private courseBatchService: CourseBatchService) { 
       
@@ -100,6 +100,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
   }
 
   getAllparicipentsList(batchList){
+    let updateCourseList = [];
       let payload = {
         request:{
           batch: {
@@ -108,7 +109,7 @@ export class CourseAssessmentProgressComponent implements OnInit {
         }
       }
       this.courseBatchService.getAllParticipantList(payload).subscribe((res:any) => {
-        this.dataSource = this.recentlyPublishedList.map((data:any) => { 
+        updateCourseList = this.recentlyPublishedList.map((data:any) => { 
           let courseBatch = data.batches?res.filter((b:any) => b.batchId === data.batches[0].batchId):[];
           return {
             id:data.identifier,
@@ -119,8 +120,10 @@ export class CourseAssessmentProgressComponent implements OnInit {
             Duration:this.covertTime(data.Duration),
             totalMembers:courseBatch.length>0?courseBatch[0].count:'0',
             batchId:data.batches?data.batches[0].batchId:'',
+            primaryCategory:data.primaryCategory+'s',
             link:data.batches?{text:'View Progress', path:`/learn/batch/${data.identifier}/${data.batches[0].batchId}`}:{text:'View Progress', path:'#'}
           }}); 
+       this.dataSource = [...updateCourseList];   
     });
   }
 
