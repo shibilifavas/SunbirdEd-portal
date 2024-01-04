@@ -27,7 +27,12 @@ export class BatchProgressDetailsComponent implements OnInit {
   memberList: any[];
   authToken : [];
   displayColumns = ['initials', 'name', 'designation', 'department','progress'];
-  breadCrumbData = [];
+  breadCrumbData = [{
+    label: 'Courses',
+    "status": "",
+    "icon": "list",
+    "link": "/learn/batch-progress"
+  }];
   search:string = '';
   startDate = new FormControl();
   endDate = new FormControl();
@@ -49,11 +54,12 @@ export class BatchProgressDetailsComponent implements OnInit {
     this.memberList = [];
    this.route.queryParamMap.subscribe((pa:any) => {
       this.courseDetails.name = pa.params.name;
+      this.breadCrumbData[0].label = pa.params.primaryCategory;
       this.breadCrumbData.push({
         label: this.courseDetails.name,
         "status": "active",
-        "icon": "list",
-        "link": "/learn/batch-progress"
+        "icon": "",
+        "link": ""
       })
     });
     this.route.params.subscribe(param => {
