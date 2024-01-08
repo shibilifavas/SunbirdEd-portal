@@ -404,7 +404,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
               const channelName = _.get(channelResponse, 'result.channel.name');
               channelMapping[channelId] = channelName;
             });
-            console.log("collection",collections);
             this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
             .subscribe((res: any) => {
               res.result.framework.categories.map((item)=>{
@@ -422,7 +421,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
                   })
                 }
               })
-              console.log("categoryNames",this.categoryNames);
             _.forEach(collections, collection => {
               const obj = _.pick(collection, ['contentType', 'name', 'channel']);
               obj['channel'] = channelMapping[obj.channel];

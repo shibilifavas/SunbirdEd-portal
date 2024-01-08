@@ -367,56 +367,6 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
       return;
     }
 
-    // this.getLinkedCollections(this.currentContentId)
-    //   .subscribe((response) => {
-    //     const count = _.get(response, 'result.count');
-    //     if (!count) {
-    //       this.deleteContent(this.currentContentId, this.currentPrimaryCategory);
-    //       return;
-    //     }
-    //     this.showCollectionLoader = true;
-    //     const collections = _.get(response, 'result.content', []);
-
-    //     const channels = _.map(collections, (collection) => {
-    //       return _.get(collection, 'channel');
-    //     });
-    //     const channelMapping = {};
-    //     forkJoin(_.map(channels, (channel: string) => {
-    //         return this.getChannelDetails(channel);
-    //       })).subscribe((forkResponse) => {
-    //         this.collectionData = [];
-    //         _.forEach(forkResponse, channelResponse => {
-    //           const channelId = _.get(channelResponse, 'result.channel.code');
-    //           const channelName = _.get(channelResponse, 'result.channel.name');
-    //           channelMapping[channelId] = channelName;
-    //         });
-
-    //         _.forEach(collections, collection => {
-    //           const obj = _.pick(collection, ['contentType','name','channel', ...this.taxonomyCategories]);
-    //           obj['channel'] = channelMapping[obj.channel];
-    //           this.collectionData.push(obj);
-    //       });
-
-    //       this.headers = {
-    //         type: 'Type',
-    //         name: 'Name',
-    //         [this.taxonomyCategories[3]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[3]),
-    //         [this.taxonomyCategories[2]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[2]),
-    //         [this.taxonomyCategories[1]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[1]),
-    //         [this.taxonomyCategories[0]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[0]),
-    //         channel: 'Tenant Name'
-    //         };
-    //         if (!_.isUndefined(modal)) {
-    //           this.deleteModal.deny();
-    //         }
-    //       this.collectionListModal = true;
-    //       },
-    //       (error) => {
-    //         this.toasterService.error(_.get(this.resourceService, 'messages.emsg.m0014'));
-    //         console.log(error);
-    //       });
-    //     },
-
     this.getLinkedCollections(this.currentContentId)
       .subscribe((response) => {
         const count = _.get(response, 'result.count');
@@ -440,7 +390,6 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
               const channelName = _.get(channelResponse, 'result.channel.name');
               channelMapping[channelId] = channelName;
             });
-            console.log("collection",collections);
             this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
             .subscribe((res: any) => {
               this.categoryNames = [];
@@ -459,7 +408,6 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
                   })
                 }
               })
-              console.log("categoryNames",this.categoryNames);
             _.forEach(collections, collection => {
               const obj = _.pick(collection, ['contentType', 'name', 'channel']);
               obj['channel'] = channelMapping[obj.channel];
