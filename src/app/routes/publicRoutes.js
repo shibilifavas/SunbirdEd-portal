@@ -19,7 +19,6 @@ module.exports = function (app) {
     app.all('/api/composite/v1/search', proxyObj());
     app.all('/api/ratings/v1/*', proxyObj());
     app.all('/api/course/v2/users/list', proxyObj());
-    // app.all('/api/wishlist/v1/*', proxyObjforWishlist());
     
     // app.all('/api/content/v1/create', proxyObj());
 
@@ -75,30 +74,4 @@ function proxyObj() {
         }
     })
 }
-
-// function proxyObjforWishlist() {
-//     return proxy(contentProxyUrl, {
-//         proxyReqOptDecorator: proxyUtils.decoratePublicRequestHeadersforWishlist(),
-//         proxyReqPathResolver: function (req) {
-//             let urlParam = req.originalUrl;
-//             let query = require('url').parse(req.url).query;
-//             if (query) {
-//                 return require('url').parse(contentProxyUrl + urlParam + '?' + query).path
-//             } else {
-//                 return require('url').parse(contentProxyUrl + urlParam).path
-//             }
-//         },
-//         userResDecorator: (proxyRes, proxyResData, req, res) => {
-//             try {
-//                 logger.info({ msg: 'proxyObj' + req.method + ' - ' + req.url });
-//                 const data = JSON.parse(proxyResData.toString('utf8'));
-//                 if (req.method === 'GET' && proxyRes.statusCode === 404 && (typeof data.message === 'string' && data.message.toLowerCase() === 'API not found with these values'.toLowerCase())) res.redirect('/')
-//                 else return proxyUtils.handleSessionExpiry(proxyRes, proxyResData, req, res, data);
-//             } catch (err) {
-//                 logger.error({ msg: 'Error occurred while featching the data' });
-//                 return proxyUtils.handleSessionExpiry(proxyRes, proxyResData, req, res);
-//             }
-//         }
-//     })
-// }
 
