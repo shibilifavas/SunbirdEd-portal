@@ -20,15 +20,15 @@ export class WishlistedService {
   }
 
   addToWishlist(payload: any) {
-    return this.http.post(`api/wishlist/v1/add`, payload);
+    return this.http.post(`learner/wishlist/v1/add`, payload);
   }
 
   removeFromWishlist(payload: any) {
-    return this.http.post(`api/wishlist/v1/remove`, payload);
+    return this.http.post(`learner/wishlist/v1/remove`, payload);
   }
 
   getWishlistedCourses(payload: any) {
-    return this.http.post(`api/wishlist/v1/get`, payload);
+    return this.http.post(`learner/wishlist/v1/get`, payload);
   }
 
 }

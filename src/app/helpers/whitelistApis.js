@@ -1940,17 +1940,17 @@ const API_LIST = {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     },
-    "/api/wishlist/v1/add": {
-      // checksNeeded: [],
-      // ROLE_CHECK: [ROLE.ANONYMOUS]
+    "/learner/wishlist/v1/add": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     },
-    "/api/wishlist/v1/remove": {
-      // checksNeeded: [],
-      // ROLE_CHECK: [ROLE.ANONYMOUS]
+    "/learner/wishlist/v1/remove": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     },
-    "/api/wishlist/v1/get": {
-      // checksNeeded: [],
-      // ROLE_CHECK: [ROLE.ANONYMOUS]
+    "/learner/wishlist/v1/get": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
     },
   },
   URL_PATTERN: [
@@ -2109,9 +2109,9 @@ const API_LIST = {
     '/content/questionset/v2/retire/:do_id',
     '/learner/user/v2/signup',
     '/learner/course/v2/users/list',
-    '/api/wishlist/v1/add',
-    '/api/wishlist/v1/remove',
-    '/api/wishlist/v1/get'
+    '/learner/wishlist/v1/add',
+    '/learner/wishlist/v1/remove',
+    '/learner/wishlist/v1/get'
   ]
 };
 module.exports = API_LIST;
