@@ -24,6 +24,8 @@ const cacheConfig = {
   ttl: envHelper.sunbird_cache_ttl
 }
 
+let userToken;
+
 const apiInterceptor = new ApiInterceptor(keyCloakConfig, cacheConfig, [`${envHelper.PORTAL_AUTH_SERVER_URL}/realms/${envHelper.KEY_CLOAK_REALM}`])
 
 const decorateRequestHeaders = function (upstreamUrl = "") {
@@ -48,6 +50,7 @@ const decorateRequestHeaders = function (upstreamUrl = "") {
 
     if (srcReq.kauth && srcReq.kauth.grant && srcReq.kauth.grant.access_token &&
       srcReq.kauth.grant.access_token.token) {
+      userToken = getAuthToken(srcReq)
       proxyReqOpts.headers['x-authenticated-user-token'] =  getAuthToken(srcReq)
       proxyReqOpts.headers['x-auth-token'] =  getAuthToken(srcReq)
     }
@@ -102,6 +105,15 @@ const overRideRequestHeaders = function (upstreamUrl = "", data) {
 const decoratePublicRequestHeaders = function () {
   return function (proxyReqOpts, srcReq) {
     proxyReqOpts.headers['X-App-Id'] = appId
+    proxyReqOpts.headers.Authorization = 'Bearer ' + getBearerToken(srcReq)
+    return proxyReqOpts
+  }
+}
+
+const decoratePublicRequestHeadersforWishlist = function () {
+  return function (proxyReqOpts, srcReq) {
+    proxyReqOpts.headers['Content-Type'] = 'application/json'
+    proxyReqOpts.headers['x-authenticated-user-token'] = userToken;
     proxyReqOpts.headers.Authorization = 'Bearer ' + getBearerToken(srcReq)
     return proxyReqOpts
   }
@@ -286,3 +298,4 @@ module.exports.addReqLog = addReqLog
 module.exports.overRideRequestHeaders = overRideRequestHeaders
 module.exports.validateUserTokenForDF = validateUserTokenForDF
 module.exports.checkForValidRedirect = checkForValidRedirect
+module.exports.decoratePublicRequestHeadersforWishlist = decoratePublicRequestHeadersforWishlist
