@@ -26,8 +26,13 @@ export class BatchProgressDetailsComponent implements OnInit {
   courseDetails: any = {};
   memberList: any[];
   authToken : [];
-  displayColumns = ['initials', 'name', 'designation', 'department','progress', 'link'];
-  breadCrumbData = [];
+  displayColumns = ['initials', 'name', 'designation', 'department','progress'];
+  breadCrumbData = [{
+    label: 'Courses',
+    "status": "",
+    "icon": "list",
+    "link": "/learn/batch-progress"
+  }];
   search:string = '';
   startDate = new FormControl();
   endDate = new FormControl();
@@ -49,11 +54,12 @@ export class BatchProgressDetailsComponent implements OnInit {
     this.memberList = [];
    this.route.queryParamMap.subscribe((pa:any) => {
       this.courseDetails.name = pa.params.name;
+      this.breadCrumbData[0].label = pa.params.primaryCategory;
       this.breadCrumbData.push({
         label: this.courseDetails.name,
         "status": "active",
-        "icon": "list",
-        "link": "/learn/batch-progress"
+        "icon": "",
+        "link": ""
       })
     });
     this.route.params.subscribe(param => {
@@ -92,19 +98,17 @@ export class BatchProgressDetailsComponent implements OnInit {
                     name: m.firstName+' '+m.lastName,
                     designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
                     department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
-                    progress: 0,
-                    link:{path:'/profile', text:'profile'}
+                    progress: 0
                   }
                 })
-                 // progress: courseList.filters(course => course.identifier === this.courseDetails.id && course.userId === m.id)[0].completionPercentage,
-              this.updateProgress(res,memResponse);
+                this.updateProgress(res,memResponse);
              }
         })
      }
     })
   }
 
-  updateProgress(res, memResponse){
+  updateProgress(res, memResponse) {
     this.updatedMemberList = [];
     let filteredCourseList = [];
     const option = {
@@ -127,8 +131,7 @@ export class BatchProgressDetailsComponent implements OnInit {
               name: m.firstName+' '+m.lastName,
               designation:m.profileDetails!==null? m.profileDetails.professionalDetails[0].designation : '',
               department:m.profileDetails !== null? m.profileDetails.employmentDetails.departmentName : '',
-              progress:perValue.length>0? perValue[0].completionPercentage : 0,
-              link:{ path:'/profile', text:'profile' }
+              progress:perValue.length>0? perValue[0].completionPercentage : 0
             }
           });
           this.memberList = [...this.updatedMemberList];

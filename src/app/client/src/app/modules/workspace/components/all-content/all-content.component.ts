@@ -15,6 +15,7 @@ import { SuiModalService, TemplateModalConfig, ModalTemplate } from 'ng2-semanti
 import { debounceTime, map } from 'rxjs/operators';
 import { ContentIDParam } from '../../interfaces/delteparam';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
+import { ContentSearchService } from '@sunbird/content-search';
 
 @Component({
   selector: 'app-all-content',
@@ -203,6 +204,10 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
    */
   public collectionListModal = false;
   public isQuestionSetFilterEnabled: boolean;
+  frameworkId: any;
+  categoryNames:any =[];
+  targetTaxonomyIds: any = ["targetTaxonomyCategory1Ids","targetTaxonomyCategory2Ids","targetTaxonomyCategory3Ids","targetTaxonomyCategory4Ids"];
+  competencyDetails: any = [];
   /**
     * Constructor to create injected service(s) object
     Default method of Draft Component class
@@ -222,7 +227,8 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
     route: Router, userService: UserService,
     toasterService: ToasterService, resourceService: ResourceService,
     config: ConfigService, public modalService: SuiModalService,
-    public taxonomyService:TaxonomyService) {
+    public taxonomyService:TaxonomyService,
+    private contentSearchService: ContentSearchService) {
     super(searchService, workSpaceService, userService);
     this.paginationService = paginationService;
     this.route = route;
@@ -239,6 +245,7 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
   }
 
   ngOnInit() {
+    this.frameworkId = this.contentSearchService.frameworkId;
     this.workSpaceService.questionSetEnabled$.subscribe(
       (response: any) => {
         this.isQuestionSetFilterEnabled = response.questionSetEnablement;
@@ -383,29 +390,58 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
               const channelName = _.get(channelResponse, 'result.channel.name');
               channelMapping[channelId] = channelName;
             });
-
+            this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
+            .subscribe((res: any) => {
+              this.categoryNames = [];
+              res.result.framework.categories.map((item)=>{
+                this.taxonomyCategories.map((cat: any)=>{
+                  if(item.code == cat){
+                    this.categoryNames.push(item.name);
+                  }
+                }) 
+                if(item.name=="Competencies"){
+                  item.terms.map((term:any)=>{
+                    let object: any ={};
+                    object.identifier = term.identifier;
+                    object.name = term.name;
+                    this.competencyDetails.push(object);
+                  })
+                }
+              })
             _.forEach(collections, collection => {
-              const obj = _.pick(collection, ['contentType','name','channel', ...this.taxonomyCategories]);
+              const obj = _.pick(collection, ['contentType', 'name', 'channel']);
               obj['channel'] = channelMapping[obj.channel];
+              let competencies:any = [];
+              collection[this.targetTaxonomyIds[3]].map((id:any)=>{
+                this.competencyDetails.map((comp:any)=>{
+                  if(comp.identifier == id){
+                    competencies.push(comp.name);
+                  }
+                })
+              })
+              obj[this.targetTaxonomyIds[3]] = competencies;
               this.collectionData.push(obj);
           });
+          console.log("collectionData ",this.collectionData);
 
           this.headers = {
-            type: 'Type',
-            name: 'Name',
-            [this.taxonomyCategories[3]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[3]),
-            [this.taxonomyCategories[2]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[2]),
-            [this.taxonomyCategories[1]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[1]),
-            [this.taxonomyCategories[0]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[0]),
-            channel: 'Tenant Name'
-            };
-            if (!_.isUndefined(modal)) {
+             type: 'Type',
+             name: 'Name',
+             [this.categoryNames[3]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[3]),
+             [this.categoryNames[2]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[2]),
+             [this.categoryNames[1]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[1]),
+             [this.categoryNames[0]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[0]),
+             channel: 'Tenant Name'
+             };
+             if (!_.isUndefined(this.deleteModal)) {
               this.deleteModal.deny();
             }
-          this.collectionListModal = true;
+          this.collectionListModal = true;   
+            })
+                     
           },
           (error) => {
-            this.toasterService.error(_.get(this.resourceService, 'messages.emsg.m0014'));
+           this.toasterService.error(_.get(this.resourceService, 'messages.emsg.m0014'));
             console.log(error);
           });
         },
@@ -419,7 +455,6 @@ export class AllContentComponent extends WorkSpace implements OnInit, AfterViewI
   * This method deletes content using the content id.
   */
   deleteContent(contentId, primaryCategory) {
-    console.log("primaryCategory", primaryCategory);
     this.showLoader = true;
     this.loaderMessage = {
       'loaderMessage': this.resourceService.messages.stmsg.m0034,

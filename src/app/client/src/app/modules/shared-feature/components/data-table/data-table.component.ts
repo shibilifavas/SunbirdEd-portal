@@ -46,6 +46,9 @@ export class DataTableComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  splitColumnName(str) {
+     return str.split(/(?=[A-Z])/).join(' ');
+  }
 }
 
 
