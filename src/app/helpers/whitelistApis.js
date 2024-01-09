@@ -1947,7 +1947,11 @@ const API_LIST = {
     "/api/wishlist/v1/remove": {
       // checksNeeded: [],
       // ROLE_CHECK: [ROLE.ANONYMOUS]
-    }
+    },
+    "/api/wishlist/v1/get": {
+      // checksNeeded: [],
+      // ROLE_CHECK: [ROLE.ANONYMOUS]
+    },
   },
   URL_PATTERN: [
     '/learner/user/v1/feed/delete',
@@ -2106,7 +2110,8 @@ const API_LIST = {
     '/learner/user/v2/signup',
     '/learner/course/v2/users/list',
     '/api/wishlist/v1/add',
-    '/api/wishlist/v1/remove'
+    '/api/wishlist/v1/remove',
+    '/api/wishlist/v1/get'
   ]
 };
 module.exports = API_LIST;
