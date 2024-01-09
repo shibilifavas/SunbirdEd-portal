@@ -288,4 +288,3 @@ module.exports.addReqLog = addReqLog
 module.exports.overRideRequestHeaders = overRideRequestHeaders
 module.exports.validateUserTokenForDF = validateUserTokenForDF
 module.exports.checkForValidRedirect = checkForValidRedirect
-// module.exports.decoratePublicRequestHeadersforWishlist = decoratePublicRequestHeadersforWishlist
