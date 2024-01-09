@@ -19,7 +19,7 @@ import { SegmentationTagService } from '../../../core/services/segmentation-tag/
 import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
 import { IContent } from '@project-sunbird/common-consumption';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
 import { WishlistedService } from '../../../../service/wishlisted.service';
 
 interface IContentSearchRequest {
@@ -42,6 +42,10 @@ interface IFilters {
 interface ISoftConstraints {
     badgeAssertions?: number;
     channel?: number;
+}
+
+interface SnackBarData {
+    message: string;
 }
 
 @Component({
@@ -171,6 +175,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     popularCompetencyMapping = [];
     breadCrumbData = [];
     showIcon: boolean = false;
+    allWishlistedIds = [];
 
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
@@ -307,6 +312,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.initConfiguration();
         this.segmentationTagService.getSegmentCommand();
+        this.getWishlisteddoIds();
         const enrolledSection$ = this.getQueryParams().pipe(
             tap(() => {
                 const currentPage = this._currentPageData = this.getCurrentPageData();
@@ -343,6 +349,20 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 "icon": "school",
                 "link": ""
             });
+    }
+
+    public getWishlisteddoIds() {
+        let payload = {
+            "request": {
+              "userId": this.userService._userid
+            }
+          }
+      
+          this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+            if (res.result.wishlist.length > 0) {
+              this.allWishlistedIds = res.result.wishlist;
+            }
+          });
     }
 
     public fetchPopularCompetenciesData() {
@@ -492,6 +512,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchService.contentSearch(option).subscribe((res: any) => {
                 this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
                 this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
+                this.recentlyPublishedList = this.recentlyPublishedList.map((course: any) => {
+                    let isWhishListed = this.allWishlistedIds.find((id: string) => id === course.identifier);
+                    if(isWhishListed) {
+                        course['isWishListed'] = true;
+                    } else {
+                        course['isWishListed'] = false;
+                    }
+
+                    return course
+                })
                 this.count = res.count;
                 // console.log('recentlyPublishedList', this.recentlyPublishedList);
             });
@@ -1653,7 +1683,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['/learn/course', id])
     }
 
-    favoriteIconClicked(option: string, courseId: any) {
+    favoriteIconClicked(option: string, courseId: any, key: string) {
         console.log("Icon: ", option);
 
         let payload = {
@@ -1666,6 +1696,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if(option === 'selected') {
             this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
                 if(res) {
+                    this.updateWishlistedCourse(option,key, courseId);
+                    this.wishlistedService.updateData({ message: 'Wishlisted' });
                     this.snackBar.openFromComponent(SnackBarComponent, {
                         duration: 2000,
                         panelClass: ['wishlist-snackbar']
@@ -1675,9 +1707,34 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
                 if(res) {
-                    console.log("un wishlisted");
+                    this.updateWishlistedCourse(option,key, courseId)
+                    this.wishlistedService.updateData({ message: 'Unwishlisted' });
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
                 }
             });
+        }
+    }
+
+    updateWishlistedCourse(option: string,key: string, courseId: any) {
+        if(option === 'selected') {
+            if(key === 'published') {
+                this.recentlyPublishedList.forEach((course: any) => {
+                    if (course.identifier == courseId) {
+                      course['isWishListed'] = true;
+                    }
+                });
+            }
+        } else {
+            if(key === 'published') {
+                this.recentlyPublishedList.forEach((course: any) => {
+                    if (course.identifier == courseId) {
+                      course['isWishListed'] = false;
+                    }
+                });
+            }
         }
     }
 }
