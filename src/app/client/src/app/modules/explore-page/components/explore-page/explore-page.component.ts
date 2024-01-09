@@ -4,7 +4,7 @@ import { PublicPlayerService } from '@sunbird/public';
 import { Component, OnInit, OnDestroy, HostListener, AfterViewInit, ChangeDetectorRef, Inject } from '@angular/core';
 import {
     ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService, COLUMN_TYPE, UtilService,
-    OfflineCardService, BrowserCacheTtlService, IUserData, GenericResourceService
+    OfflineCardService, BrowserCacheTtlService, IUserData, GenericResourceService, SnackBarComponent
 } from '@sunbird/shared';
 import { Router, ActivatedRoute } from '@angular/router';
 import { cloneDeep, get, find, map as _map, pick, omit, groupBy, sortBy, replace, uniqBy, forEach, has, uniq, flatten, each, isNumber, toString, partition, toLower, includes } from 'lodash-es';
@@ -19,6 +19,8 @@ import { SegmentationTagService } from '../../../core/services/segmentation-tag/
 import * as publicService from '../../../public/services';
 import { TaxonomyService } from '../../../../service/taxonomy.service';
 import { IContent } from '@project-sunbird/common-consumption';
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef } from '@angular/material/snack-bar';
+import { WishlistedService } from '../../../../service/wishlisted.service';
 
 interface IContentSearchRequest {
     request: {
@@ -40,6 +42,10 @@ interface IFilters {
 interface ISoftConstraints {
     badgeAssertions?: number;
     channel?: number;
+}
+
+interface SnackBarData {
+    message: string;
 }
 
 @Component({
@@ -168,6 +174,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     popularCompetenciesData = [];
     popularCompetencyMapping = [];
     breadCrumbData = [];
+    showIcon: boolean = false;
+    allWishlistedIds = [];
 
     get slideConfig() {
         return cloneDeep(this.configService.appConfig.LibraryCourses.slideConfig);
@@ -200,7 +208,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         private browserCacheTtlService: BrowserCacheTtlService, private profileService: ProfileService,
         private segmentationTagService: SegmentationTagService, private observationUtil: ObservationUtilService,
         private genericResourceService: GenericResourceService, private cdr: ChangeDetectorRef, private taxonomyService: TaxonomyService,
-        private learnPageContentService: publicService.LearnPageContentService) {
+        private learnPageContentService: publicService.LearnPageContentService, private snackBar: MatSnackBar,
+        private wishlistedService: WishlistedService) {
         this.genericResourceService.initialize();
         this.instance = (<HTMLInputElement>document.getElementById('instance'))
             ? (<HTMLInputElement>document.getElementById('instance')).value.toUpperCase() : 'SUNBIRD';
@@ -303,6 +312,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.initConfiguration();
         this.segmentationTagService.getSegmentCommand();
+        this.getWishlisteddoIds();
         const enrolledSection$ = this.getQueryParams().pipe(
             tap(() => {
                 const currentPage = this._currentPageData = this.getCurrentPageData();
@@ -339,6 +349,20 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 "icon": "school",
                 "link": ""
             });
+    }
+
+    public getWishlisteddoIds() {
+        let payload = {
+            "request": {
+              "userId": this.userService._userid
+            }
+          }
+      
+          this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+            if (res.result.wishlist.length > 0) {
+              this.allWishlistedIds = res.result.wishlist;
+            }
+          });
     }
 
     public fetchPopularCompetenciesData() {
@@ -488,6 +512,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchService.contentSearch(option).subscribe((res: any) => {
                 this.recentlyPublishedList = this.sortBy ? res.result.content.concat().sort(this.sort(this.sortBy)) : res.result.content;
                 this.recentlyPublishedList = this.contentSearchService.updateCourseWithTaggedCompetency(this.recentlyPublishedList);
+                this.recentlyPublishedList = this.recentlyPublishedList.map((course: any) => {
+                    let isWhishListed = this.allWishlistedIds.find((id: string) => id === course.identifier);
+                    if(isWhishListed) {
+                        course['isWishListed'] = true;
+                    } else {
+                        course['isWishListed'] = false;
+                    }
+
+                    return course
+                })
                 this.count = res.count;
                 // console.log('recentlyPublishedList', this.recentlyPublishedList);
             });
@@ -1643,5 +1677,64 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     loadTopicCourses(keyword: string) {
         this.router.navigateByUrl(`search/Courses/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&keyword=${keyword}`)
         console.log('loadKeywordCourses', keyword);
+    }
+
+    courseCardClicked(event: any, id: any) {
+        this.router.navigate(['/learn/course', id])
+    }
+
+    favoriteIconClicked(option: string, courseId: any, key: string) {
+        console.log("Icon: ", option);
+
+        let payload = {
+            "request": {
+                "userId": this.userService._userid,
+                "courseId": courseId
+            }
+        }
+
+        if(option === 'selected') {
+            this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    this.updateWishlistedCourse(option,key, courseId);
+                    this.wishlistedService.updateData({ message: 'Wishlisted' });
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
+                }
+            });
+        } else {
+            this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+                if(res) {
+                    this.updateWishlistedCourse(option,key, courseId)
+                    this.wishlistedService.updateData({ message: 'Unwishlisted' });
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
+                }
+            });
+        }
+    }
+
+    updateWishlistedCourse(option: string,key: string, courseId: any) {
+        if(option === 'selected') {
+            if(key === 'published') {
+                this.recentlyPublishedList.forEach((course: any) => {
+                    if (course.identifier == courseId) {
+                      course['isWishListed'] = true;
+                    }
+                });
+            }
+        } else {
+            if(key === 'published') {
+                this.recentlyPublishedList.forEach((course: any) => {
+                    if (course.identifier == courseId) {
+                      course['isWishListed'] = false;
+                    }
+                });
+            }
+        }
     }
 }

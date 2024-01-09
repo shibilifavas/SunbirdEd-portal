@@ -173,7 +173,7 @@
                 (beforeChange)="beforeChange($event)">
                 <div ngxSlickItem class="slide" *ngFor='let course of enrolledCourses;'>
                   <compass-course-card [routerLink]="['/learn/course', course['content']['identifier']]" class=""
-                    [data]="course"></compass-course-card>
+                    [data]="course" [showIcon]="showIcon"></compass-course-card>
                 </div>
               </ngx-slick-carousel>
             </div>
@@ -254,7 +254,7 @@
         (init)="slickInit($event)" (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)"
         (beforeChange)="beforeChange($event)">
         <div ngxSlickItem class="slide" *ngFor='let course of recentlyPublishedList;'>
-          <compass-course-card [routerLink]="['/learn/course', course['identifier']]" class="" [data]="course">
+          <compass-course-card (courseCardClicked)="courseCardClicked($event, course['identifier'])" class="" [data]="course" (favoriteIconClicked)="favoriteIconClicked($event, course['identifier'], 'published')">
           </compass-course-card>
         </div>
       </ngx-slick-carousel>

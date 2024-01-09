@@ -1,6 +1,6 @@
 import { combineLatest, Subject, throwError, BehaviorSubject } from 'rxjs';
 import { map, mergeMap, first, takeUntil, delay, switchMap } from 'rxjs/operators';
-import { ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService } from '@sunbird/shared';
+import { ResourceService, ToasterService, ConfigService, NavigationHelperService, LayoutService, SnackBarComponent } from '@sunbird/shared';
 import { CourseConsumptionService, CourseBatchService, CourseProgressService } from './../../../services';
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,9 @@ import { GroupsService } from '../../../../groups/services/groups/groups.service
 import { CoursePageContentService } from "../../../services/course-page-content.service";
 import { CsCourseService } from '@project-sunbird/client-services/services/course/interface';
 import { AssessmentScoreService } from './../../../services';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PublicPlayerService } from '@sunbird/public';
+import { WishlistedService } from '../../../../../service/wishlisted.service';
 
 @Component({
   templateUrl: './course-consumption-page.component.html',
@@ -44,6 +47,9 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   _routerStateContentStatus: any;
   breadCrumbData;
   contentTabLabel: string;
+  allWishlistedIds = [];
+  isWishlisted: boolean = false;
+  // questionSetEvaluable: any;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
     private courseConsumptionService: CourseConsumptionService, private coursesService: CoursesService,
@@ -53,7 +59,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService, public generaliseLabelService: GeneraliseLabelService,
     public coursePageContentService: CoursePageContentService, private userService: UserService,
     @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
-    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService) {
+    private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService, private snackBar: MatSnackBar,
+    public publicPlayerService: PublicPlayerService, private wishlistedService: WishlistedService) {
   }
   ngOnInit() {
     this.initLayout();
@@ -70,6 +77,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.courseConsumptionService.setContentIds(this.contentIds);
         this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
         this.layoutService.updateSelectedContentType.emit(courseHierarchy.contentType);
+        this.checkWishlisted();
         this.getContentState();
         this.getGeneraliseResourceBundle();
         this.checkCourseStatus(courseHierarchy);
@@ -87,7 +95,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           keywords: this.courseHierarchy.keywords,
           rating: 0,
           numberOfRating: '0 Ratings',
-          duration: this.courseHierarchy.Duration
+          duration: this.courseHierarchy.Duration,
+          isWishListed: this.isWishlisted
         };
         this.breadCrumbData = [
           {
@@ -259,9 +268,60 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     isRouteChanged && this.fetchEnrolledCourses$.next(true); // update component only if batch is changed.
   }
 
-  addWishList() {
-    console.log('Add to wish list');
+  addWishList(option: string) {
+    console.log("Icon: ", option);
+
+    let payload = {
+      "request": {
+          "userId": this.userService._userid,
+          "courseId": this.courseHierarchy.identifier
+      }
+    }
+
+    if(option === 'selected') {
+      this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+          if(res) {
+              this.config['isWishListed'] = true;
+              this.wishlistedService.updateData({ message: 'Wishlisted' });
+              this.snackBar.openFromComponent(SnackBarComponent, {
+                  duration: 2000,
+                  panelClass: ['wishlist-snackbar']
+              });
+          }
+      });
+    } else {
+      this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+          if(res) {
+            this.config['isWishListed'] = false;
+              this.wishlistedService.updateData({ message: 'Unwishlisted' });
+              this.snackBar.openFromComponent(SnackBarComponent, {
+                  duration: 2000,
+                  panelClass: ['wishlist-snackbar']
+              });
+          }
+      });
+    }
   }
+
+  checkWishlisted() {
+    let payload = {
+      "request": {
+        "userId": this.userService._userid
+      }
+    }
+
+    this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+      if (res.result.wishlist.length > 0) {
+        this.allWishlistedIds = res.result.wishlist;
+        this.allWishlistedIds.forEach((id:string) => {
+          if(id === this.courseHierarchy.identifier) {
+            this.config['isWishListed'] = true;
+          }
+        });
+      }
+    });
+  }
+  
 
   // updateCourseContent(hierarchy?: any) {
   //   if(hierarchy) {
@@ -347,14 +407,10 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       .getContentState(req, { apiPath: '/content/course/v1' })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        //generate certificate, if passing criteria meets
-        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment' && res[0]?.bestScore?.totalScore > 60 && res[0].status !== 2) {
-          // const attemptID = this.assessmentScoreService.attemptID;
-          // const assessmentTs = this.assessmentScoreService._assessmentTs;
-          // if(attemptID && assessmentTs) {
-          //   this.courseProgressService.statusCompletion(res[0], this.userService.userid, attemptID, assessmentTs )
-          // }
-          this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+
+        //generate certificate, if passing criteria meets for assessment
+        if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment') {
+          this.checkPassingCriteria(res)
         }
         this.courseConsumptionService.calculateAvgCourseProgress(res);
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
@@ -367,6 +423,42 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.courseProgressService.updateCourseStatus(0);
         console.log('Content state read CSL API failed ', error);
       });
+  }
+
+  checkPassingCriteria(res: any) {
+    // let courseEvaluable = this.serverValidationCheck( _.get(this.courseHierarchy, 'children')[0].children[0].evalMode);
+    let contentId = _.get(this.courseHierarchy, 'children')[0].children[0].identifier;
+    let collectionId = _.get(this.courseHierarchy, 'children')[0].identifier;
+      const requestBody = {
+        request: {
+          questionset: {
+            contentID: contentId,
+            collectionID: collectionId, 
+            userID: this.userService._userid,
+            attemptID: this.assessmentScoreService.generateHash()
+          }
+        }
+      }
+      this.publicPlayerService.getQuestionSetHierarchyByPost(requestBody).pipe(
+        takeUntil(this.unsubscribe$))
+        .subscribe((response) => {  
+          //calculate percentage here
+          if(res[0]?.bestScore) {
+            let totalPercentage = this.getTotalPercentage(res[0].bestScore);   
+            if(totalPercentage > response?.questionset?.minimumPassPercentage && res[0].status !== 2) {
+              this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+            }
+          }
+        }, (err) => {
+          this.toasterService.error(this.resourceService.messages.stmsg.m0009);
+        });
+  }
+
+  getTotalPercentage(score: any) {
+    if(score.totalMaxScore == 0) {
+      return 0
+    }
+    return score.totalScore / score.totalMaxScore * 100
   }
 
   getCourseRating(courseId: string) {

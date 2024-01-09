@@ -1,5 +1,5 @@
 <div class="course-assessment__wrapper">
-        <header class="course-assessment__header">
+       <header class="course-assessment__header">
             <div class="container ui course-assessment__tabs">
                  <span (click)="switchTabs('Course')" class="course-assessment__label" [ngClass]="{'active': primaryCategory === 'Course'}">Courses</span>
                  <span (click)="switchTabs('Assessment')" class="course-assessment__label" [ngClass]="{'active': primaryCategory === 'Assessment'}">Assessments</span>
@@ -18,7 +18,7 @@
 
                     <mat-form-field class="course-assessment__search"  [floatLabel]="'never'"> 
                         <mat-icon>search</mat-icon>
-                        <input matInput type="text" [(ngModel)]="search" (keyup.enter)="searchQuery()" (blur)="searchQuery()" placeholder="Search" appearance="outline" />                       
+                        <input matInput type="text" [(ngModel)]="search" (keyup.enter)="searchQuery()" (blur)="searchQuery()" placeholder="Search course" appearance="outline" />                       
                     </mat-form-field>
                 </div>
             </header>

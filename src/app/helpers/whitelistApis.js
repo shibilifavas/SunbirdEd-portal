@@ -337,9 +337,9 @@ const API_LIST = {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC],
       OWNER_CHECK: {
-        checks: [
-          { entity: '__session__userId', params: [] }
-        ]
+      checks: [
+      { entity: '__session__userId', params: [] }
+      ]
       }
     },
     '/content/course/v1/content/state/update': {
@@ -461,7 +461,7 @@ const API_LIST = {
     },
     '/learner/user/v2/signup': {
       checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC]
+      ROLE_CHECK: [ROLE.ANONYMOUS]
     },
     '/learner/user/v1/feed/:userId': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
@@ -1667,6 +1667,13 @@ const API_LIST = {
         ROLE.CONTENT_CREATOR
       ]
     },
+    '/content/questionset/v2/retire/:do_id': {
+      description: 'QuestionSet retire',
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [
+        ROLE.CONTENT_CREATOR
+      ]
+    },
     '/action/question/v2/read/:do_id': {
       description: 'Question read',
       checksNeeded: ['ROLE_CHECK'],
@@ -1928,7 +1935,23 @@ const API_LIST = {
     "/learner/course/v1/batch/allparticipants/list" : {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
-    }
+    },
+    "/learner/course/v2/users/list": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/learner/wishlist/v1/add": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/learner/wishlist/v1/remove": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
+    },
+    "/learner/wishlist/v1/get": {
+      checksNeeded: ['ROLE_CHECK'],
+      ROLE_CHECK: [ROLE.PUBLIC]
+    },
   },
   URL_PATTERN: [
     '/learner/user/v1/feed/delete',
@@ -2075,7 +2098,6 @@ const API_LIST = {
     '/kendra/resource/mlreports/v1/filtervalues',
     '/assessment/programs/mlcore/v1/join/:id',
     '/assessment/users/mlcore/v1/solutions/:id',
-    '/api/questionset/v2/retire/:QuestionSet_Id',
     '/action/question/v2/list',
     '/learner/course/v1/enrol',
     '/learner/course/v1/batch/participants/list',
@@ -2083,7 +2105,13 @@ const API_LIST = {
     '/learner/course/batch/cert/v1/template/add',
     '/action/asset/v1/create',
     'course/v1/batch/allparticipants/list',
-    '/learner/user/v1/create'
+    '/learner/user/v1/create',
+    '/content/questionset/v2/retire/:do_id',
+    '/learner/user/v2/signup',
+    '/learner/course/v2/users/list',
+    '/learner/wishlist/v1/add',
+    '/learner/wishlist/v1/remove',
+    '/learner/wishlist/v1/get'
   ]
 };
 module.exports = API_LIST;

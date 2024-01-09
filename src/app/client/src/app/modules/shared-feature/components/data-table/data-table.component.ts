@@ -33,9 +33,9 @@ export class DataTableComponent implements OnInit {
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-    this.paginator.page.subscribe(r => {
+    this.paginator?.page.subscribe(r => {
       this.onPageChange.emit(r);
-    })
+    });
   }
 
   applyFilter(event: Event) {
@@ -45,6 +45,9 @@ export class DataTableComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  splitColumnName(str) {
+     return str.split(/(?=[A-Z])/).join(' ');
   }
 }
 

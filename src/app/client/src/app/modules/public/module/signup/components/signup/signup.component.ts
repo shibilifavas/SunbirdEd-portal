@@ -3,7 +3,8 @@ import { Subject, Subscription, throwError } from 'rxjs';
 import {
   ResourceService,
   NavigationHelperService,
-  ConfigService
+  ConfigService,
+  ToasterService
 } from '@sunbird/shared';
 import { TenantService, UserService } from '@sunbird/core';
 import { TelemetryService } from '@sunbird/telemetry';
@@ -52,15 +53,14 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
   firstNameFieldError = false;
   lastNameFieldError = false;
   emailFieldError = false;
+  phoneFieldError = false;
   passwordFieldError = false;
   confirmPasswordFieldError = false;
-  designationFieldError = false;
-  departmentNameFieldError = false;
 
   constructor(public resourceService: ResourceService, public tenantService: TenantService, public deviceDetectorService: DeviceDetectorService,
     public activatedRoute: ActivatedRoute, public telemetryService: TelemetryService,
     public navigationhelperService: NavigationHelperService, private router: Router, private userService: UserService,
-    private registerService: RegisterService, private config: ConfigService
+    private registerService: RegisterService, private config: ConfigService, private toasterService: ToasterService
     ) {
   }
 
@@ -229,21 +229,19 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     let lastName: any = document.getElementById("last_name");
     let email: any = document.getElementById("email");
     let username: any = document.getElementById("username");
+    let phone: any = document.getElementById("phone");
     let password: any = document.getElementById("password");
     let confirmPassword: any = document.getElementById("confirm_password");
-    let designation: any = document.getElementById("designation");
-    let departmentName: any = document.getElementById("departmentName");
 
     // Validation block
 
     this.firstNameFieldError = false;
     this.lastNameFieldError = false;
     this.emailFieldError = false;
+    this.phoneFieldError = false;
     this.passwordFieldError = false;
     this.confirmPasswordFieldError = false;
     this.confirmPasswordFieldError = false;
-    this.designationFieldError = false;
-    this.departmentNameFieldError = false;
     if (firstName.value === "" && lastName.value === "" && password.value === "") {
       this.registerErrorMessage = "All the fields are required";
       this.firstNameFieldError = true;
@@ -257,15 +255,12 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     } else if (lastName.value === "") {
       this.lastNameFieldError = true;
       this.registerErrorMessage = "Please enter last name";
-    } else if (designation.value === "") {
-      this.designationFieldError = true;
-      this.registerErrorMessage = "Please enter designation";
-    } else if (departmentName.value === "") {
-      this.departmentNameFieldError = true;
-      this.registerErrorMessage = "Please enter department name";
-     } else if (email.value === "") {
+    } else if (email.value === "") {
       this.emailFieldError = true;
       this.registerErrorMessage = "Please enter email id";
+    }else if (phone.value === "") {
+      this.phoneFieldError = true;
+      this.registerErrorMessage = "Please enter phone number";
     } else if (password.value === "") {
       this.passwordFieldError = true;
       this.registerErrorMessage = "Please enter password";
@@ -287,44 +282,32 @@ export class SignupComponent implements OnInit, OnDestroy, AfterViewInit {
     let data = {
       request: {
         firstName: firstName.value,
+        email: email.value,
+        phone: phone.value,
+        userName: email.value,
         lastName: lastName.value,
         password: password.value,
-        email: email.value,
-        profileDetails: {
-              personalDetails: {
-                  email: email.value,
-                  userName: email.value,
-                  channel: this.config.appConfig.channelName,
-                  roles: [
-                      'PUBLIC'
-                  ]
-              },
-              professionalDetails: [
-                {
-                  designation: designation.value
-                }
-              ],
-              employmentDetails: {
-                departmentName: departmentName.value
-              },
-              areaOfInterest : []
-          }
+        rootOrgId: this.config.appConfig.rootOrgId,
+        channel: this.config.appConfig.channelName
       }
   }
 
   this.registerService.register(data).pipe(catchError(error => {
       // const statusCode = error.status;
       this.registerErrorMessage = error?.error?.params?.errmsg;
-      return throwError(error);
+      this.toasterService.error(this.registerErrorMessage);
+      return throwError(error);  
     })
     ).subscribe(res => {
       firstName.value = "";
       lastName.value = "";
       email.value = "";
+      phone.value = "";
       password.value = "";
       confirmPassword.value = "";
       this.registerSuccessMessage = "Registration successfull, please login."
       console.log('Register', res);
+      this.toasterService.success(this.registerSuccessMessage);
     })
   }
   

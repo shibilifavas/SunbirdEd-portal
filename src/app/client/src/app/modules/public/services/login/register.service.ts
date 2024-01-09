@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LearnerService } from '@sunbird/core';
+import { LearnerService, PublicDataService } from '@sunbird/core';
+import { ConfigService } from '@sunbird/shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
 
-  constructor(private http: HttpClient, public learnerService: LearnerService) { }
+  constructor(private http: HttpClient, public learnerService: LearnerService, public publicDataService: PublicDataService, private config: ConfigService) { }
 
   register(data: any) {
     // const httpHeaders: HttpHeaders = new HttpHeaders({
@@ -15,7 +16,7 @@ export class RegisterService {
     //   'Content-Type': 'application/json',
     // });
      const option = {
-      url: 'user/v1/create',
+      url: this.config.urlConFig.URLS.USER.SIGNUP,
       data: data
     };
     return this.learnerService.post(option);

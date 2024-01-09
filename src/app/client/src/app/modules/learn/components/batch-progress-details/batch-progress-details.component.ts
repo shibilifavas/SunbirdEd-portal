@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseBatchService } from '../../services';
-import { UserService } from '@sunbird/core';
+import { UserService, PublicDataService, LearnerService} from '@sunbird/core';
+import { ConfigService } from '@sunbird/shared';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/internal/operators/map';
 import { FormControl } from '@angular/forms';
@@ -25,17 +26,27 @@ export class BatchProgressDetailsComponent implements OnInit {
   courseDetails: any = {};
   memberList: any[];
   authToken : [];
-  displayColumns = ['initials', 'name', 'designation', 'department','progress', 'link'];
-  breadCrumbData = [];
-  search:string;
+  displayColumns = ['initials', 'name', 'designation', 'department','progress'];
+  breadCrumbData = [{
+    label: 'Courses',
+    "status": "",
+    "icon": "list",
+    "link": "/learn/batch-progress"
+  }];
+  search:string = '';
   startDate = new FormControl();
   endDate = new FormControl();
   showDatedropdown = false;
   statusList = ['All members', 'Completed', 'Not started'];
   status = new FormControl('');
   dateRange;
+  updatedMemberList = [];
 
-  constructor(private route: ActivatedRoute, private courseBatchService: CourseBatchService,
+  constructor(private route: ActivatedRoute, 
+    private courseBatchService: CourseBatchService, 
+    private publicDataService: PublicDataService,
+    private learnerService: LearnerService,
+    private configService: ConfigService,
     private userSerivce: UserService, private httpClient: HttpClient) {
    }
 
@@ -43,11 +54,12 @@ export class BatchProgressDetailsComponent implements OnInit {
     this.memberList = [];
    this.route.queryParamMap.subscribe((pa:any) => {
       this.courseDetails.name = pa.params.name;
+      this.breadCrumbData[0].label = pa.params.primaryCategory;
       this.breadCrumbData.push({
         label: this.courseDetails.name,
         "status": "active",
-        "icon": "list",
-        "link": "/learn/batch-progress"
+        "icon": "",
+        "link": ""
       })
     });
     this.route.params.subscribe(param => {
@@ -74,7 +86,8 @@ export class BatchProgressDetailsComponent implements OnInit {
                 userId: [
                     ...res
                 ]
-              }
+              },
+            query:this.search.length>0?this.search:'',
           }
         }
         this.userSerivce.getEnrolledUsers(requestBody).subscribe((memResponse:any) => {
@@ -83,19 +96,49 @@ export class BatchProgressDetailsComponent implements OnInit {
                   return {
                     initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
                     name: m.firstName+' '+m.lastName,
-                    designation:m.userType,
-                    department:m.department || '',
-                    progress: 80,
-                    link:{path:'/profile', text:'profile'}
+                    designation:m.profileDetails!==null?m.profileDetails.professionalDetails[0].designation : '',
+                    department:m.profileDetails !== null?m.profileDetails.employmentDetails.departmentName : '',
+                    progress: 0
                   }
                 })
-          }
+                this.updateProgress(res,memResponse);
+             }
         })
      }
     })
   }
 
-  OnDateChange(e){
+  updateProgress(res, memResponse) {
+    this.updatedMemberList = [];
+    let filteredCourseList = [];
+    const option = {
+      url: this.configService.urlConFig.URLS.COURSE.COURSE_USERS,
+      data: { 
+        request: {
+          filters: {
+            "courseIds": [this.courseDetails.id],
+           },
+           "userIds": [...res]
+        }
+      }
+    }
+    this.learnerService.post(option).subscribe((courseList:any) => {
+        filteredCourseList = courseList.result.courses.filter((c:any) => c.courseId === this.courseDetails.id);
+        this.updatedMemberList = memResponse.map((m:any) => {
+            const perValue = filteredCourseList.filter((cos:any) => cos.userId === m.id);
+        return {
+              initials:`${m.firstName[0]}${m.lastName[0] ? m.lastName[0] : ''}`,
+              name: m.firstName+' '+m.lastName,
+              designation:m.profileDetails!==null? m.profileDetails.professionalDetails[0].designation : '',
+              department:m.profileDetails !== null? m.profileDetails.employmentDetails.departmentName : '',
+              progress:perValue.length>0? perValue[0].completionPercentage : 0
+            }
+          });
+          this.memberList = [...this.updatedMemberList];
+    });
+  }
+
+  OnDateChange(e) {
     console.log(this.startDate.value.format('DD/MM/yyyy'));
     console.log(this.endDate.value.format('DD/MM/yyyy'));
   }
@@ -104,13 +147,29 @@ export class BatchProgressDetailsComponent implements OnInit {
     console.log(e);
   }
 
-  onSelect(event){
-    console.log(event);
+  onSelect(event:any) {
+    let filtedList = [];
+      switch(event) {
+      case 'Not started' :  filtedList = this.updatedMemberList.filter(m => m.progress === 0);
+                            console.log(filtedList);
+                              break;
+      case 'Completed' :    filtedList = this.updatedMemberList.filter(m => m.progress === 100);
+                              console.log(filtedList);
+                              break;
+      case 'All members' :  filtedList = this.updatedMemberList; 
+                              console.log(filtedList);
+                              break;
+      default:break;         
+    }
+    this.memberList = [...filtedList];
   }
 
+  searchQuery() {
+    this.getBatchParticipentList();
+  }
 
   bulkDateFilter(data) {
-    switch(data){
+    switch(data) {
       case 'today': let dateRange = new Date().toUTCString();
                     console.log(new Date(dateRange).toLocaleDateString());
                       break;
@@ -134,5 +193,6 @@ export class BatchProgressDetailsComponent implements OnInit {
     let lastDay = new Date(y, m, 0);
     return {firstDay:firstDay, lastDay: lastDay};
   }
+
 
 }

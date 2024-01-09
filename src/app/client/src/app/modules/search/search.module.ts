@@ -18,6 +18,7 @@ import { CommonConsumptionModule } from 'compass-common-consumption';
 import { CardModule } from 'compass-common-consumption';
 import { AllTopicsComponent } from './components/all-topics/all-topics.component';
 import { CoursesSearchComponent } from './components/courses-search/courses-search.component';
+import { WhishlistCoursesComponent } from './components/whishlist-courses/whishlist-courses.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,7 @@ import { CoursesSearchComponent } from './components/courses-search/courses-sear
   ],
   declarations: [ UserSearchComponent,
   UserFilterComponent, UserEditComponent, UserDeleteComponent,
-  UserProfileComponent, HomeSearchComponent, AllCompetenciesComponent, AllTopicsComponent, CoursesSearchComponent ],
+  UserProfileComponent, HomeSearchComponent, AllCompetenciesComponent, AllTopicsComponent, CoursesSearchComponent, WhishlistCoursesComponent ],
   providers: [UserSearchService]
 })
 export class SearchModule { }
