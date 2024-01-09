@@ -2,7 +2,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkSpace } from '../../classes/workspace';
-import { SearchService, UserService, CoursesService, FrameworkService } from '@sunbird/core';
+import { SearchService, UserService, CoursesService, FrameworkService, ChannelService } from '@sunbird/core';
 import {
   ServerResponse, ConfigService, PaginationService, IPagination,
   IContents, ToasterService, ResourceService, ILoaderMessage, INoResultMessage,
@@ -13,6 +13,7 @@ import * as _ from 'lodash-es';
 import { IImpressionEventInput } from '@sunbird/telemetry';
 import { combineLatest, forkJoin } from 'rxjs';
 import { ContentIDParam } from '../../interfaces/delteparam';
+import { ContentSearchService } from '@sunbird/content-search';
 
 /**
  * Interface for passing the configuartion for modal
@@ -175,6 +176,10 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
    */
    public isQuestionSetEnabled: boolean;
    taxonomyCategories:any;
+   frameworkId: any;
+   categoryNames:any = [];
+   targetTaxonomyIds: any = ["targetTaxonomyCategory1Ids","targetTaxonomyCategory2Ids","targetTaxonomyCategory3Ids","targetTaxonomyCategory4Ids"];
+   competencyDetails: any = [];
   /**
     * Constructor to create injected service(s) object
     Default method of Draft Component class
@@ -195,7 +200,8 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
     toasterService: ToasterService, resourceService: ResourceService,
     config: ConfigService, public navigationhelperService: NavigationHelperService,
     public coursesService: CoursesService,
-    public taxonomyService:TaxonomyService) {
+    public taxonomyService:TaxonomyService,
+    private contentSearchService: ContentSearchService) {
     super(searchService, workSpaceService, userService);
     this.paginationService = paginationService;
     this.route = route;
@@ -208,6 +214,7 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
   }
 
   ngOnInit() {
+    this.frameworkId = this.contentSearchService.frameworkId;
     this.workSpaceService.questionSetEnabled$.subscribe(
       (response: any) => {
           this.isQuestionSetEnabled = response?.questionSetEnablement;
@@ -332,8 +339,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
     * This method launch the content editior
   */
   contentClick(param, content) {
-    console.log("content",content);
-    console.log("param",param);
     this.contentMimeType = content.metaData.mimeType;
     if (param.data && param.data.originData) {
       const originData = JSON.parse(param.data.originData);
@@ -344,7 +349,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
       }
     }
     if (param.action.eventName === 'delete') {
-      console.log("delete");
       this.currentContentId = param.data.metaData.identifier;
       this.currentPrimaryCategory = param.data.metaData.primaryCategory;
       const config = new TemplateModalConfig<{ data: string }, string, string>(this.modalTemplate);
@@ -372,10 +376,7 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
     if (!_.isUndefined(modal)) {
       this.deleteModal = modal;
     }
-    console.log("modal", modal);
-    console.log("currentPrimaryCategory", this.currentPrimaryCategory);
     this.showCollectionLoader = false;
-    console.log("contentMimeType", this.contentMimeType);
     if (this.contentMimeType === 'application/vnd.ekstep.content-collection') {
       this.deleteContent(this.currentContentId, this.currentPrimaryCategory);
       return;
@@ -383,7 +384,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
     this.getLinkedCollections(this.currentContentId)
       .subscribe((response) => {
         const count = _.get(response, 'result.count');
-        console.log("count", count);
         if (!count) {
           this.deleteContent(this.currentContentId, this.currentPrimaryCategory);
           return;
@@ -398,37 +398,59 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
         forkJoin(_.map(channels, (channel: string) => {
             return this.getChannelDetails(channel);
           })).subscribe((forkResponse) => {
-            console.log("forkresponse", forkResponse);
             this.collectionData = [];
             _.forEach(forkResponse, channelResponse => {
               const channelId = _.get(channelResponse, 'result.channel.code');
               const channelName = _.get(channelResponse, 'result.channel.name');
               channelMapping[channelId] = channelName;
             });
-            console.log("collection", collections);
-
+            this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
+            .subscribe((res: any) => {
+              res.result.framework.categories.map((item)=>{
+                this.taxonomyCategories.map((cat: any)=>{
+                  if(item.code == cat){
+                    this.categoryNames.push(item.name);
+                  }
+                }) 
+                if(item.name=="Competencies"){
+                  item.terms.map((term:any)=>{
+                    let object: any ={};
+                    object.identifier = term.identifier;
+                    object.name = term.name;
+                    this.competencyDetails.push(object);
+                  })
+                }
+              })
             _.forEach(collections, collection => {
-              const obj = _.pick(collection, ['contentType', 'name', 'channel', ...this.taxonomyCategories]);
+              const obj = _.pick(collection, ['contentType', 'name', 'channel']);
               obj['channel'] = channelMapping[obj.channel];
+              let competencies:any = [];
+              collection[this.targetTaxonomyIds[3]].map((id:any)=>{
+                this.competencyDetails.map((comp:any)=>{
+                  if(comp.identifier == id){
+                    competencies.push(comp.name);
+                  }
+                })
+              })
+              obj[this.targetTaxonomyIds[3]] = competencies;
               this.collectionData.push(obj);
           });
-          console.log("collectionData",this.collectionData);
+          console.log("collectionData ",this.collectionData);
 
           this.headers = {
              type: 'Type',
              name: 'Name',
-             [this.taxonomyCategories[3]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[3]),
-             [this.taxonomyCategories[2]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[2]),
-             [this.taxonomyCategories[1]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[1]),
-             [this.taxonomyCategories[0]]: this.taxonomyService.capitalizeFirstLetter(this.taxonomyCategories[0]),
+             [this.categoryNames[3]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[3]),
+             [this.categoryNames[2]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[2]),
+             [this.categoryNames[1]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[1]),
+             [this.categoryNames[0]]: this.taxonomyService.capitalizeFirstLetter(this.categoryNames[0]),
              channel: 'Tenant Name'
              };
              if (!_.isUndefined(this.deleteModal)) {
               this.deleteModal.deny();
             }
-          console.log("headers",this.headers);
-          this.collectionListModal = true;
-          console.log("collectionListModal",this.collectionListModal);
+          this.collectionListModal = true;   
+            })     
           },
           (error) => {
            this.toasterService.error(_.get(this.resourceService, 'messages.emsg.m0014'));
@@ -449,7 +471,6 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
         this.loaderMessage = {
           'loaderMessage': this.resourceService.messages.stmsg.m0034,
         };
-        console.log("delete Content");
         if(primaryCategory == "Practice Question Set"){
           this.retire(contentIds).subscribe(
             (data: ServerResponse) => {
