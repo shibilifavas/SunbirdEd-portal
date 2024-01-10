@@ -32,7 +32,7 @@
         <div class="ui grid middle aligned stackable">
           <div class="three wide column" *ngFor="let data of attendedTraining.slice(0, 4)">
             <compass-course-card (click)="redirectToToc(data['contentId'], data['batch']['batchId'])" [data]="data"
-            (favoriteIconClicked)="favoriteIconClicked($event)"></compass-course-card>
+            (favoriteIconClicked)="favoriteIconClicked($event,data['contentId'])"></compass-course-card>
           </div>
         </div>
       </section>
