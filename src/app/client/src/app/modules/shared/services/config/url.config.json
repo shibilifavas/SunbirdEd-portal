@@ -382,6 +382,11 @@
       "GENERIC_REPORTS": "reports/mlreports/v1/fetch",
       "ALL_EVIDENCE":"observations/mlreports/v1/listAllEvidences"
     },
+    "WISHLIST": {
+      "GET_LIST": "wishlist/v1/get",
+      "ADD": "wishlist/v1/add",
+      "REMOVE": "wishlist/v1/remove"
+    },
     "UCI": "/uci"
 
   }

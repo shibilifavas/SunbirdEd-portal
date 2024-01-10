@@ -163,7 +163,6 @@ export class CoursesSearchComponent implements OnInit {
   }
 
   appendWishlistToCourse() {
-    debugger;
     this.courses.forEach((course: any) => {
       let isWhishListed;
       if(course.identifier) {
@@ -210,7 +209,7 @@ export class CoursesSearchComponent implements OnInit {
       this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
           if(res) {
               this.updateWishlistedCourse(option, courseId);
-              this.wishlistedService.updateData({ message: 'Wishlisted' });
+              this.wishlistedService.updateData({ message: 'Added to Wishlist' });
               this.snackBar.openFromComponent(SnackBarComponent, {
                   duration: 2000,
                   panelClass: ['wishlist-snackbar']
@@ -221,7 +220,7 @@ export class CoursesSearchComponent implements OnInit {
         this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
             if(res) {
                 this.updateWishlistedCourse(option, courseId);
-                this.wishlistedService.updateData({ message: 'Unwishlisted' });
+                this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
                 this.snackBar.openFromComponent(SnackBarComponent, {
                     duration: 2000,
                     panelClass: ['wishlist-snackbar']

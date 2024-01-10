@@ -282,7 +282,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
           if(res) {
               this.config['isWishListed'] = true;
-              this.wishlistedService.updateData({ message: 'Wishlisted' });
+              this.wishlistedService.updateData({ message: 'Added to Wishlist' });
               this.snackBar.openFromComponent(SnackBarComponent, {
                   duration: 2000,
                   panelClass: ['wishlist-snackbar']
@@ -293,7 +293,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
       this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
           if(res) {
             this.config['isWishListed'] = false;
-              this.wishlistedService.updateData({ message: 'Unwishlisted' });
+              this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
               this.snackBar.openFromComponent(SnackBarComponent, {
                   duration: 2000,
                   panelClass: ['wishlist-snackbar']
