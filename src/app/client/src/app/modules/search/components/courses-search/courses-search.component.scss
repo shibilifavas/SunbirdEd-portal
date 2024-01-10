@@ -60,3 +60,8 @@
     justify-content: center;
     display: flex !important;
 }
+.mat-list {
+    .mat-list-item {
+        height: auto;
+    }
+}
