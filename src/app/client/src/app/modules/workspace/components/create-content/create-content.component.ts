@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ResourceService, ConfigService, NavigationHelperService } from '@sunbird/shared';
-import { FrameworkService, PermissionService, UserService } from '@sunbird/core';
+import { FrameworkService, PermissionService, UserService,SearchService } from '@sunbird/core';
 import { IImpressionEventInput } from '@sunbird/telemetry';
 import { WorkSpaceService } from './../../services';
 @Component({
@@ -68,11 +68,15 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
 
   * @param {ResourceService} resourceService Reference of ResourceService
  */
+  metricsData: any[];
+  sequence = ['Course', 'Assessment', 'Learning Resource', 'Practice Question Set'];
+
   constructor(configService: ConfigService, resourceService: ResourceService,
     frameworkService: FrameworkService, permissionService: PermissionService,
     private activatedRoute: ActivatedRoute, public userService: UserService,
     public navigationhelperService: NavigationHelperService,
-    public workSpaceService: WorkSpaceService) {
+    public workSpaceService: WorkSpaceService,
+    private searchService: SearchService) {
     this.resourceService = resourceService;
     this.frameworkService = frameworkService;
     this.permissionService = permissionService;
@@ -93,6 +97,7 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
         this.enableQuestionSetCreation = response.questionSetEnablement;
       }
     );
+    this.getInsightDashboardData();
   }
 
 
@@ -110,6 +115,47 @@ export class CreateContentComponent implements OnInit, AfterViewInit {
           duration: this.navigationhelperService.getPageLoadTime()
         }
       };
+    });
+  }
+
+  getInsightDashboardData() {
+    const payload= {
+      "request": {
+          "filters": {
+              "status": [
+                  "Draft",
+                  "Review",
+                  "Live"
+              ],
+              "createdBy": this.userService.userid,
+              "primaryCategory": [
+                  "Learning Resource",
+                  "Practice Question Set",
+                  "Course",
+                  "Assessment"
+              ]
+           }
+      }
+    }
+    this.searchService.getInsightsMetric(payload).subscribe((res: any) => {
+      if(res.result.metric.length > 0) {
+        let response = res.result.metric;
+        // response.forEach((data: any) => {
+        //   if(data.primaryCategory == 'Course') {
+        //     this.metricsData.splice(0,0,data)
+        //   } else if(data.primaryCategory == 'Assessment') {
+        //     this.metricsData.splice(1,0,data)
+        //   } else if(data.primaryCategory == 'Learning Resource') {
+        //     this.metricsData.splice(2,0,data)
+        //   } else {
+        //     this.metricsData.splice(3,0,data)
+        //   }
+        // })
+
+        this.metricsData = response.sort((a, b) => {
+          return this.sequence.indexOf(a.primaryCategory) - this.sequence.indexOf(b.primaryCategory);
+      });
+      }
     });
   }
 }

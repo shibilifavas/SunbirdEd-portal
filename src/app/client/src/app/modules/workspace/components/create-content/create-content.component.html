@@ -1,27 +1,46 @@
     <div class="ui grid mt-5">
       <div class="twelve wide coulmn w-100">
-        <div class="sub-heading-one">Insight</div>
-        <div class="ui grid mb-32">
-          <div class="three wide column">
-            <div class="insight-card mr-16">
-              <div class="insight-title">
-                <span>Course</span><span>345</span>
-              </div>
-              <div class="insight-status">
-                <span>Draft</span><span>30</span>
-              </div>
-              <div class="insight-status">
-                <span>On Review</span><span>15</span>
-              </div>
-              <div class="insight-status">
-                <span>Live</span><span>300</span>
-              </div>
-            </div>
-          </div>
-          <div class="three wide column">
+        <ng-container *ngIf="metricsData?.length > 0">
+          <div class="sub-heading-one">Insight</div>
+          <div class="ui grid mb-32">
+            <div class="three wide column">
+            <ng-container *ngFor="let data of metricsData">
               <div class="insight-card mr-16">
                 <div class="insight-title">
-                  <span>Assessments</span><span>41</span>
+                  <span>{{data.primaryCategory}}</span><span>{{data.totalCount}}</span>
+                </div>
+                <div class="insight-status">
+                  <span>Draft</span><span>{{data.status.draft}}</span>
+                </div>
+                <div class="insight-status">
+                  <span>On Review</span><span>{{data.status.review}}</span>
+                </div>
+                <div class="insight-status">
+                  <span>Live</span><span>{{data.status.live}}</span>
+                </div>
+              </div>
+            </ng-container>
+            </div>
+            <!-- <div class="three wide column">
+                <div class="insight-card mr-16">
+                  <div class="insight-title">
+                    <span>Assessments</span><span>41</span>
+                  </div>
+                  <div class="insight-status">
+                    <span>Draft</span><span>12</span>
+                  </div>
+                  <div class="insight-status">
+                    <span>On Review</span><span>08</span>
+                  </div>
+                  <div class="insight-status">
+                    <span>Live</span><span>21</span>
+                  </div>
+                </div>
+            </div>
+            <div class="three wide column">
+              <div class="insight-card mr-16">
+                <div class="insight-title">
+                  <span>Resource</span><span>124</span>
                 </div>
                 <div class="insight-status">
                   <span>Draft</span><span>12</span>
@@ -33,41 +52,26 @@
                   <span>Live</span><span>21</span>
                 </div>
               </div>
-          </div>
-          <div class="three wide column">
-            <div class="insight-card mr-16">
-              <div class="insight-title">
-                <span>Resource</span><span>124</span>
-              </div>
-              <div class="insight-status">
-                <span>Draft</span><span>12</span>
-              </div>
-              <div class="insight-status">
-                <span>On Review</span><span>08</span>
-              </div>
-              <div class="insight-status">
-                <span>Live</span><span>21</span>
-              </div>
             </div>
-          </div>
-          <div class="three wide column">
-            <div class="insight-card">
-              <div class="insight-title">
-                <span>Course</span><span>245</span>
+            <div class="three wide column">
+              <div class="insight-card">
+                <div class="insight-title">
+                  <span>Course</span><span>245</span>
+                </div>
+                <div class="insight-status">
+                  <span>Draft</span><span>30</span>
+                </div>
+                <div class="insight-status">
+                  <span>On Review</span><span>15</span>
+                </div>
+                <div class="insight-status">
+                  <span>Live</span><span>200</span>
+                </div>
               </div>
-              <div class="insight-status">
-                <span>Draft</span><span>30</span>
-              </div>
-              <div class="insight-status">
-                <span>On Review</span><span>15</span>
-              </div>
-              <div class="insight-status">
-                <span>Live</span><span>200</span>
-              </div>
-            </div>
-          </div>
+            </div> -->
 
-        </div>
+          </div>            
+        </ng-container>
       </div>
       <div class="twelve wide column ">
         <div class="ui grid">

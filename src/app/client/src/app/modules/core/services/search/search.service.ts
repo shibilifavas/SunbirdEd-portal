@@ -617,4 +617,12 @@ export class SearchService {
     };
     return this.learnerService.post(option);
   }
+
+  getInsightsMetric(payload: any) {
+    const option = {
+      url: this.config.urlConFig.URLS.COMPOSITE.SEARCH_METRIC,
+      data: payload
+    };
+    return this.learnerService.post(option);
+  }
 }

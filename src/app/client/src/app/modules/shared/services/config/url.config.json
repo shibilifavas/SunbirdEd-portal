@@ -139,7 +139,8 @@
     },
     "COMPOSITE": {
       "SEARCH": "composite/v1/search",
-      "SEARCH_IMAGES": "composite/v3/search"
+      "SEARCH_IMAGES": "composite/v3/search",
+      "SEARCH_METRIC": "composite/v1/search/metric"
     },
     "SYSTEM_SETTING": {
       "CUSTODIAN_ORG": "data/v1/system/settings/get/custodianOrgId",
