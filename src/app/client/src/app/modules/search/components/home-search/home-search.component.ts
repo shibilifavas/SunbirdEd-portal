@@ -757,7 +757,7 @@ getInteractEdata(event) {
       this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
           if(res) {
               this.updateWishlistedCourse(option, courseId);
-              this.wishlistedService.updateData({ message: 'Wishlisted' });
+              this.wishlistedService.updateData({ message: 'Added to Wishlist' });
               this.snackBar.openFromComponent(SnackBarComponent, {
                   duration: 2000,
                   panelClass: ['wishlist-snackbar']
@@ -767,7 +767,7 @@ getInteractEdata(event) {
     } else {
         this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
             if(res) {
-                this.wishlistedService.updateData({ message: 'Unwishlisted' });
+                this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
                 this.snackBar.openFromComponent(SnackBarComponent, {
                     duration: 2000,
                     panelClass: ['wishlist-snackbar']
