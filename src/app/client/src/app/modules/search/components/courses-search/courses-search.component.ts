@@ -34,7 +34,7 @@ export class CoursesSearchComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
     public resourceService: ResourceService, private schemaService: SchemaService,
     private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService, private snackBar: MatSnackBar,
-    private router: Router, private userService: UserService, private wishlistedService: WishlistedService) { }
+    private router: Router, private userService: UserService, private wishlistedService: WishlistedService, private toasterService: ToasterService) { }
 
   ngOnInit(): void {
     if (this.activatedRoute.snapshot.queryParams.learnings == 'true') {
@@ -88,7 +88,7 @@ export class CoursesSearchComponent implements OnInit {
   checkUserProfileDetails() {
     this.userService.userData$.subscribe((user: IUserData) => {
       if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
-        if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || ['profileDetails']['professionalDetails'][0]['designation'] == undefined || ['profileDetails']['professionalDetails'][0]['designation'] == '') {
+        if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
           this.toasterService.warning("Please update your designation to proceed.");
           this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
         }
