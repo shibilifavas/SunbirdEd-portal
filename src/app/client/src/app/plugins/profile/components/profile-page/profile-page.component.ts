@@ -888,13 +888,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         if(option === 'selected') {
           this.contributions.forEach((course: any) => {
-            if (course.contentId == courseId) {
+            if (course.identifier == courseId) {
               course['isWishListed'] = true;
             }
         });
         } else {
           this.contributions.forEach((course: any) => {
-            if (course.contentId == courseId) {
+            if (course.identifier == courseId) {
               course['isWishListed'] = false;
             }
         });
