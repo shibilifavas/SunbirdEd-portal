@@ -21,9 +21,15 @@ export class CoursesSearchComponent implements OnInit {
   public unsubscribe$ = new Subject<void>();
   public primaryCategories = ["course", "assessment"];
   selectedCompetency: string;
+  rating = [];
+  startRates = [{label:5,selected:false}, 
+                {label:4,selected:false},
+                {label:3,selected:false},
+                {label:2,selected:false},
+                {label:1,selected:false},
+                ]
+  recentlyPublished = true;
   allWishlistedIds = [];
-
-
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
     public resourceService: ResourceService, private schemaService: SchemaService,
     private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService, private snackBar: MatSnackBar,
@@ -145,7 +151,7 @@ export class CoursesSearchComponent implements OnInit {
         "taxonomyCategory4Ids"
       ],
       query: key ?? '',
-      sort_by: { lastPublishedOn: 'desc' },
+      sort_by: { lastPublishedOn: this.recentlyPublished?'desc':'asc' },
       pageNumber: pageNumber
     };
     if (option.filters.keywords == '') {
@@ -177,11 +183,11 @@ export class CoursesSearchComponent implements OnInit {
   updateCoursesType(event) {
     // console.log(event.target.value);
     // console.log(event.target.checked);
-    if (event.target.checked == true) {
-      this.primaryCategories.push(event.target.name);
+    if (event.checked) {
+      this.primaryCategories.push(event.source.name);
     } else {
       this.primaryCategories.forEach((element, index) => {
-        if (element == event.target.name) this.primaryCategories.splice(index, 1);
+        if (element == event.source.name) this.primaryCategories.splice(index, 1);
       });
     }
     if (this.primaryCategories.length == 0) {
@@ -244,6 +250,24 @@ export class CoursesSearchComponent implements OnInit {
         }
     });
     }
+  }
+
+  getRatingText(index) {
+    this.rating = [];
+    for(let i = index; i>0; i--){
+       this.rating.push(i); 
+    }
+      return this.rating;
+  }
+
+  recentlyAddCourses() {
+    console.log(this.recentlyPublished);
+    this.fetchContentOnParamChange();
+  }
+
+  updateAllSelected(){
+    const startRates = this.startRates.filter(s => s.selected);
+    console.log(startRates);
   }
 
 }
