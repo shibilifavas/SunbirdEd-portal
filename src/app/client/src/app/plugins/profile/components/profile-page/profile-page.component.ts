@@ -161,7 +161,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showFullScreenLoader = false;
       if (user.userProfile) {
         if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
-          if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || ['profileDetails']['professionalDetails'][0]['designation'] == undefined || ['profileDetails']['professionalDetails'][0]['designation'] == '') {
+          if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
             this.toasterService.warning("Please update your designation to proceed.");
             this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
           }
