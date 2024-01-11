@@ -160,6 +160,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       /* istanbul ignore else */
       this.showFullScreenLoader = false;
       if (user.userProfile) {
+        this.getWishlistedDoids();
         this.userProfile = user.userProfile;
         const role: string = (!this.userProfile.profileUserType.type ||
           (this.userProfile.profileUserType.type && this.userProfile.profileUserType.type === 'OTHER')) ? '' : this.userProfile.profileUserType.type;
@@ -326,12 +327,24 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchService.searchContentByUserId(searchParams, inputParams).subscribe((data: ServerResponse) => {
       // this.contributions = this.utilService.getDataForCard(data.result.content, constantData, dynamicFields, metaData);
       this.contributions = data.result.content;
+      this.appendWishlistToCourse();
       this.totalContributions = _.get(data, 'result.count') || 0;
       console.log('Contributions', this.contributions);
     });
   }
 
   getTrainingAttended() {
+
+    this.coursesService.enrolledCourseData$.pipe().subscribe(data => {
+      this.attendedTraining = _.reverse(_.sortBy(data.enrolledCourses, val => {
+        return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
+      })) || [];
+      this.appendWishlistToCourse()
+      // this.attendedTraining  = this.attendedTraining.slice(0, 4);
+    });
+  }
+
+  getWishlistedDoids() {
     let payload = {
       "request": {
         "userId": this.userService._userid
@@ -341,27 +354,35 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
       if (res.result.wishlist.length > 0) {
         this.allWishlistedIds = res.result.wishlist;
-      }
-      this.coursesService.enrolledCourseData$.pipe().subscribe(data => {
-        this.attendedTraining = _.reverse(_.sortBy(data.enrolledCourses, val => {
-          return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
-        })) || [];
         this.appendWishlistToCourse()
-        // this.attendedTraining  = this.attendedTraining.slice(0, 4);
-      });
+      }
+      
     });
   }
 
   appendWishlistToCourse() {
-    this.attendedTraining = this.attendedTraining.map((course: any) => {
-      let isWhishListed = this.allWishlistedIds.find((id: string) => id === course.contentId);
-      if(isWhishListed) {
-          course['isWishListed'] = true;
-      } else {
-          course['isWishListed'] = false;
-      }
-      return course
-    })
+    if(this.attendedTraining.length > 0) {
+      this.attendedTraining = this.attendedTraining.map((course: any) => {
+        let isWhishListed = this.allWishlistedIds.find((id: string) => id === course.contentId);
+        if(isWhishListed) {
+            course['isWishListed'] = true;
+        } else {
+            course['isWishListed'] = false;
+        }
+        return course
+      })
+    } 
+    if(this.contributions.length > 0) {
+      this.contributions = this.contributions.map((course: any) => {
+        let isWhishListed = this.allWishlistedIds.find((id: string) => id === course.identifier);
+        if(isWhishListed) {
+            course['isWishListed'] = true;
+        } else {
+            course['isWishListed'] = false;
+        }
+        return course
+      })
+    }
   }
 
   /**
@@ -809,7 +830,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(`/learn/course/${courseId}/batch/${batchId}`);
   }
 
-  favoriteIconClicked(option: string, courseId: any) {
+  contributionRedirectToToc(courseId) {
+    this.router.navigateByUrl(`/learn/course/${courseId}`)
+  }
+
+  favoriteIconClicked(option: string, courseId: any, key: string) {
     console.log("Icon: ", option)
 
     let payload = {
@@ -822,7 +847,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     if(option === 'selected') {
         this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
             if(res) {
-                this.updateWishlistedCourse(option, courseId);
+                this.updateWishlistedCourse(option, courseId, key);
                 this.wishlistedService.updateData({ message: 'Added to Wishlist' });
                 this.snackBar.openFromComponent(SnackBarComponent, {
                     duration: 2000,
@@ -833,7 +858,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
             if(res) {
-                this.updateWishlistedCourse(option, courseId);
+                this.updateWishlistedCourse(option, courseId, key);
                 this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
                 this.snackBar.openFromComponent(SnackBarComponent, {
                     duration: 2000,
@@ -844,19 +869,36 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    updateWishlistedCourse(option: string, courseId: any) {
-      if(option === 'selected') {
-        this.attendedTraining.forEach((course: any) => {
-          if (course.contentId == courseId) {
-            course['isWishListed'] = true;
-          }
-      });
+    updateWishlistedCourse(option: string, courseId: any, key) {
+      if(key == 'learnings') {
+        if(option === 'selected') {
+          this.attendedTraining.forEach((course: any) => {
+            if (course.contentId == courseId) {
+              course['isWishListed'] = true;
+            }
+        });
+        } else {
+          this.attendedTraining.forEach((course: any) => {
+            if (course.contentId == courseId) {
+              course['isWishListed'] = false;
+            }
+        });
+        }
+        
       } else {
-        this.attendedTraining.forEach((course: any) => {
-          if (course.contentId == courseId) {
-            course['isWishListed'] = false;
-          }
-      });
+        if(option === 'selected') {
+          this.contributions.forEach((course: any) => {
+            if (course.identifier == courseId) {
+              course['isWishListed'] = true;
+            }
+        });
+        } else {
+          this.contributions.forEach((course: any) => {
+            if (course.identifier == courseId) {
+              course['isWishListed'] = false;
+            }
+        });
+        }
       }
     }
 }

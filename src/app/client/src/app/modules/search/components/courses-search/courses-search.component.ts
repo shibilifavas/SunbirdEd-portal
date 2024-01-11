@@ -36,7 +36,6 @@ export class CoursesSearchComponent implements OnInit {
      private router: Router, private userService: UserService, private wishlistedService: WishlistedService) { }
 
   ngOnInit(): void {
-    this.getWishlisteddoids()
     if (this.activatedRoute.snapshot.queryParams.learnings == 'true') {
       this.breadCrumbData = [
         {
@@ -128,6 +127,7 @@ export class CoursesSearchComponent implements OnInit {
           this.courses = _.reverse(_.sortBy(data.enrolledCourses, val => {
             return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
           })) || [];
+          this.appendWishlistToCourse();
         });
       });
     });
@@ -161,9 +161,9 @@ export class CoursesSearchComponent implements OnInit {
       delete option.filters.targetTaxonomyCategory4Ids;
     }
     this.searchService.contentSearch(option).subscribe(res => {
+      this.getWishlisteddoids();
       this.courses = res['result']['content'];
       this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
-      this.appendWishlistToCourse();
       // console.log('Searched Courses', res['result']['content']);
     });
   }
@@ -239,13 +239,13 @@ export class CoursesSearchComponent implements OnInit {
   updateWishlistedCourse(option: string, courseId: any) {
     if(option === 'selected') {
       this.courses.forEach((course: any) => {
-        if (course.identifier == courseId) {
+        if (course?.identifier == courseId || course?.contentId == courseId) {
           course['isWishListed'] = true;
         }
     });
     } else {
       this.courses.forEach((course: any) => {
-        if (course.identifier == courseId) {
+        if (course?.identifier == courseId || course?.contentId == courseId) {
           course['isWishListed'] = false;
         }
     });
