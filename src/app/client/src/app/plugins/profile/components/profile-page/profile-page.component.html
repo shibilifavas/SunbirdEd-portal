@@ -32,7 +32,7 @@
         <div class="ui grid middle aligned stackable">
           <div class="three wide column" *ngFor="let data of attendedTraining.slice(0, 4)">
             <compass-course-card (click)="redirectToToc(data['contentId'], data['batch']['batchId'])" [data]="data"
-            (favoriteIconClicked)="favoriteIconClicked($event)"></compass-course-card>
+            (favoriteIconClicked)="favoriteIconClicked($event,data['contentId'],'learnings')"></compass-course-card>
           </div>
         </div>
       </section>
@@ -356,8 +356,8 @@
               (init)="slickInit($event)" (breakpoint)="breakpoint($event)" (afterChange)="afterChange($event)"
               (beforeChange)="beforeChange($event)" responsive="breakpoints">
               <div ngxSlickItem class="slide" *ngFor='let course of contributions;'
-                [routerLink]="['/learn/course', course['identifier']]">
-                <compass-course-card [data]="course"></compass-course-card>
+                 (click)="contributionRedirectToToc(course['identifier'])">
+                <compass-course-card [data]="course" (favoriteIconClicked)="favoriteIconClicked($event,course['identifier'],'contributions')"></compass-course-card>
               </div>
             </ngx-slick-carousel>
           </div>

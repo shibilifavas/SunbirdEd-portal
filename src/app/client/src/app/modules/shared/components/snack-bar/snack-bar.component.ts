@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { WishlistedService } from '../../../../service/wishlisted.service';
 
 @Component({
   selector: 'app-snack-bar',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SnackBarComponent implements OnInit {
 
-  constructor() { }
+  data: any;
+  
+  constructor(private wishlistedService: WishlistedService) { }
 
   ngOnInit(): void {
+    this.wishlistedService.data$.subscribe((data) => {
+      this.data = data;
+    });
   }
 
 }

@@ -139,7 +139,8 @@
     },
     "COMPOSITE": {
       "SEARCH": "composite/v1/search",
-      "SEARCH_IMAGES": "composite/v3/search"
+      "SEARCH_IMAGES": "composite/v3/search",
+      "SEARCH_METRIC": "composite/v1/search/metric"
     },
     "SYSTEM_SETTING": {
       "CUSTODIAN_ORG": "data/v1/system/settings/get/custodianOrgId",
@@ -380,6 +381,11 @@
     "DHITI":{
       "GENERIC_REPORTS": "reports/mlreports/v1/fetch",
       "ALL_EVIDENCE":"observations/mlreports/v1/listAllEvidences"
+    },
+    "WISHLIST": {
+      "GET_LIST": "wishlist/v1/get",
+      "ADD": "wishlist/v1/add",
+      "REMOVE": "wishlist/v1/remove"
     },
     "UCI": "/uci"
 

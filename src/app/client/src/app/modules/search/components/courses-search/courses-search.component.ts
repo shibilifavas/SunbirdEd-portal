@@ -8,6 +8,7 @@ import { takeUntil, map, delay, debounceTime, tap, mergeMap } from 'rxjs/operato
 import { FrameworkService } from '../../../core/services/framework/framework.service';
 import * as _ from 'lodash-es';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { WishlistedService } from '../../../../service/wishlisted.service';
 
 
 @Component({
@@ -21,12 +22,19 @@ export class CoursesSearchComponent implements OnInit {
   public unsubscribe$ = new Subject<void>();
   public primaryCategories = ["course", "assessment"];
   selectedCompetency: string;
-
-
+  rating = [];
+  startRates = [{label:5,selected:false}, 
+                {label:4,selected:false},
+                {label:3,selected:false},
+                {label:2,selected:false},
+                {label:1,selected:false},
+                ]
+  recentlyPublished = true;
+  allWishlistedIds = [];
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
     public resourceService: ResourceService, private schemaService: SchemaService,
     private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService, private snackBar: MatSnackBar,
-    private router: Router, public userService: UserService, private toasterService: ToasterService) { }
+    private router: Router, private userService: UserService, private wishlistedService: WishlistedService) { }
 
   ngOnInit(): void {
     if (this.activatedRoute.snapshot.queryParams.learnings == 'true') {
@@ -91,6 +99,22 @@ export class CoursesSearchComponent implements OnInit {
     });
   }
 
+  private getWishlisteddoids() {
+    let payload = {
+      "request": {
+        "userId": this.userService._userid
+      }
+    }
+
+    this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+      if (res.result.wishlist.length > 0) {
+        this.allWishlistedIds = res.result.wishlist;
+      }
+      this.appendWishlistToCourse();
+    });
+
+  }
+
   private fetchContentOnParamChange() {
     combineLatest(this.activatedRoute.params, this.activatedRoute.queryParams, this.schemaService.fetchSchemas())
       .pipe(debounceTime(5),
@@ -103,10 +127,24 @@ export class CoursesSearchComponent implements OnInit {
   }
 
   private getTrainingAttended() {
-    this.coursesService.enrolledCourseData$.pipe().subscribe(data => {
-      this.courses = _.reverse(_.sortBy(data.enrolledCourses, val => {
-        return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
-      })) || [];
+    let payload = {
+      "request": {
+        "userId": this.userService._userid
+      }
+    }
+
+    this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+      if (res.result.wishlist.length > 0) {
+        this.allWishlistedIds = res.result.wishlist;
+      }
+      this.coursesService.enrolledCourseData$.pipe().subscribe(data => {
+        this.coursesService.enrolledCourseData$.pipe().subscribe(data => {
+          this.courses = _.reverse(_.sortBy(data.enrolledCourses, val => {
+            return _.isNumber(_.get(val, 'completedOn')) ? _.get(val, 'completedOn') : Date.parse(val.completedOn);
+          })) || [];
+          this.appendWishlistToCourse();
+        });
+      });
     });
   }
 
@@ -128,7 +166,7 @@ export class CoursesSearchComponent implements OnInit {
         "taxonomyCategory4Ids"
       ],
       query: key ?? '',
-      sort_by: { lastPublishedOn: 'desc' },
+      sort_by: { lastPublishedOn: this.recentlyPublished?'desc':'asc' },
       pageNumber: pageNumber
     };
     if (option.filters.keywords == '') {
@@ -138,20 +176,33 @@ export class CoursesSearchComponent implements OnInit {
       delete option.filters.targetTaxonomyCategory4Ids;
     }
     this.searchService.contentSearch(option).subscribe(res => {
+      this.getWishlisteddoids();
       this.courses = res['result']['content'];
       this.courses = this.contentSearchService.updateCourseWithTaggedCompetency(this.courses);
       // console.log('Searched Courses', res['result']['content']);
     });
   }
 
+  appendWishlistToCourse() {
+    this.courses.forEach((course: any) => {
+      let isWhishListed;
+      if(course.identifier) {
+        isWhishListed = this.allWishlistedIds.find((id: string) => id === course.identifier);
+      } else {
+        isWhishListed = this.allWishlistedIds.find((id: string) => id === course.contentId);
+      }
+      isWhishListed ? course['isWishListed'] = true: course['isWishListed'] = false;
+    })
+  }
+
   updateCoursesType(event) {
     // console.log(event.target.value);
     // console.log(event.target.checked);
-    if (event.target.checked == true) {
-      this.primaryCategories.push(event.target.name);
+    if (event.checked) {
+      this.primaryCategories.push(event.source.name);
     } else {
       this.primaryCategories.forEach((element, index) => {
-        if (element == event.target.name) this.primaryCategories.splice(index, 1);
+        if (element == event.source.name) this.primaryCategories.splice(index, 1);
       });
     }
     if (this.primaryCategories.length == 0) {
@@ -165,15 +216,72 @@ export class CoursesSearchComponent implements OnInit {
     this.router.navigate(['/learn/course', course['contentId'] ?? course['identifier']]);
   }
 
-  favoriteIconClicked(option: string) {
-    console.log("Icon: ", option)
+  favoriteIconClicked(option: string, courseId: any) {
+    console.log("Icon: ", option);
 
-    if (option === 'selected') {
-      this.snackBar.openFromComponent(SnackBarComponent, {
-        duration: 2000,
-        panelClass: ['wishlist-snackbar']
-      });
+    let payload = {
+      "request": {
+          "userId": this.userService._userid,
+          "courseId": courseId
+      }
     }
+    if(option === 'selected') {
+      this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+          if(res) {
+              this.updateWishlistedCourse(option, courseId);
+              this.wishlistedService.updateData({ message: 'Added to Wishlist' });
+              this.snackBar.openFromComponent(SnackBarComponent, {
+                  duration: 2000,
+                  panelClass: ['wishlist-snackbar']
+              });
+          }
+      });
+    } else {
+        this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+            if(res) {
+                this.updateWishlistedCourse(option, courseId);
+                this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
+                this.snackBar.openFromComponent(SnackBarComponent, {
+                    duration: 2000,
+                    panelClass: ['wishlist-snackbar']
+                });
+            }
+        });
+    }
+  }
+
+  updateWishlistedCourse(option: string, courseId: any) {
+    if(option === 'selected') {
+      this.courses.forEach((course: any) => {
+        if (course?.identifier == courseId || course?.contentId == courseId) {
+          course['isWishListed'] = true;
+        }
+    });
+    } else {
+      this.courses.forEach((course: any) => {
+        if (course?.identifier == courseId || course?.contentId == courseId) {
+          course['isWishListed'] = false;
+        }
+    });
+    }
+  }
+
+  getRatingText(index) {
+    this.rating = [];
+    for(let i = index; i>0; i--){
+       this.rating.push(i); 
+    }
+      return this.rating;
+  }
+
+  recentlyAddCourses() {
+    console.log(this.recentlyPublished);
+    this.fetchContentOnParamChange();
+  }
+
+  updateAllSelected(){
+    const startRates = this.startRates.filter(s => s.selected);
+    console.log(startRates);
   }
 
 }

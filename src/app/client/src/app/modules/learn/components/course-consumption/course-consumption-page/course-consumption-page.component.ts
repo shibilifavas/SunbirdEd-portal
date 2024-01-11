@@ -13,6 +13,7 @@ import { CsCourseService } from '@project-sunbird/client-services/services/cours
 import { AssessmentScoreService } from './../../../services';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PublicPlayerService } from '@sunbird/public';
+import { WishlistedService } from '../../../../../service/wishlisted.service';
 
 @Component({
   templateUrl: './course-consumption-page.component.html',
@@ -46,6 +47,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   _routerStateContentStatus: any;
   breadCrumbData;
   contentTabLabel: string;
+  allWishlistedIds = [];
+  isWishlisted: boolean = false;
   // questionSetEvaluable: any;
 
   constructor(private activatedRoute: ActivatedRoute, private configService: ConfigService,
@@ -57,7 +60,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public coursePageContentService: CoursePageContentService, private userService: UserService,
     @Inject('CS_COURSE_SERVICE') private CsCourseService: CsCourseService,
     private courseProgressService: CourseProgressService, public assessmentScoreService: AssessmentScoreService, private snackBar: MatSnackBar,
-    public publicPlayerService: PublicPlayerService) {
+    public publicPlayerService: PublicPlayerService, private wishlistedService: WishlistedService) {
   }
   ngOnInit() {
     this.initLayout();
@@ -74,6 +77,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.courseConsumptionService.setContentIds(this.contentIds);
         this.courseHierarchy['mimeTypeObjs'] = JSON.parse(this.courseHierarchy.mimeTypesCount);
         this.layoutService.updateSelectedContentType.emit(courseHierarchy.contentType);
+        this.checkWishlisted();
         this.getContentState();
         this.getGeneraliseResourceBundle();
         this.checkCourseStatus(courseHierarchy);
@@ -91,7 +95,8 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           keywords: this.courseHierarchy.keywords,
           rating: 0,
           numberOfRating: '0 Ratings',
-          duration: this.courseHierarchy.Duration
+          duration: this.courseHierarchy.Duration,
+          isWishListed: this.isWishlisted
         };
         this.breadCrumbData = [
           {
@@ -264,15 +269,59 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
   }
 
   addWishList(option: string) {
-    console.log("Icon: ", option)
+    console.log("Icon: ", option);
+
+    let payload = {
+      "request": {
+          "userId": this.userService._userid,
+          "courseId": this.courseHierarchy.identifier
+      }
+    }
 
     if(option === 'selected') {
-        this.snackBar.openFromComponent(SnackBarComponent, {
-            duration: 2000,
-            panelClass: ['wishlist-snackbar']
+      this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
+          if(res) {
+              this.config['isWishListed'] = true;
+              this.wishlistedService.updateData({ message: 'Added to Wishlist' });
+              this.snackBar.openFromComponent(SnackBarComponent, {
+                  duration: 2000,
+                  panelClass: ['wishlist-snackbar']
+              });
+          }
+      });
+    } else {
+      this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
+          if(res) {
+            this.config['isWishListed'] = false;
+              this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
+              this.snackBar.openFromComponent(SnackBarComponent, {
+                  duration: 2000,
+                  panelClass: ['wishlist-snackbar']
+              });
+          }
+      });
+    }
+  }
+
+  checkWishlisted() {
+    let payload = {
+      "request": {
+        "userId": this.userService._userid
+      }
+    }
+
+    this.wishlistedService.getWishlistedCourses(payload).subscribe((res: any) => {
+      if (res.result.wishlist.length > 0) {
+        this.allWishlistedIds = res.result.wishlist;
+        this.allWishlistedIds.forEach((id:string) => {
+          if(id === this.courseHierarchy.identifier) {
+            this.config['isWishListed'] = true;
+          }
         });
       }
+    });
   }
+  
 
   // updateCourseContent(hierarchy?: any) {
   //   if(hierarchy) {
