@@ -6,7 +6,7 @@ import { ProfileService } from '@sunbird/profile';
 import { ContentSearchService } from '@sunbird/content-search';
 import _ from 'lodash';
 import { FrameworkService } from '../../../../modules/core/services/framework/framework.service';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-personal-details',
@@ -30,8 +30,11 @@ export class PersonalDetailsComponent implements OnInit {
         this.userProfile = user.userProfile;
       }
     });
+    if (this.activatedRoute.snapshot.queryParams.showError != undefined) {
+      this.toasterService.warning("Please update your designation to proceed.");
+    }
     this.channelService.getFrameWork(this.activatedRoute.snapshot.queryParams.channel).subscribe((res: any) =>{
-      console.log("res", res);
+      // console.log("res", res);
       this.frameworkId = res.result.channel.frameworks[0].identifier;
       this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
       .subscribe((categories: any) => {
