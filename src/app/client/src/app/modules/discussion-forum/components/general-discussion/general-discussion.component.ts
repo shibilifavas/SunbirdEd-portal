@@ -1,13 +1,14 @@
 import { IFetchForumId } from './../../../groups/interfaces/group';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService, ResourceService, NavigationHelperService } from '../../../shared/services';
 import { DiscussionTelemetryService } from '../../../shared/services/discussion-telemetry/discussion-telemetry.service';
 import * as _ from 'lodash-es';
 import { UserService } from '../../../core/services';
 import { CsLibInitializerService } from '../../../../service/CsLibInitializer/cs-lib-initializer.service';
 import { CsModule } from '@project-sunbird/client-services';
-// import { IUserData } from '@sunbird/shared';
+import { IUserData } from '@sunbird/shared';
+
 // import { throwError } from 'rxjs';
 
 @Component({
@@ -32,7 +33,8 @@ export class GeneralDiscussionComponent implements OnInit {
     private discussionTelemetryService: DiscussionTelemetryService,
     private navigationHelperService: NavigationHelperService,
     private userService: UserService,
-    private csLibInitializerService: CsLibInitializerService
+    private csLibInitializerService: CsLibInitializerService,
+    public activatedRoute: ActivatedRoute
   ) {
     if (!CsModule.instance.isInitialised) {
       this.csLibInitializerService.initializeCs();
@@ -49,11 +51,36 @@ export class GeneralDiscussionComponent implements OnInit {
     // if (!this.forumIds) {
     // this.fetchForumIds();
     // }
+    this.checkUserProfileDetails();
   }
+
+  checkUserProfileDetails() {
+    this.userService.userData$.subscribe((user: IUserData) => {
+      if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+        if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
+          this.toasterService.warning("Please update your designation to proceed.");
+          this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+        }
+      } else {
+        this.toasterService.warning("Please update your designation to proceed.");
+        this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+      }
+    });
+  }
+
+  // checkUserProfileDetails() {
+  //   this.userService.userData$.subscribe((user: IUserData) => {
+  //       if (user.userProfile['organisations'][0]['position'] == null || user.userProfile['organisations'][0]['position'] == undefined || user.userProfile['organisations'][0]['position'] == '') {
+  //           this.toasterService.warning("Please update your designation to proceed.");
+  //           // window.location.href = '/profile/edit?channel=' + this.channelId;
+  //           this.router.navigate(['/profile/edit'], { queryParams: { channel: this.activatedRoute.snapshot.paramMap.get('channel') }, relativeTo: this.activatedRoute });
+  //       }
+  //   });
+  // }
 
   navigateToDF() {
     this.router.navigate(['/discussion-forum'], {
-    // this.router.navigate(['/discussion-forum/category/5'], {
+      // this.router.navigate(['/discussion-forum/category/5'], {
       queryParams: {
         categories: JSON.stringify({ result: [5] }),
         userId: this.userId

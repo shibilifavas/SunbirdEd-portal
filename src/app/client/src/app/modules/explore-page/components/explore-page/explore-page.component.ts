@@ -150,24 +150,24 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         responsive: [{
             breakpoint: 1024,
             settings: {
-              slidesToShow: 4,
-              slidesToScroll: 4 
+                slidesToShow: 4,
+                slidesToScroll: 4
             }
-          },
-          {
+        },
+        {
             breakpoint: 768,
             settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2 
+                slidesToShow: 2,
+                slidesToScroll: 2
             }
-          },
-          {
+        },
+        {
             breakpoint: 520,
             settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1
+                slidesToShow: 1,
+                slidesToScroll: 1
             }
-          }]
+        }]
     };
     popularCompetencies = [];
     popularTopics = [];
@@ -260,7 +260,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         // this.defaultFilters = this.cacheService.exists('searchFilters') ? this.getPersistFilters(true) : this.userService.defaultFrameworkFilters;
                         this.defaultFilters = this.userService.defaultFrameworkFilters;
                         this.userProfile = this.userService.userProfile;
-                        localStorage.setItem("userId",this.userProfile.userId);
+                        localStorage.setItem("userId", this.userProfile.userId);
                     } else {
                         this.userService.getGuestUser().subscribe((response) => {
                             const guestUserDetails: any = response;
@@ -298,6 +298,22 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
                 this.queryParams = { ...params, ...queryParams };
             }));
+    }
+
+    checkUserProfileDetails() {
+        this.userService.userData$.subscribe((user: IUserData) => {
+            if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+                if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
+                    this.toasterService.warning("Please update your designation to proceed.");
+                    // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+                    window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
+                }
+            } else {
+                this.toasterService.warning("Please update your designation to proceed.");
+                // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+                window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
+            }
+        });
     }
 
     ngOnInit() {
@@ -343,12 +359,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.addHoverData();
         });
         this.breadCrumbData.push(
-            {
-                "label": "Learn",
-                "status": "active",
-                "icon": "school",
-                "link": ""
-            });
+        {
+            "label": "Learn",
+            "status": "active",
+            "icon": "school",
+            "link": ""
+        });
+        this.checkUserProfileDetails();
     }
 
     public getWishlisteddoIds() {
@@ -385,11 +402,11 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         };
 
-        for(let option=0; option<this.contentSearchService.popularOptions.length; option++) {
+        for (let option = 0; option < this.contentSearchService.popularOptions.length; option++) {
             requestData['facets'] = [this.contentSearchService.popularOptions[option].facets];
             this.searchService.compositePopularSearch(requestData).subscribe(res => {
                 this.popularCompetenciesData = res['result']['facets'][0]['values'];
-                if(this.popularCompetenciesData.length > 0) {
+                if (this.popularCompetenciesData.length > 0) {
                     let popularCard = {};
                     let popularCardMapping = [];
                     this.browseByCard.push({
@@ -397,14 +414,14 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         "title": this.contentSearchService.popularOptions[option].name,
                         "description": "Assess your competency levels and embark on a journey of continuous improvement."
                     })
-                    popularCard['popularTitle'] = 'Popular '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
-                    popularCard['popularButton'] = 'All '+ this.contentSearchService.popularOptions[option].name.toLowerCase();
+                    popularCard['popularTitle'] = 'Popular ' + this.contentSearchService.popularOptions[option].name.toLowerCase();
+                    popularCard['popularButton'] = 'All ' + this.contentSearchService.popularOptions[option].name.toLowerCase();
                     popularCard['facets'] = this.contentSearchService.popularOptions[option].facets;
                     popularCard['tenant'] = this.channelId == '0138325860604395527' ? 'compass' : 'other';
                     for (let i = 0; i < this.popularCompetenciesData.length; i++) {
                         this.popularCompetencies[i] = this.popularCompetenciesData[i]['name'];
                     }
-        
+
                     for (let i = 0; i < this.contentSearchService.channelData.length; i++) {
                         for (let j = 0; j < this.contentSearchService.channelData[i]['terms'].length; j++) {
                             if (this.contentSearchService.channelData[i]['terms'][j]['associations'] !== undefined) {
@@ -536,7 +553,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (id == 0) {
             this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&facets=keywords`)
         } else {
-            if(this.channelId == '0138325860604395527') {
+            if (this.channelId == '0138325860604395527') {
                 this.router.navigateByUrl(`search/Library/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&hideFilter=false`)
             } else {
                 this.router.navigateByUrl(`search/Topics/1?channel=${this.channelId}&framework=${this.contentSearchService.frameworkId}&facets=${facet}`)
@@ -575,7 +592,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                         return course['completionPercentage'] !== 100;
                     });
                     console.log('enrolledCourses', this.enrolledCourses);
-                   
+
                     const { constantData, metaData, dynamicFields } = _.get(this.configService, 'appConfig.CoursePageSection.enrolledCourses');
                     enrolledSection.contents = _.map(filteredCourses, content => {
                         const formatedContent = this.utilService.processContent(content, constantData, dynamicFields, metaData);
@@ -752,7 +769,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                             request.channelId = this.selectedFilters['channel'];
                         }
                         const option = this.searchService.getSearchRequest(request, get(filters, 'primaryCategory'));
-                        
+
                         const params = _.get(this.activatedRoute, 'snapshot.queryParams');
                         _.filter(Object.keys(params), filterValue => {
                             if (((_.get(currentPageData, 'metaData.filters').indexOf(filterValue) !== -1))) {
@@ -1683,7 +1700,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['/learn/course', id])
     }
 
-    favoriteIconClicked(option: string, courseId: any, key: string) {
+    favoriteIconClicked(option: string, courseId: any) {
         console.log("Icon: ", option);
 
         let payload = {
@@ -1693,11 +1710,9 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
 
-        if(option === 'selected') {
+        if (option === 'selected') {
             this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
-                if(res) {
-                    this.updateWishlistedCourse(option,key, courseId);
-                    this.wishlistedService.updateData({ message: 'Added to Wishlist' });
+                if (res) {
                     this.snackBar.openFromComponent(SnackBarComponent, {
                         duration: 2000,
                         panelClass: ['wishlist-snackbar']
@@ -1706,13 +1721,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         } else {
             this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
-                if(res) {
-                    this.updateWishlistedCourse(option,key, courseId)
-                    this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
-                    this.snackBar.openFromComponent(SnackBarComponent, {
-                        duration: 2000,
-                        panelClass: ['wishlist-snackbar']
-                    });
+                if (res) {
+                    console.log("un wishlisted");
                 }
             });
         }
