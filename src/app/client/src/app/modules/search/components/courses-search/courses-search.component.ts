@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService, SchemaService, CoursesService } from '@sunbird/core';
-import { ResourceService, SnackBarComponent } from '@sunbird/shared';
+import { SearchService, SchemaService, CoursesService, UserService } from '@sunbird/core';
+import { ResourceService, SnackBarComponent, IUserData, ToasterService } from '@sunbird/shared';
 import { ContentSearchService } from '@sunbird/content-search';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Subject, of, Observable } from 'rxjs';
 import { takeUntil, map, delay, debounceTime, tap, mergeMap } from 'rxjs/operators';
 import { FrameworkService } from '../../../core/services/framework/framework.service';
 import * as _ from 'lodash-es';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-courses-search',
@@ -25,7 +26,7 @@ export class CoursesSearchComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute, public searchService: SearchService,
     public resourceService: ResourceService, private schemaService: SchemaService,
     private contentSearchService: ContentSearchService, public coursesService: CoursesService, public frameworkService: FrameworkService, private snackBar: MatSnackBar,
-     private router: Router) { }
+    private router: Router, public userService: UserService, private toasterService: ToasterService) { }
 
   ngOnInit(): void {
     if (this.activatedRoute.snapshot.queryParams.learnings == 'true') {
@@ -61,19 +62,33 @@ export class CoursesSearchComponent implements OnInit {
       ];
       this.fetchContentOnParamChange();
     }
-
     this.frameworkService.getSelectedFrameworkCategories(this.activatedRoute.snapshot.queryParams.framework)
-    .subscribe((res: any) => {
-      res.result.framework.categories.map((item)=>{
-        if(item.name == "Competencies"){
-          item.terms.map((term)=>{
-            if(term.identifier == this.activatedRoute.snapshot.queryParams.competency){
-              this.selectedCompetency = term.name;
-            }
-          })
-        }
+      .subscribe((res: any) => {
+        res.result.framework.categories.map((item) => {
+          if (item.name == "Competencies") {
+            item.terms.map((term) => {
+              if (term.identifier == this.activatedRoute.snapshot.queryParams.competency) {
+                this.selectedCompetency = term.name;
+              }
+            })
+          }
+        })
       })
-    })
+    this.checkUserProfileDetails();
+  }
+
+  checkUserProfileDetails() {
+    this.userService.userData$.subscribe((user: IUserData) => {
+      if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+        if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || ['profileDetails']['professionalDetails'][0]['designation'] == undefined || ['profileDetails']['professionalDetails'][0]['designation'] == '') {
+          this.toasterService.warning("Please update your designation to proceed.");
+          this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+        }
+      } else {
+        this.toasterService.warning("Please update your designation to proceed.");
+        this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+      }
+    });
   }
 
   private fetchContentOnParamChange() {
@@ -153,10 +168,10 @@ export class CoursesSearchComponent implements OnInit {
   favoriteIconClicked(option: string) {
     console.log("Icon: ", option)
 
-    if(option === 'selected') {
+    if (option === 'selected') {
       this.snackBar.openFromComponent(SnackBarComponent, {
-          duration: 2000,
-          panelClass: ['wishlist-snackbar']
+        duration: 2000,
+        panelClass: ['wishlist-snackbar']
       });
     }
   }

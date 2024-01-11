@@ -158,6 +158,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
       /* istanbul ignore else */
       this.showFullScreenLoader = false;
       if (user.userProfile) {
+        if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+          if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || ['profileDetails']['professionalDetails'][0]['designation'] == undefined || ['profileDetails']['professionalDetails'][0]['designation'] == '') {
+            this.toasterService.warning("Please update your designation to proceed.");
+            this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+          }
+        } else {
+          this.toasterService.warning("Please update your designation to proceed.");
+          this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+        }
         this.userProfile = user.userProfile;
         const role: string = (!this.userProfile.profileUserType.type ||
           (this.userProfile.profileUserType.type && this.userProfile.profileUserType.type === 'OTHER')) ? '' : this.userProfile.profileUserType.type;
@@ -239,9 +248,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  navigateToEditProfile(){
+  navigateToEditProfile() {
     const channel = this.activatedRoute.snapshot.queryParams.channel;
-    this.router.navigate(['profile/edit'],{queryParams : {channel}});
+    this.router.navigate(['profile/edit'], { queryParams: { channel } });
   }
 
   setNonCustodianUserLocation() {
@@ -786,10 +795,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   favoriteIconClicked(option: string) {
     console.log("Icon: ", option)
 
-    if(option === 'selected') {
+    if (option === 'selected') {
       this.snackBar.openFromComponent(SnackBarComponent, {
-          duration: 2000,
-          panelClass: ['wishlist-snackbar']
+        duration: 2000,
+        panelClass: ['wishlist-snackbar']
       });
     }
   }
