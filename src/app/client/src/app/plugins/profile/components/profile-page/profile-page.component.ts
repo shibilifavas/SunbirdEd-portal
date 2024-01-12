@@ -159,7 +159,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.userSubscription = this.userService.userData$.subscribe((user: IUserData) => {
       /* istanbul ignore else */
       this.showFullScreenLoader = false;
-      if (user.userProfile) {
+      if (user.userProfile && user.userProfile['profileDetails'] !== null) {
         if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
           if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
             this.toasterService.warning("Please update your designation to proceed.");
