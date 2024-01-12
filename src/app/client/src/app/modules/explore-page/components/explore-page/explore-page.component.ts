@@ -302,17 +302,20 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     checkUserProfileDetails() {
         this.userService.userData$.subscribe((user: IUserData) => {
+            if(user.userProfile['profileDetails'] !== null){
             if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
                 if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
                     this.toasterService.warning("Please update your designation to proceed.");
                     // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
                     window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
                 }
-            } else {
+            }
+            }  else {
                 this.toasterService.warning("Please update your designation to proceed.");
                 // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
                 window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
             }
+
         });
     }
 
