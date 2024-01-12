@@ -1703,7 +1703,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.navigate(['/learn/course', id])
     }
 
-    favoriteIconClicked(option: string, courseId: any) {
+    favoriteIconClicked(option: string, courseId: any, key: string) {
         console.log("Icon: ", option);
 
         let payload = {
@@ -1713,9 +1713,11 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
 
-        if (option === 'selected') {
+        if(option === 'selected') {
             this.wishlistedService.addToWishlist(payload).subscribe((res: any) => {
-                if (res) {
+                if(res) {
+                    this.updateWishlistedCourse(option,key, courseId);
+                    this.wishlistedService.updateData({ message: 'Added to Wishlist' });
                     this.snackBar.openFromComponent(SnackBarComponent, {
                         duration: 2000,
                         panelClass: ['wishlist-snackbar']
@@ -1724,8 +1726,13 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         } else {
             this.wishlistedService.removeFromWishlist(payload).subscribe((res: any) => {
-                if (res) {
-                    console.log("un wishlisted");
+                if(res) {
+                    this.updateWishlistedCourse(option,key, courseId)
+                    this.wishlistedService.updateData({ message: 'Removed from Wishlist' });
+                    this.snackBar.openFromComponent(SnackBarComponent, {
+                        duration: 2000,
+                        panelClass: ['wishlist-snackbar']
+                    });
                 }
             });
         }
