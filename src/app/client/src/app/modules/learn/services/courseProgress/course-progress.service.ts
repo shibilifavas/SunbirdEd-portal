@@ -2,7 +2,7 @@ import { of as observableOf, Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { ConfigService, ServerResponse, ToasterService, ResourceService } from '@sunbird/shared';
-import { ContentService, UserService, CoursesService } from '@sunbird/core';
+import { ContentService, UserService, CoursesService, PublicDataService } from '@sunbird/core';
 import * as _ from 'lodash-es';
 import dayjs from 'dayjs';
 
@@ -39,7 +39,7 @@ export class CourseProgressService {
 
 
   constructor(contentService: ContentService, configService: ConfigService,
-    userService: UserService, public coursesService: CoursesService, private toasterService: ToasterService,
+    userService: UserService, public coursesService: CoursesService, private toasterService: ToasterService, private publicService: PublicDataService,
     private resourceService: ResourceService) {
     this.contentService = contentService;
     this.configService = configService;
@@ -87,7 +87,7 @@ export class CourseProgressService {
       if (_.get(req, 'fields')) {
         channelOptions.data.request['fields'] = _.get(req, 'fields');
       }
-      return this.contentService.post(channelOptions).pipe(map((res: ServerResponse) => {
+      return this.publicService.post(channelOptions).pipe(map((res: ServerResponse) => {
         return res;
       }), catchError((err) => {
            return err;
