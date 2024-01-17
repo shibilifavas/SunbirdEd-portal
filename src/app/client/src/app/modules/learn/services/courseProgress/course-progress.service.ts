@@ -80,7 +80,8 @@ export class CourseProgressService {
         data: {
           request: {
             courseId: req.courseId,
-            batchId: req.batchId
+            batchId: req.batchId,
+            userId: req.userId
           }
         }
       };
