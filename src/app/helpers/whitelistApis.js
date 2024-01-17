@@ -343,14 +343,15 @@ const API_LIST = {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
     },
+
+    // OWNER_CHECK: {
+    //   checks: [
+    //   { entity: '__session__userId', params: [] }
+    //   ]
+    //   }
     '/content/course/v1/content/state/read': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC],
-      OWNER_CHECK: {
-      checks: [
-      { entity: '__session__userId', params: [] }
-      ]
-      }
+      ROLE_CHECK: [ROLE.PUBLIC]
     },
     '/content/course/v1/content/state/update': {
       checksNeeded: ['ROLE_CHECK', 'OWNER_CHECK'],
