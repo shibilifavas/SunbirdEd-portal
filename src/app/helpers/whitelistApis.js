@@ -1961,10 +1961,6 @@ const API_LIST = {
     "/learner/wishlist/v1/get": {
       checksNeeded: ['ROLE_CHECK'],
       ROLE_CHECK: [ROLE.PUBLIC]
-    },
-    "/api/course/v1/content/state/read": {
-      checksNeeded: ['ROLE_CHECK'],
-      ROLE_CHECK: [ROLE.PUBLIC]
     }
   },
   URL_PATTERN: [
@@ -2126,7 +2122,7 @@ const API_LIST = {
     '/learner/wishlist/v1/add',
     '/learner/wishlist/v1/remove',
     '/learner/wishlist/v1/get',
-    '/api/course/v1/content/state/read'
+   '/course/v1/content/state/read'
   ]
 };
 module.exports = API_LIST;

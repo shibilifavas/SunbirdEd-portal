@@ -87,7 +87,7 @@ export class CourseProgressService {
       if (_.get(req, 'fields')) {
         channelOptions.data.request['fields'] = _.get(req, 'fields');
       }
-      return this.publicService.post(channelOptions).pipe(map((res: ServerResponse) => {
+      return this.contentService.post(channelOptions).pipe(map((res: ServerResponse) => {
         return res;
       }), catchError((err) => {
            return err;
