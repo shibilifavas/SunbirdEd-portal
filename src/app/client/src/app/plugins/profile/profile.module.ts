@@ -26,6 +26,8 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { PersonalDetailsComponent } from './components/personal-details/personal-details.component';
 import { MatButtonModule } from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatChipsModule} from '@angular/material/chips';
 import { AcademicDetailsComponent } from './components/academic-details/academic-details.component';
 import { ProfessionalDetailsComponent } from './components/professional-details/professional-details.component';
 import { CertificationAndSkillsComponent } from './components/certification-and-skills/certification-and-skills.component';
@@ -65,7 +67,9 @@ export const csCertificateServiceFactory = (csLibInitializerService: CsLibInitia
     MatTooltipModule,
     CardModule,
     SlickCarouselModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatChipsModule,
   ],
   declarations: [ProfilePageComponent, ProfileBadgeComponent, UpdateContactDetailsComponent,
    AccountRecoveryInfoComponent,

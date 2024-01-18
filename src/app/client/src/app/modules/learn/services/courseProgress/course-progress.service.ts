@@ -2,7 +2,7 @@ import { of as observableOf, Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { Injectable, EventEmitter } from '@angular/core';
 import { ConfigService, ServerResponse, ToasterService, ResourceService } from '@sunbird/shared';
-import { ContentService, UserService, CoursesService } from '@sunbird/core';
+import { ContentService, UserService, CoursesService, PublicDataService } from '@sunbird/core';
 import * as _ from 'lodash-es';
 import dayjs from 'dayjs';
 
@@ -28,6 +28,7 @@ export class CourseProgressService {
   mimeType: string = '';
   contentProgress: any = {};
   lastReadContentId = new BehaviorSubject<any>('');
+  resultMessage: string;
 
   private courseStatus$ = new BehaviorSubject<Number>(0);
   courseStatus = this.courseStatus$.asObservable();
@@ -38,7 +39,7 @@ export class CourseProgressService {
 
 
   constructor(contentService: ContentService, configService: ConfigService,
-    userService: UserService, public coursesService: CoursesService, private toasterService: ToasterService,
+    userService: UserService, public coursesService: CoursesService, private toasterService: ToasterService, private publicService: PublicDataService,
     private resourceService: ResourceService) {
     this.contentService = contentService;
     this.configService = configService;
@@ -71,6 +72,26 @@ export class CourseProgressService {
       }), catchError((err) => {
         this.courseProgressData.emit({ lastPlayedContentId: req.contentIds[0] });
         return err;
+      }));
+  }
+  public geCourseBatchState(req) {
+      const channelOptions = {
+        url: this.configService.urlConFig.URLS.COURSE.USER_CONTENT_STATE_READ,
+        data: {
+          request: {
+            courseId: req.courseId,
+            batchId: req.batchId,
+            userId: req.userId
+          }
+        }
+      };
+      if (_.get(req, 'fields')) {
+        channelOptions.data.request['fields'] = _.get(req, 'fields');
+      }
+      return this.contentService.post(channelOptions).pipe(map((res: ServerResponse) => {
+        return res;
+      }), catchError((err) => {
+           return err;
       }));
   }
 
@@ -251,8 +272,9 @@ export class CourseProgressService {
             // ]
         }
     }
-    this.sendAssessment({requestBody, methodType}).subscribe(res => {
+    this.sendAssessment({requestBody, methodType}).subscribe((response: any) => {
       console.log("Assessment status updated with 2");
+      window.location.href = '/learn/course/' + res.courseId + '/batch/' + res.batchId;
     })
   }
 
@@ -381,6 +403,10 @@ export class CourseProgressService {
 
   getLastReadContent() {
     return this.lastReadContentId.asObservable();
+  }
+
+  setResultMessage(message: string) {
+    this.resultMessage = message;
   }
 
 

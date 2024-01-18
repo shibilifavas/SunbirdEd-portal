@@ -63,6 +63,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     public publicPlayerService: PublicPlayerService, private wishlistedService: WishlistedService) {
   }
   ngOnInit() {
+
     this.initLayout();
     this.fetchEnrolledCourses$.pipe(switchMap(this.handleEnrolledCourses.bind(this)))
       .subscribe(({ courseHierarchy, enrolledBatchDetails }: any) => {
@@ -84,6 +85,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         this.updateBreadCrumbs();
         this.updateCourseContent()
         this.getAllBatchDetails();
+        this.getCourseBatchState();
         this.showLoader = false;
         this.config = {
           className: 'dark-background',
@@ -393,6 +395,7 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
 
 
   private getContentState() {
+    this.courseProgressService.setResultMessage('');
     const fieldsArray: Array<string> = ['progress', 'score'];
     const req: any = {
       userId: this.userService.userid,
@@ -411,8 +414,9 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
         //generate certificate, if passing criteria meets for assessment
         if(this.courseHierarchy.primaryCategory.toLowerCase() == 'assessment') {
           this.checkPassingCriteria(res)
+        } else {
+          this.courseConsumptionService.calculateAvgCourseProgress(res);
         }
-        this.courseConsumptionService.calculateAvgCourseProgress(res);
         this.tocList = this.courseConsumptionService.attachProgresstoContent(res);
         const _parsedResponse = this.courseProgressService.getContentProgressState(req, res);
         //set completedPercentage for consumed courses
@@ -445,12 +449,17 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
           //calculate percentage here
           if(res[0]?.bestScore) {
             let totalPercentage = this.getTotalPercentage(res[0].bestScore);   
-            if(totalPercentage > response?.questionset?.minimumPassPercentage && res[0].status !== 2) {
-              this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+            if(totalPercentage >= response?.questionset?.minimumPassPercentage) {
+              if(res[0].status !== 2) {
+                this.courseProgressService.statusCompletion(res[0], this.userService.userid)
+              } else {
+                this.courseProgressService.setResultMessage('Pass');
+              }
+            } else {
+              this.courseProgressService.setResultMessage('Fail');
             }
+            this.courseConsumptionService.calculateAvgCourseProgress(res);
           }
-        }, (err) => {
-          this.toasterService.error(this.resourceService.messages.stmsg.m0009);
         });
   }
 
@@ -469,4 +478,9 @@ export class CourseConsumptionPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  getCourseBatchState(){
+    this.courseProgressService.geCourseBatchState({...this.activatedRoute.snapshot.firstChild.params, userId: this.userService.userid}).subscribe(res => {
+      this.courseConsumptionService.courseBatchProgress.next(res);
+    });
+  }
 }

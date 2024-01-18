@@ -36,6 +36,12 @@ export class CourseAsideComponent implements OnInit {
   courseContent: any;
   showRatingModal = false;
   rating:number = 0;
+  resultMessage: string = '';
+  instructorRating:number = 0;
+  contentRating:number = 0;
+  engagementRating:number = 0;
+  assessmentRating:number = 0;
+  courseBatchCompletetion = 0;
 
   constructor(private router: Router, private courseConsumptionService: CourseConsumptionService,
      private userService: UserService,  public courseProgressService: CourseProgressService, public resourceService: ResourceService, public toasterService: ToasterService,
@@ -43,6 +49,7 @@ export class CourseAsideComponent implements OnInit {
      @Inject('CS_COURSE_SERVICE') private courseCService: CsCourseService) { }
 
   ngOnInit(): void {
+    console.log("rating header",this.resourceService?.frmelmnts?.toc?.overview?.ratingHeader);
     this.firstModule = this.courseConsumptionService.getCourseContent()[0];
     // console.log('courseHierarchy', this.courseHierarchy);
     this.firstContentId = this.firstModule.body[0].selectedContent;
@@ -53,7 +60,6 @@ export class CourseAsideComponent implements OnInit {
       // alert(status);
       this.courseStatus = status
     });
-
     //set selected content Id with last visited contentId
     this.courseProgressService.getLastReadContent().subscribe((resumeContent: any) => {
       if(resumeContent !== '' && resumeContent) {
@@ -110,6 +116,9 @@ export class CourseAsideComponent implements OnInit {
     if(changes?.params?.currentValue) {
       this.batchId = changes.params.currentValue;
     }
+    this.courseConsumptionService.courseBatchProgress.subscribe((res:any) => {
+      this.courseBatchCompletetion = res.result.contentList[0]?.courseCompletionPercentage
+    })
   }
 
   downloadOldAndRCCert() {
@@ -166,12 +175,18 @@ export class CourseAsideComponent implements OnInit {
       activityId: this.courseHierarchy.identifier,
       userId: _.get(this.userProfile, 'userId'),
       activityType: "Course",
-      rating: this.rating,
+      instructorQuality: this.instructorRating,
+      contentRelevance: this.contentRating,
+      courseEngagement: this.engagementRating,
+      assessmentsQuality: this.assessmentRating,
       review: (<HTMLInputElement>document.getElementById("review")).value
   };
     this.courseConsumptionService.saveCourseRating(data).subscribe((res: any) => {
       this.showRatingModal = false;
-      this.rating = 0;
+      this.instructorRating = 0;
+      this.contentRating = 0;
+      this.engagementRating = 0;
+      this.assessmentRating = 0;
       (<HTMLInputElement>document.getElementById("review")).value = '';
       console.log('Rating', res);
     });
@@ -188,5 +203,14 @@ export class CourseAsideComponent implements OnInit {
       return this.courseConsumptionService.AvgPercentage;
     }
     return 0;
+  }
+
+  getResultMessage() {
+    if(this.courseProgressService.resultMessage) {
+      this.resultMessage = this.courseProgressService.resultMessage;
+      return '- ' + this.courseProgressService.resultMessage;
+    }
+    this.resultMessage = '';
+    return this.resultMessage;
   }
 }
