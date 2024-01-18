@@ -1,28 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {UserService, ChannelService} from '@sunbird/core';
-import {IUserData, ToasterService, ResourceService} from '@sunbird/shared';
-import { ProfileService } from '@sunbird/profile';
-import { ContentSearchService } from '@sunbird/content-search';
-import _ from 'lodash';
-import { FrameworkService } from '../../../../modules/core/services/framework/framework.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UserService, ChannelService } from "@sunbird/core";
+import { IUserData, ToasterService, ResourceService } from "@sunbird/shared";
+import { ProfileService } from "@sunbird/profile";
+import { ContentSearchService } from "@sunbird/content-search";
+import _ from "lodash";
+import { FrameworkService } from "../../../../modules/core/services/framework/framework.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: 'app-personal-details',
-  templateUrl: './personal-details.component.html',
-  styleUrls: ['./personal-details.component.scss']
+  selector: "app-personal-details",
+  templateUrl: "./personal-details.component.html",
+  styleUrls: ["./personal-details.component.scss"],
 })
 export class PersonalDetailsComponent implements OnInit {
   form: FormGroup;
-  formData = {"colOne":{"fields":[{"label":"First name","value":"firstName"},{"label":"Last name","value":"lastName"},{"label":"Mobile number","value1":"countryCode","value":"phone"},{"label":"Primary email","value":"primaryEmail"},{"label":"Secondary email","value":"secondaryEmail"},{"label":"Department name","value":"departmentName"},{"label":"Designation","value":"designation"},{"label":"Date of joining","value":"doj"}],"radio":[]},"colTwo":{}}
+  formData = {
+    colOne: {
+      fields: [
+        { label: "First name", value: "firstName" },
+        { label: "Last name", value: "lastName" },
+        { label: "Mobile number", value1: "countryCode", value: "phone" },
+        { label: "Primary email", value: "primaryEmail" },
+        { label: "Secondary email", value: "secondaryEmail" },
+        { label: "Department name", value: "departmentName" },
+        { label: "Designation", value: "designation" },
+        { label: "Date of joining", value: "doj" },
+      ],
+      radio: [],
+    },
+    colTwo: {},
+  };
   userProfile: any;
   payload: any = {};
-  frameworkId:any;
+  frameworkId: any;
   positions: any = [];
 
-  constructor(private formBuilder: FormBuilder, public userService: UserService, private profileService: ProfileService, public toasterService: ToasterService, public resourceService: ResourceService, private contentSearchService: ContentSearchService,
-    private frameworkService: FrameworkService, private channelService: ChannelService, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    public userService: UserService,
+    private profileService: ProfileService,
+    public toasterService: ToasterService,
+    public resourceService: ResourceService,
+    private contentSearchService: ContentSearchService,
+    private frameworkService: FrameworkService,
+    private channelService: ChannelService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.userService.userData$.subscribe((user: IUserData) => {
@@ -33,48 +57,61 @@ export class PersonalDetailsComponent implements OnInit {
     if (this.activatedRoute.snapshot.queryParams.showError != undefined) {
       this.toasterService.warning("Please update your designation to proceed.");
     }
-    this.channelService.getFrameWork(this.activatedRoute.snapshot.queryParams.channel).subscribe((res: any) =>{
-      // console.log("res", res);
-      this.frameworkId = res.result.channel.frameworks[0].identifier;
-      this.frameworkService.getSelectedFrameworkCategories(this.frameworkId)
-      .subscribe((categories: any) => {
-        console.log("resssssss", categories.result.framework.categories);
-        categories.result.framework.categories.map((item: any)=>{
-          if(item.identifier == "fracing_fw_taxonomycategory1"){
-            this.positions = [...item.terms];
-          }
-        })
-      })
-    })
-   
+    this.channelService
+      .getFrameWork(this.activatedRoute.snapshot.queryParams.channel)
+      .subscribe((res: any) => {
+        // console.log("res", res);
+        this.frameworkId = res.result.channel.frameworks[0].identifier;
+        this.frameworkService
+          .getSelectedFrameworkCategories(this.frameworkId)
+          .subscribe((categories: any) => {
+            console.log("resssssss", categories.result.framework.categories);
+            categories.result.framework.categories.map((item: any) => {
+              if (item.identifier == "fracing_fw_taxonomycategory1") {
+                this.positions = [...item.terms];
+              }
+            });
+          });
+      });
 
-    this.formData.colOne.fields.map((item)=>{
+    this.formData.colOne.fields.map((item) => {
       item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
-    })
+    });
     console.log("user data", this.userProfile);
     this.form = this.formBuilder.group({
-      firstName: [{value : this.userProfile?.firstName, disabled: true}],
-      lastName: [{value : this.userProfile?.lastName,disabled: true}],
-      countryCode : [this.userProfile?.countryCode],
+      firstName: [{ value: this.userProfile?.firstName, disabled: true }],
+      lastName: [{ value: this.userProfile?.lastName, disabled: true }],
+      countryCode: [this.userProfile?.countryCode],
       phone: [this.userProfile?.phone],
       primaryEmail: [{ value: this.userProfile?.email, disabled: true }],
-      secondaryEmail: [this.userProfile?.profileDetails?.personalDetails?.secondaryEmail],
-      departmentName: [
-        this.userProfile?.profileDetails?.employmentDetails?.departmentName || '',
-        Validators.required
+      secondaryEmail: [
+        this.userProfile?.profileDetails?.personalDetails?.secondaryEmail,
       ],
-      designation: [this.userProfile?.profileDetails?.professionalDetails[0]?.designation || '', Validators.required],
-      doj: [this.userProfile?.profileDetails?.professionalDetails[0]?.doj || '']
+      departmentName: [
+        this.userProfile?.profileDetails?.employmentDetails?.departmentName ||
+          "",
+        Validators.required,
+      ],
+      designation: [
+        this.userProfile?.profileDetails?.professionalDetails[0]?.designation ||
+          "",
+        Validators.required,
+      ],
+      doj: [
+        this.userProfile?.profileDetails?.professionalDetails[0]?.doj || "",
+      ],
     });
   }
 
   onSubmit(request) {
     if (this.form.valid) {
-      console.log('Form submitted!', this.form.value);
+      console.log("Form submitted!", this.form.value);
       this.payload = this.form.value;
       this.payload.userId = this.userProfile.userId;
       const maskingPattern = /^\*{6}\d{4}$/;
-      if(maskingPattern.test(this.payload.phone)){delete this.payload.phone;}
+      if (maskingPattern.test(this.payload.phone)) {
+        delete this.payload.phone;
+      }
       let profileDetails: any = {};
       let personalDetails: any = {};
       personalDetails.firstName = this.payload.firstName;
@@ -95,11 +132,14 @@ export class PersonalDetailsComponent implements OnInit {
       delete this.payload.doj;
       profileDetails.professionalDetails = professionalDetails;
       this.payload.profileDetails = profileDetails;
-      this.profileService.updatePrivateProfile(this.payload).subscribe(res => {
-        console.log("res",res);
-        this.toasterService.success(_.get(this.resourceService, 'messages.smsg.m0059'));
-    })
+      this.profileService
+        .updatePrivateProfile(this.payload)
+        .subscribe((res) => {
+          console.log("res", res);
+          this.toasterService.success(
+            _.get(this.resourceService, "messages.smsg.m0059")
+          );
+        });
     }
   }
-
 }

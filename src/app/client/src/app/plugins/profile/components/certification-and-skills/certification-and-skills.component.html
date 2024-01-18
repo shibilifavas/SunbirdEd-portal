@@ -1,0 +1,68 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+    <div class="ui grid stackable m-0 p-0">
+      <!-- First Column -->
+      <div class="six wide column m-0 p-0">
+        <div class="form-container">
+          <div class="form-column">
+            <p>Certification</p>
+            <div class="form-group">
+              <label>Additional skill acquired/Course completed</label>
+              <textarea
+                id=""
+                name=""
+                placeholder="Type here"
+                class="textarea"
+                rows="5"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Provide certification details</label>
+              <textarea
+                id=""
+                name=""
+                placeholder="Type here"
+                class="textarea"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Second Column -->
+      <div class="six wide column m-0 p-0">
+        <div class="form-container">
+          <div class="form-column">
+            <p>Skills</p>
+            <div class="form-group">
+              <label>Professional interests</label>
+              <textarea
+                id=""
+                name=""
+                placeholder="Type here"
+                class="textarea"
+                rows="5"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Hobbies</label>
+              <textarea
+                id=""
+                name=""
+                placeholder="Type here"
+                class="textarea"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="submitbtn">
+      <button class="com-primary-btn btn" type="submit">
+        {{ resourceService.frmelmnts.lbl.editProfile.submit }}
+      </button>
+    </div>
+  </form>
+  

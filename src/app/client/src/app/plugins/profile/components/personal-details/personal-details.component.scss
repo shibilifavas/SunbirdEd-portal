@@ -21,6 +21,17 @@
   .btn{
     padding: 12px 32px;
   }
+  .subscript {
+    opacity: 1;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: "Lato-Regular";
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.25px;
+    text-align: right;
+    line-height: 16px;
+  }
   .form-group{
     display: flex;
     flex-direction: column;
@@ -51,9 +62,21 @@
         color:  var(--com-grey-border);
         font-weight: 500;
     }
-    textarea{
-        border: solid 1px var(--com-grey-border);
-        border-radius: 4px;
+    textarea {
+      border: solid 1px var(--com-grey-border);
+      border-radius: 4px;
+      padding-left: 10px;
+      padding-top: 8px;
+    }
+    .textarea:hover {
+      border: solid 1px var(--primary-color);
+    }
+    textarea::placeholder {
+      color: var(--com-grey-border);
+      font-weight: 500;
+    }
+    .textarea:focus-visible {
+      border: solid 1px var(--primary-color) !important;
     }
     mat-radio-group{
         mat-radio-button{
