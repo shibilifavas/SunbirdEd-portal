@@ -1,3 +1,4 @@
+@use "compass-sb-styles/assets/mixins/mixins" as *;
 .form-container {
     display: flex;
     width: 100%;
@@ -7,7 +8,7 @@
   .form-column {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
     padding: 24px 24px;
     margin: 0 16px;
     border: solid 1px var(--com-grey-border);
@@ -46,38 +47,26 @@
         text-align: left;
         line-height: 20px;
     }
-    // input {
-    //     height: 60px;
-    //     border: solid 1px var(--com-grey-border);
-    //     border-radius: 4px;
-    //     padding-left: 10px;
-    // }
-    // .input:focus-visible {
-    //     border: solid 1px var(--primary-color)!important;
-    // }
-    // .input:hover {
-    //     border: solid 1px var(--primary-color);
-    // }
-    // input.input::placeholder {
-    //     color:  var(--com-grey-border);
-    //     font-weight: 500;
-    // }
-    // textarea {
-  //     border: solid 1px var(--com-grey-border);
-  //     border-radius: 4px;
-      padding-left: 10px;
-      padding-top: 8px;
+    input{
+        height: 60px;
+        border: solid 1px var(--com-grey-border);
+        border-radius: 4px;
+        padding-left: 10px;
     }
-    .textarea:hover {
-      border: solid 1px var(--primary-color);
+    .input:focus-visible {
+        border: solid 1px var(--primary-color)!important;
     }
-    textarea::placeholder {
-      color: var(--com-grey-border);
-      font-weight: 500;
+    .input:hover {
+        border: solid 1px var(--primary-color);
     }
-    .textarea:focus-visible {
-      border: solid 1px var(--primary-color) !important;
-    // }
+    input.input::placeholder {
+        color:  var(--com-grey-border);
+        font-weight: 500;
+    }
+    textarea{
+        border: solid 1px var(--com-grey-border);
+        border-radius: 4px;
+    }
     mat-radio-group{
         mat-radio-button{
             label{
@@ -148,7 +137,7 @@
     .mat-form-field-flex {
       padding-left: 10px !important;
       padding-bottom: 10px !important;
-      border-bottom: solid 1px #949494;
+      // border-bottom: solid 1px #949494;
     }
 
     .mat-form-field-appearance-legacy .mat-form-field-underline {

@@ -1,115 +1,192 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
-    <div class="ui grid stackable m-0 p-0">
-      <!-- First Column -->
-      <div class="six wide column m-0 p-0">
-        <div class="form-container">
-          <div class="form-column">
-            <div class="form-group">
-              <label>Type of Organisation</label>
-              <mat-radio-group>
-                <mat-radio-button>Government Organisation</mat-radio-button>
-                <mat-radio-button>Non-government Organisation</mat-radio-button>
-              </mat-radio-group>
-            </div>
-  
-            <div class="form-group">
-              <label>Organisation name</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Industry</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Designation</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Location</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Description</label>
-              <textarea
-                id=""
-                name=""
-                placeholder="Type here"
-                class="textarea"
-                rows="5"
-              ></textarea>
-  
-              <span class="subscript m-3">0/500 characters</span>
-            </div>
+  <div class="ui grid stackable m-0 p-0">
+    <!-- First Column -->
+    <div class="six wide column m-0 p-0">
+      <div class="form-container">
+        <div class="form-column">
+          <!-- <div class="form-group">
+            <label>Type of Organisation</label>
+            <mat-radio-group>
+              <mat-radio-button value="1">Government Organisation</mat-radio-button>
+              <mat-radio-button value="2">Non-government Organisation</mat-radio-button>
+            </mat-radio-group>
+          </div> -->
+          <div class="form-group">
+            <label>Type of Organisation</label>
+            <mat-radio-group formControlName="organisationType">
+              <mat-radio-button value="Government"
+                >Government Organisation</mat-radio-button
+              >
+              <mat-radio-button value="Non-Government"
+                >Non-government Organisation</mat-radio-button
+              >
+            </mat-radio-group>
           </div>
-        </div>
-  
-        <div class="form-container">
-          <div class="form-column">
-            <p>Other Details For Government employees (If Applicable)</p>
-            <div class="form-group">
-              <label>Pay band (grade pay)</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Service</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Organisation Name</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="organisationName"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Industrty</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="industry"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Designation</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="designation"
+              placeholder="Type here"
+            />
+          </mat-form-field> -->
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="location"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              #input
+              formControlName="description"
+              placeholder="Type here"
+              rows="5"
+            ></textarea>
+          </mat-form-field> -->
         </div>
       </div>
-  
-      <!-- Second Column -->
-      <div class="six wide column m-0 p-0">
-        <div class="form-container test">
-          <div class="form-column">
-            <div class="form-group">
-              <label>Cadre</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Allotment year of service</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Date of joining</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Civil list number</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Employee code</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Location</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-            <div class="form-group">
-              <label>Postal address</label>
-              <textarea
-                id=""
-                name=""
-                placeholder="Type here"
-                class="textarea"
-                rows="5"
-              ></textarea>
-              <span class="subscript m-3">0/300 characters</span>
-            </div>
-            <div class="form-group">
-              <label>Pin code</label>
-              <input class="input" type="text" placeholder="Type here" />
-            </div>
-          </div>
+
+      <div class="form-container">
+        <div class="form-column">
+          <p>Other Details For Government employees (If Applicable)</p>
+          <mat-form-field appearance="outline">
+            <mat-label>Organisation Name</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="govOrganisationName"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Service</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="service"
+              placeholder="Type here"
+            />
+          </mat-form-field>
         </div>
       </div>
     </div>
-  
-    <div class="submitbtn">
-      <button class="com-primary-btn btn" type="submit">
-        {{ resourceService.frmelmnts.lbl.editProfile.submit }}
-      </button>
+
+    <!-- Second Column -->
+    <div class="six wide column m-0 p-0">
+      <div class="form-container test">
+        <div class="form-column">
+          <mat-form-field appearance="outline">
+            <mat-label>Cadre</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="cadre"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Allotement year of service</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="allotmentYear"
+              [matDatepicker]="picker"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Date of Joining</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="dateOfJoining"
+              placeholder="Type here"
+            />
+          </mat-form-field> -->
+          <mat-form-field appearance="outline">
+            <mat-label>Civil List Number</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="civilListNumber"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Employee Code</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="employeeCode"
+              placeholder="Type here"
+            />
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="location"
+              placeholder="Type here"
+            />
+          </mat-form-field> -->
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Postal Address</mat-label>
+            <textarea
+              matInput
+              #input
+              formControlName="postalAddress"
+              placeholder="Type here"
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Pin Code</mat-label>
+            <input
+              matInput
+              #input
+              formControlName="pinCode"
+              placeholder="Type here"
+            />
+          </mat-form-field> -->
+        </div>
+      </div>
     </div>
-  </form>
-  
+  </div>
+
+  <div class="submitbtn">
+    <button class="com-primary-btn btn" type="submit">
+      {{ resourceService.frmelmnts.lbl.editProfile.submit }}
+    </button>
+  </div>
+</form>

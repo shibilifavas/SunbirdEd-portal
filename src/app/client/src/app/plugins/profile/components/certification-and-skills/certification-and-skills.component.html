@@ -5,26 +5,28 @@
         <div class="form-container">
           <div class="form-column">
             <p>Certification</p>
-            <div class="form-group">
-              <label>Additional skill acquired/Course completed</label>
+            <mat-form-field appearance="outline">
+              <mat-label>Additional skill acquired/Course completed</mat-label>
               <textarea
-                id=""
-                name=""
+                matInput
+                #input
+                formControlName="additionalSkillCourse"
                 placeholder="Type here"
-                class="textarea"
                 rows="5"
               ></textarea>
-            </div>
-            <div class="form-group">
-              <label>Provide certification details</label>
+              <!-- <span class="subscript m-3">0/300 characters</span> -->
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Provide certification details</mat-label>
               <textarea
-                id=""
-                name=""
+                matInput
+                #input
+                formControlName="certificationDetails"
                 placeholder="Type here"
-                class="textarea"
                 rows="5"
               ></textarea>
-            </div>
+              <!-- <span class="subscript m-3">0/300 characters</span> -->
+            </mat-form-field>
           </div>
         </div>
       </div>
@@ -34,31 +36,32 @@
         <div class="form-container">
           <div class="form-column">
             <p>Skills</p>
-            <div class="form-group">
-              <label>Professional interests</label>
+            <mat-form-field appearance="outline">
+              <mat-label>Professional interests</mat-label>
               <textarea
-                id=""
-                name=""
+                matInput
+                #input
+                formControlName="professionalInterests"
                 placeholder="Type here"
-                class="textarea"
                 rows="5"
               ></textarea>
-            </div>
-            <div class="form-group">
-              <label>Hobbies</label>
+              <!-- <span class="subscript m-3">0/300 characters</span> -->
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Hobbies</mat-label>
               <textarea
-                id=""
-                name=""
+                matInput
+                #input
+                formControlName="hobbies"
                 placeholder="Type here"
-                class="textarea"
                 rows="5"
               ></textarea>
-            </div>
+              <!-- <span class="subscript m-3">0/300 characters</span> -->
+            </mat-form-field>
           </div>
         </div>
       </div>
     </div>
-  
     <div class="submitbtn">
       <button class="com-primary-btn btn" type="submit">
         {{ resourceService.frmelmnts.lbl.editProfile.submit }}

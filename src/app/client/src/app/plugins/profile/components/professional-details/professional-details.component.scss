@@ -63,22 +63,22 @@ p {
     text-align: left;
     line-height: 20px;
   }
-  input {
-    height: 60px;
-    border: solid 1px var(--com-grey-border);
-    border-radius: 4px;
-    padding-left: 10px;
-  }
-  .input:focus-visible {
-    border: solid 1px var(--primary-color) !important;
-  }
-  .input:hover {
-    border: solid 1px var(--primary-color);
-  }
-  input.input::placeholder {
-    color: var(--com-grey-border);
-    font-weight: 500;
-  }
+  // input {
+  //   height: 60px;
+  //   border: solid 1px var(--com-grey-border);
+  //   border-radius: 4px;
+  //   padding-left: 10px;
+  // }
+  // .input:focus-visible {
+  //   border: solid 1px var(--primary-color) !important;
+  // }
+  // .input:hover {
+  //   border: solid 1px var(--primary-color);
+  // }
+  // input.input::placeholder {
+  //   color: var(--com-grey-border);
+  //   font-weight: 500;
+  // }
   textarea {
     border: solid 1px var(--com-grey-border);
     border-radius: 4px;
@@ -150,30 +150,52 @@ p {
   .mat-radio-button {
     padding: 14px 24px;
     margin: 16px 16px;
-    margin-bottom: 0;
     border: solid 1px var(--com-grey-border);
-    border-radius: 4px;
     label {
       margin: 0;
     }
   }
-  mat-radio-button:first-child {
-    margin: 16px 0;
-    margin-bottom: 0;
+  @media (max-width: 720px) {
+    .mat-radio-button label {
+      white-space: normal;
+      display: block;
+    }
   }
   .mat-radio-checked {
-    border: 1.5px solid rgb(35, 134, 252);
+    border: 1.5px solid rgba(35, 134, 252, 1);
     opacity: 1;
     background-color: rgba(0, 116, 182, 0.05);
     .mat-radio-label {
       .mat-radio-container {
         .mat-radio-outer-circle {
-          border-color: rgb(35, 134, 252);
+          border-color: var(--primary-color);
         }
         .mat-radio-inner-circle {
-          background-color: rgb(35, 134, 252);
+          background-color: var(--primary-color);
         }
       }
     }
   }
+
+  .mat-form-field-flex {
+    padding-left: 10px !important;
+    padding-bottom: 10px !important;
+    // border-bottom: solid 1px #949494;
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    height: 0px !important;
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background: #ffffff;
+  }
+
+  .mat-form-field-infix {
+    display: inline-flex !important;
+  }
+}
+
+*:focus-visible {
+  border: unset !important;
 }
