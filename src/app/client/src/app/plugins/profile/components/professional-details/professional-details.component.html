@@ -4,13 +4,6 @@
     <div class="six wide column m-0 p-0">
       <div class="form-container">
         <div class="form-column">
-          <!-- <div class="form-group">
-            <label>Type of Organisation</label>
-            <mat-radio-group>
-              <mat-radio-button value="1">Government Organisation</mat-radio-button>
-              <mat-radio-button value="2">Non-government Organisation</mat-radio-button>
-            </mat-radio-group>
-          </div> -->
           <div class="form-group">
             <label>Type of Organisation</label>
             <mat-radio-group formControlName="organisationType">
@@ -41,15 +34,7 @@
               placeholder="Type here"
             />
           </mat-form-field>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Designation</mat-label>
-            <input
-              matInput
-              #input
-              formControlName="designation"
-              placeholder="Type here"
-            />
-          </mat-form-field> -->
+
           <mat-form-field appearance="outline">
             <mat-label>Location</mat-label>
             <input
@@ -59,16 +44,6 @@
               placeholder="Type here"
             />
           </mat-form-field>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea
-              matInput
-              #input
-              formControlName="description"
-              placeholder="Type here"
-              rows="5"
-            ></textarea>
-          </mat-form-field> -->
         </div>
       </div>
 
@@ -96,7 +71,6 @@
         </div>
       </div>
     </div>
-
     <!-- Second Column -->
     <div class="six wide column m-0 p-0">
       <div class="form-container test">
@@ -124,15 +98,6 @@
             ></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Date of Joining</mat-label>
-            <input
-              matInput
-              #input
-              formControlName="dateOfJoining"
-              placeholder="Type here"
-            />
-          </mat-form-field> -->
           <mat-form-field appearance="outline">
             <mat-label>Civil List Number</mat-label>
             <input
@@ -151,39 +116,10 @@
               placeholder="Type here"
             />
           </mat-form-field>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Location</mat-label>
-            <input
-              matInput
-              #input
-              formControlName="location"
-              placeholder="Type here"
-            />
-          </mat-form-field> -->
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Postal Address</mat-label>
-            <textarea
-              matInput
-              #input
-              formControlName="postalAddress"
-              placeholder="Type here"
-              rows="5"
-            ></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Pin Code</mat-label>
-            <input
-              matInput
-              #input
-              formControlName="pinCode"
-              placeholder="Type here"
-            />
-          </mat-form-field> -->
         </div>
       </div>
     </div>
   </div>
-
   <div class="submitbtn">
     <button class="com-primary-btn btn" type="submit">
       {{ resourceService.frmelmnts.lbl.editProfile.submit }}

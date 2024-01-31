@@ -38,9 +38,7 @@ export class ProfessionalDetailsComponent implements OnInit {
         { label: "Type of Organisation", value: "organisationType" },
         { label: "Organisation Name", value: "organisationName" },
         { label: "Industry", value: "industry" },
-        // { label: "Designation", value: "designation" },
         { label: "Location", value: "location" },
-        // { label: "Description", value: "description" },
       ],
     },
     colTwo: {
@@ -56,11 +54,8 @@ export class ProfessionalDetailsComponent implements OnInit {
       fields: [
         { label: "Cadre", value: "cadre" },
         { label: "Allotment Year of Service", value: "allotmentYear" },
-        // { label: "Date of Joining", value: "dateOfJoining" },
         { label: "Civil List Number", value: "civilListNumber" },
         { label: "Employee Code", value: "employeeCode" },
-        // { label: "Postal Address", value: "postalAddress" },
-        // { label: "Pin Code", value: "pinCode" },
       ],
     },
   };
@@ -129,64 +124,49 @@ export class ProfessionalDetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       // First Column
       organisationType: [
-        this.userProfile?.profileDetails?.professionalDetails
+        this.userProfile?.profileDetails?.professionalDetails[0]
           ?.organisationType || "",
       ],
       organisationName: [
-        this.userProfile?.profileDetails?.professionalDetails
+        this.userProfile?.profileDetails?.professionalDetails[0]
           ?.organisationName || "",
       ],
       industry: [
-        this.userProfile?.profileDetails?.professionalDetails?.industry || "",
+        this.userProfile?.profileDetails?.professionalDetails[0]?.industry ||
+          "",
       ],
-      // designation: [
-      //   this.userProfile?.profileDetails?.professionalDetails?.designation ||
-      //     "",
-      // ],
+
       location: [
-        this.userProfile?.profileDetails?.professionalDetails?.location || "",
+        this.userProfile?.profileDetails?.professionalDetails[0]?.location ||
+          "",
       ],
-      // description: [
-      //   this.userProfile?.profileDetails?.professionalDetails?.description ||
-      //     "",
-      // ],
 
       // Second Column
       govOrganisationName: [
-        this.userProfile?.profileDetails?.professionalDetails
+        this.userProfile?.profileDetails?.professionalDetails[0]
           ?.govOrganisationName || "",
       ],
       service: [
-        this.userProfile?.profileDetails?.professionalDetails?.service || "",
+        this.userProfile?.profileDetails?.professionalDetails[0]?.service || "",
       ],
 
       // Third Column
       cadre: [
-        this.userProfile?.profileDetails?.professionalDetails?.cadre || "",
+        this.userProfile?.profileDetails?.professionalDetails[0]?.cadre || "",
       ],
       allotmentYear: [
-        this.userProfile?.profileDetails?.professionalDetails?.allotmentYear ||
-          "",
+        this.userProfile?.profileDetails?.professionalDetails[0]
+          ?.allotmentYear || "",
       ],
-      // dateOfJoining: [
-      //   this.userProfile?.profileDetails?.professionalDetails?.dateOfJoining ||
-      //     "",
-      // ],govOrganisationName
+
       civilListNumber: [
-        this.userProfile?.profileDetails?.professionalDetails
+        this.userProfile?.profileDetails?.professionalDetails[0]
           ?.civilListNumber || "",
       ],
       employeeCode: [
-        this.userProfile?.profileDetails?.professionalDetails?.employeeCode ||
-          "",
+        this.userProfile?.profileDetails?.professionalDetails[0]
+          ?.employeeCode || "",
       ],
-      // postalAddress: [
-      //   this.userProfile?.profileDetails?.professionalDetails?.postalAddress ||
-      //     "",
-      // ],
-      // pinCode: [
-      //   this.userProfile?.profileDetails?.professionalDetails?.pinCode || "",
-      // ],
     });
   }
 
@@ -198,37 +178,34 @@ export class ProfessionalDetailsComponent implements OnInit {
         if (user && user.userProfile) {
           this.userProfile = user.userProfile;
 
-          let professionalDetails: any = {
-            organisationType: this.payload.organisationType,
-            organisationName: this.payload.organisationName,
-            industry: this.payload.industry,
-            // designation: this.payload.designation,
-            location: this.payload.location,
-            // description: this.payload.description,
-            govOrganisationName: this.payload.govOrganisationName,
-            service: this.payload.service,
-            cadre: this.payload.cadre,
-            allotmentYear: this.payload.allotmentYear,
-            // dateOfJoining: this.payload.dateOfJoining,
-            civilListNumber: this.payload.civilListNumber,
-            employeeCode: this.payload.employeeCode,
-            // postalAddress: this.payload.postalAddress,
-            // pinCode: this.payload.pinCode,
-          };
+          let professionalDetails: any = [
+            {
+              designation:
+                this.userProfile?.profileDetails?.professionalDetails[0]
+                  ?.designation,
+              doj: this.userProfile?.profileDetails?.professionalDetails[0]
+                ?.doj,
+              organisationType: this.payload.organisationType,
+              organisationName: this.payload.organisationName,
+              industry: this.payload.industry,
+              location: this.payload.location,
+              govOrganisationName: this.payload.govOrganisationName,
+              service: this.payload.service,
+              cadre: this.payload.cadre,
+              allotmentYear: this.payload.allotmentYear,
+              civilListNumber: this.payload.civilListNumber,
+              employeeCode: this.payload.employeeCode,
+            },
+          ];
 
           this.userProfile.profileDetails = {
             ...this.userProfile.profileDetails,
-            professionalDetails: {
-              ...this.userProfile.profileDetails.professionalDetails,
-              ...professionalDetails,
-            },
+            professionalDetails: professionalDetails,
           };
 
           const payloadWithProfileDetails = {
             profileDetails: this.userProfile.profileDetails,
           };
-          console.log("PAYLOAD",payloadWithProfileDetails)
-
           this.profileService
             .updatePrivateProfile(payloadWithProfileDetails)
             .subscribe((res) => {
@@ -238,6 +215,15 @@ export class ProfessionalDetailsComponent implements OnInit {
             });
         }
       });
+    }
+    else {
+      const requiredFieldsEmpty = Object.keys(this.form.controls).some(
+        (control) => this.form.get(control)?.hasError("required")
+      );
+
+      if (requiredFieldsEmpty) {
+        this.toasterService.warning("Please fill in all required fields");
+      }
     }
   }
 }

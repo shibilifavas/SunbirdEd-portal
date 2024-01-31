@@ -145,7 +145,7 @@ export class PersonalDetailsComponent implements OnInit {
         Validators.required,
       ],
       designation: [
-        this.userProfile?.profileDetails?.professionalDetails[0]?.designation ||
+        this.userProfile?.profileDetails?.professionalDetails[0].designation ||
           "",
         Validators.required,
       ],
@@ -200,6 +200,30 @@ export class PersonalDetailsComponent implements OnInit {
         delete this.payload.phone;
       }
 
+      let existingProfessionalDetails =
+        this.userProfile.profileDetails?.professionalDetails || [];
+
+      let updatedProfessionalDetails = existingProfessionalDetails.map(
+        (detail) => {
+          if (detail.designation !== null && detail.doj !== null) {
+            return {
+              ...detail,
+              designation: this.payload.designation || detail.designation,
+              doj: this.payload.doj || detail.doj,
+            };
+          } else {
+            return detail;
+          }
+        }
+      );
+
+      if (existingProfessionalDetails.length === 0) {
+        updatedProfessionalDetails.push({
+          designation: this.payload.designation || null,
+          doj: this.payload.doj || null,
+        });
+      }
+
       let profileDetails: any = {
         personalDetails: {
           secondaryEmail: null,
@@ -212,12 +236,7 @@ export class PersonalDetailsComponent implements OnInit {
         employmentDetails: {
           departmentName: this.payload.departmentName,
         },
-        professionalDetails: [
-          {
-            designation: this.payload.designation,
-            doj: this.payload.doj,
-          },
-        ],
+        professionalDetails: updatedProfessionalDetails,
         areaOfInterest: [
           {
             skills: this.areas,
@@ -239,13 +258,51 @@ export class PersonalDetailsComponent implements OnInit {
         ...profileDetails,
       };
 
-      this.profileService
-        .updatePrivateProfile(this.payload)
-        .subscribe((res) => {
+      this.profileService.updatePrivateProfile(this.payload).subscribe(
+        (res) => {
           this.toasterService.success(
             _.get(this.resourceService, "messages.smsg.m0059")
           );
-        });
+        },
+        (error) => {
+          if (
+            error &&
+            error.error &&
+            error.error.params &&
+            error.error.params.errmsg
+          ) {
+            const errMsg = error.error.params.errmsg;
+
+            if (errMsg === "Invalid format for given phone.") {
+              this.toasterService.warning(
+                _.get(this.resourceService, "messages.smsg.m0067")
+              );
+            } else if (errMsg === "phone already exists") {
+              this.toasterService.warning(
+                _.get(this.resourceService, "messages.smsg.m0068")
+              );
+            } else {
+              this.toasterService.error(
+                "Failed to update profile. Please try again."
+              );
+            }
+          } else {
+            this.toasterService.error(
+              "Failed to update profile. Please try again."
+            );
+          }
+        }
+      );
+    } else {
+      const requiredFieldsEmpty = Object.keys(this.form.controls).some(
+        (control) => this.form.get(control)?.hasError("required")
+      );
+
+      if (requiredFieldsEmpty) {
+        this.toasterService.error(
+          _.get(this.resourceService, "messages.smsg.m0069")
+        );
+      }
     }
   }
 }

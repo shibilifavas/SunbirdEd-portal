@@ -79,7 +79,6 @@ export class CertificationAndSkillsComponent implements OnInit {
     this.userService.userData$.subscribe((user: IUserData) => {
       if (user.userProfile) {
         this.userProfile = user.userProfile;
-        console.log("AAAAA", this.userProfile);
       }
     });
 
@@ -139,7 +138,6 @@ export class CertificationAndSkillsComponent implements OnInit {
       this.payload = this.form.value;
 
       this.userService.userData$.subscribe((user: any) => {
-
         if (user && user.userProfile) {
           this.userProfile = user.userProfile;
 
@@ -161,7 +159,6 @@ export class CertificationAndSkillsComponent implements OnInit {
           const payloadWithProfileDetails = {
             profileDetails: this.userProfile.profileDetails,
           };
-
           this.profileService
             .updatePrivateProfile(payloadWithProfileDetails)
             .subscribe((res) => {
@@ -171,6 +168,15 @@ export class CertificationAndSkillsComponent implements OnInit {
             });
         }
       });
+    }
+    else {
+      const requiredFieldsEmpty = Object.keys(this.form.controls).some(
+        (control) => this.form.get(control)?.hasError("required")
+      );
+
+      if (requiredFieldsEmpty) {
+        this.toasterService.warning("Please fill in all required fields");
+      }
     }
   }
 }
