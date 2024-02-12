@@ -32,6 +32,8 @@ import { map, startWith } from "rxjs/operators";
 })
 export class AcademicDetailsComponent implements OnInit {
   form: FormGroup;
+  showAdditionalQualification: boolean = false;
+  additionalQualifications: FormGroup[] = [];
   formData = {
     colOne: {
       fields: [
@@ -115,49 +117,62 @@ export class AcademicDetailsComponent implements OnInit {
         item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
       });
     }
-    this.form = this.formBuilder.group({
-      // First Column
-      tenthSchoolName: [
-        this.userProfile?.profileDetails?.academicDetails?.tenthSchoolName ||
-          "",
-      ],
-      tenthSchoolPassing: [
-        this.userProfile?.profileDetails?.academicDetails?.tenthSchoolPassing ||
-          "",
-      ],
-      graduationName: [
-        this.userProfile?.profileDetails?.academicDetails?.graduationName || "",
-      ],
-      graduationPassing: [
-        this.userProfile?.profileDetails?.academicDetails?.graduationPassing ||
-          "",
-      ],
-      graduationInstituteName: [
-        this.userProfile?.profileDetails?.academicDetails
-          ?.graduationInstituteName || "",
-      ],
-
-      // Second Column
-      twelthSchoolNames: [
-        this.userProfile?.profileDetails?.academicDetails?.twelthSchoolNames ||
-          "",
-      ],
-      twelthShoolPassingYear: [
-        this.userProfile?.profileDetails?.academicDetails
-          ?.twelthShoolPassingYear || "",
-      ],
-      DegreeName: [
-        this.userProfile?.profileDetails?.academicDetails?.DegreeName || "",
-      ],
-      degreeYearOfPassing: [
-        this.userProfile?.profileDetails?.academicDetails
-          ?.degreeYearOfPassing || "",
-      ],
-      degreeInstituteName: [
-        this.userProfile?.profileDetails?.academicDetails
-          ?.degreeInstituteName || "",
-      ],
+    this.populateForm();
+    const additionalQualificationsData = this.userProfile.profileDetails.academicDetails.filter(detail =>
+      detail.type === "ADDITIONAL_QUALIFICATION"
+    );
+    additionalQualificationsData.forEach((qualification: any) => {
+      const additionalQualificationGroup = this.formBuilder.group({
+        degree: [qualification.nameOfQualification],
+        yearOfPassing: [qualification.yearOfPassing],
+        instituteName: [qualification.nameOfInstitute],
+      });
+      this.additionalQualifications.push(additionalQualificationGroup);
+    })
+  }
+  addAdditionalQualification() {
+    const additionalQualificationGroup = this.formBuilder.group({
+      degree: [""],
+      yearOfPassing: [""],
+      instituteName: [""],
     });
+    this.additionalQualifications.push(additionalQualificationGroup);
+    this.showAdditionalQualification = true;
+  }
+  populateForm() {
+    if (this.userProfile?.profileDetails?.academicDetails) {
+      const academicDetails = this.userProfile.profileDetails.academicDetails;
+      const tenthSchool = academicDetails[0];
+      const twelthSchool = academicDetails[1];
+      const graduation = academicDetails[2];
+      const postGraduation = academicDetails[3];
+  
+      this.form = this.formBuilder.group({
+        tenthSchoolName: [tenthSchool?.nameOfInstitute || ""],
+        tenthSchoolPassing: [tenthSchool?.yearOfPassing || ""],
+        graduationName: [graduation?.nameOfQualification || ""],
+        graduationPassing: [graduation?.yearOfPassing || ""],
+        graduationInstituteName: [graduation?.nameOfInstitute || ""],
+        twelthSchoolNames: [twelthSchool?.nameOfInstitute || ""],
+        twelthShoolPassingYear: [twelthSchool?.yearOfPassing || ""],
+        DegreeName: [postGraduation?.nameOfQualification || ""],
+        degreeYearOfPassing: [postGraduation?.yearOfPassing || ""],
+        degreeInstituteName: [postGraduation?.nameOfInstitute || ""],
+      });
+    } else {
+      this.form = this.formBuilder.group({
+        tenthSchoolName: [""],
+        tenthSchoolPassing: [""],
+        graduationName: [""],
+        graduationPassing: [""],
+        graduationInstituteName: [""],
+        twelthSchoolNames: [""],
+        twelthShoolPassingYear: [""],
+        DegreeName: [""],
+        degreeYearOfPassing: [""],
+        degreeInstituteName: [""],
+      });
+    }
   }
   onSubmit(request) {
     if (this.form.valid) {
@@ -167,25 +182,43 @@ export class AcademicDetailsComponent implements OnInit {
         if (user && user.userProfile) {
           this.userProfile = user.userProfile;
 
-          let academicDetails: any = {
-            tenthSchoolName: this.payload.tenthSchoolName,
-            tenthSchoolPassing: this.payload.tenthSchoolPassing,
-            graduationName: this.payload.graduationName,
-            graduationPassing: this.payload.graduationPassing,
-            graduationInstituteName: this.payload.graduationInstituteName,
-            twelthSchoolNames: this.payload.twelthSchoolNames,
-            twelthShoolPassingYear: this.payload.twelthShoolPassingYear,
-            DegreeName: this.payload.DegreeName,
-            degreeYearOfPassing: this.payload.degreeYearOfPassing,
-            degreeInstituteName: this.payload.degreeInstituteName,
-          };
-
+          let academicDetails: any = [
+            {
+              nameOfQualification: "SSLC",
+              type: "X_STANDARD",
+              nameOfInstitute: this.payload.tenthSchoolName,
+              yearOfPassing: this.payload.tenthSchoolPassing,
+            },
+            {
+              nameOfQualification: "PLUS TWO",
+              type: "XII_STANDARD",
+              nameOfInstitute: this.payload.twelthSchoolNames,
+              yearOfPassing: this.payload.twelthShoolPassingYear,
+            },
+            {
+              nameOfQualification: this.payload.graduationName,
+              type: "GRADUATE",
+              nameOfInstitute: this.payload.graduationInstituteName,
+              yearOfPassing: this.payload.graduationPassing,
+            },
+            {
+              nameOfQualification: this.payload.DegreeName,
+              type: "POSTGRADUATE",
+              nameOfInstitute: this.payload.degreeInstituteName,
+              yearOfPassing: this.payload.degreeYearOfPassing,
+            },
+          ];
+          this.additionalQualifications.forEach((qualification) => {
+            academicDetails.push({
+              nameOfQualification: qualification.value.degree,
+              type: "ADDITIONAL_QUALIFICATION",
+              nameOfInstitute: qualification.value.instituteName,
+              yearOfPassing: qualification.value.yearOfPassing,
+            });
+          });
           this.userProfile.profileDetails = {
             ...this.userProfile.profileDetails,
-            academicDetails: {
-              ...this.userProfile.profileDetails.academicDetails,
-              ...academicDetails,
-            },
+            academicDetails,
           };
 
           const payloadWithProfileDetails = {

@@ -219,7 +219,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-
     private initConfiguration() {
         this.defaultFilters = this.userService.defaultFrameworkFilters;
         if (this.utilService.isDesktopApp) {
@@ -299,23 +298,52 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             }));
     }
 
-    checkUserProfileDetails() {
-        this.userService.userData$.subscribe((user: IUserData) => {
-            if(user.userProfile['profileDetails'] !== null){
-            if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
-                if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
-                    this.toasterService.warning("Please update your designation to proceed.");
-                    // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
-                    window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
-                }
-            }
-            }  else {
-                this.toasterService.warning("Please update your designation to proceed.");
-                // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
-                window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
-            }
+    // checkUserProfileDetails() {
+    //     this.userService.userData$.subscribe((user: IUserData) => {
+    //         if(user.userProfile['profileDetails'] !== null){
+    //         if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+    //             if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
+    //                 this.toasterService.warning("Please update your designation to proceed.");
+    //                 // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+    //                 window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
+    //             }
+    //         }
+    //         }  else {
+    //             this.toasterService.warning("Please update your designation to proceed.");
+    //             // this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+    //             window.location.href = '/profile/edit?channel=' + user.userProfile['rootOrgId'] + '&showError=true';
+    //         }
 
-        });
+    //     });
+    // }
+    checkUserProfileDetails() {
+      this.userService.userData$.subscribe((user: IUserData) => {
+        if (user.userProfile["profileDetails"] !== null) {
+          if (
+            user.userProfile["profileDetails"]["professionalDetails"].length > 0
+          ) {
+            if (
+              user.userProfile["profileDetails"]["professionalDetails"][0][
+                "designation"
+              ] == null ||
+              user.userProfile["profileDetails"]["professionalDetails"][0][
+                "designation"
+              ] == undefined ||
+              user.userProfile["profileDetails"]["professionalDetails"][0][
+                "designation"
+              ] == ""
+            ) {
+              this.toasterService.warning(
+                  _.get(this.resourceService, "messages.smsg.m0070")
+                  );      
+            }
+          }
+        } else {
+          this.toasterService.warning(
+              _.get(this.resourceService, "messages.smsg.m0070")
+              );
+        }
+      });
     }
 
     ngOnInit() {
@@ -492,8 +520,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             console.log('Popular topics', res['result']);
         });
     }
-
-
 
     public fetchRequestContents() {
         for (let section of this.contentSections) {
@@ -1302,7 +1328,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-
     logViewAllTelemetry(event) {
         const telemetryData = {
             cdata: [{
@@ -1476,7 +1501,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
             window.location.href = pillData.name === 'observation' ? '/observation' : '/resources'
         }
     }
-
 
     getSectionTitle(title) {
         let _sectionTitle = this.utilService.transposeTerms(get(this.resourceService, title), get(this.resourceService, title) || '', this.resourceService.selectedLang);

@@ -258,13 +258,17 @@ export class PersonalDetailsComponent implements OnInit {
         ...this.userProfile.profileDetails,
         ...profileDetails,
       };
-
       this.profileService.updatePrivateProfile(this.payload).subscribe(
         (res) => {
           this.toasterService.success(
             _.get(this.resourceService, "messages.smsg.m0059")
           );
-          this.router.navigate(['/profile'], { queryParams: { channel: this.activatedRoute.snapshot.queryParams.channel}, relativeTo: this.activatedRoute });
+          // this.router.navigate(["/profile"], {
+          //   queryParams: {
+          //     channel: this.activatedRoute.snapshot.queryParams.channel,
+          //   },
+          //   relativeTo: this.activatedRoute,
+          // });
         },
         (error) => {
           if (
