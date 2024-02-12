@@ -24,14 +24,8 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
-import { MatChipInputEvent } from "@angular/material/chips";
-import { Observable } from "rxjs";
-import { map, startWith } from "rxjs/operators";
 
 @Component({
-  selector: "app-personal-details",
-  templateUrl: "./personal-details.component.html",
-  styleUrls: ["./personal-details.component.scss"],
   selector: "app-personal-details",
   templateUrl: "./personal-details.component.html",
   styleUrls: ["./personal-details.component.scss"],
@@ -62,44 +56,17 @@ export class PersonalDetailsComponent implements OnInit {
       ],
     },
   };
-  formData = {
-    colOne: {
-      fields: [
-        { label: "First name", value: "firstName" },
-        { label: "Last name", value: "lastName" },
-        { label: "Mobile number", value1: "countryCode", value: "phone" },
-        { label: "Primary email", value: "primaryEmail" },
-        { label: "Secondary email", value: "secondaryEmail" },
-        { label: "Department name", value: "departmentName" },
-        { label: "Designation", value: "designation" },
-      ],
-      radio: [],
-    },
-    colTwo: {
-      fields: [
-        { label: "Domicile", value: "domicileMedium" },
-        { label: "Other languages known", value: "otherLanguages" },
-        { label: "Telephone Number", value: "telephone" },
-        { label: "Date of joining", value: "doj" },
-        { label: "Postal address", value: "postalAddress" },
-        { label: "Pin code", value: "pinCode" },
-      ],
-    },
-  };
   userProfile: any;
   payload: any = {};
-  frameworkId: any;
   frameworkId: any;
   positions: any = [];
   // selectedAreasOfInterest: any = [];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   areasOfIntrestCtrl = new FormControl("");
-  areasOfIntrestCtrl = new FormControl("");
   filteredAreas: Observable<string[]>;
   areas: string[] = [];
 
-  @ViewChild("areaInput") areaInput: ElementRef<HTMLInputElement>;
   @ViewChild("areaInput") areaInput: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -143,23 +110,7 @@ export class PersonalDetailsComponent implements OnInit {
             });
           });
       });
-    this.channelService
-      .getFrameWork(this.activatedRoute.snapshot.queryParams.channel)
-      .subscribe((res: any) => {
-        // console.log("res", res);
-        this.frameworkId = res.result.channel.frameworks[0].identifier;
-        this.frameworkService
-          .getSelectedFrameworkCategories(this.frameworkId)
-          .subscribe((categories: any) => {
-            categories.result.framework.categories.map((item: any) => {
-              if (item.identifier == "fracing_fw_taxonomycategory1") {
-                this.positions = [...item.terms];
-              }
-            });
-          });
-      });
 
-    this.formData.colOne.fields.map((item) => {
     this.formData.colOne.fields.map((item) => {
       item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
     });
@@ -168,16 +119,7 @@ export class PersonalDetailsComponent implements OnInit {
         item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
       });
     }
-    });
-    if (this.formData.colTwo && this.formData.colTwo.fields) {
-      this.formData.colTwo.fields.map((item) => {
-        item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
-      });
-    }
     this.form = this.formBuilder.group({
-      firstName: [{ value: this.userProfile?.firstName, disabled: true }],
-      lastName: [{ value: this.userProfile?.lastName, disabled: true }],
-      countryCode: [this.userProfile?.countryCode],
       firstName: [{ value: this.userProfile?.firstName, disabled: true }],
       lastName: [{ value: this.userProfile?.lastName, disabled: true }],
       countryCode: [this.userProfile?.countryCode],
@@ -198,39 +140,10 @@ export class PersonalDetailsComponent implements OnInit {
       pinCode: [
         this.userProfile?.profileDetails?.personalDetails?.pinCode || "",
       ],
-      secondaryEmail: [
-        this.userProfile?.profileDetails?.personalDetails?.secondaryEmail,
-      ],
-      domicileMedium: [
-        this.userProfile?.profileDetails?.personalDetails?.domicileMedium || "",
-      ],
-      otherLanguages: [
-        this.userProfile?.profileDetails?.personalDetails?.otherLanguages || "",
-      ],
-      postalAddress: [
-        this.userProfile?.profileDetails?.personalDetails?.postalAddress || "",
-      ],
-      pinCode: [
-        this.userProfile?.profileDetails?.personalDetails?.pinCode || "",
-      ],
       departmentName: [
         this.userProfile?.profileDetails?.employmentDetails?.departmentName ||
           "",
         Validators.required,
-        this.userProfile?.profileDetails?.employmentDetails?.departmentName ||
-          "",
-        Validators.required,
-      ],
-      designation: [
-        this.userProfile?.profileDetails?.professionalDetails[0].designation ||
-          "",
-        Validators.required,
-      ],
-      doj: [
-        this.userProfile?.profileDetails?.professionalDetails[0]?.doj || "",
-      ],
-      telephone: [
-        this.userProfile?.profileDetails?.personalDetails?.telephone || "",
       ],
       designation: [
         this.userProfile?.profileDetails?.professionalDetails[0].designation ||
@@ -246,14 +159,11 @@ export class PersonalDetailsComponent implements OnInit {
     });
     this.areas =
       this.userProfile?.profileDetails?.areaOfInterest[0].skills || [];
-    this.areas =
-      this.userProfile?.profileDetails?.areaOfInterest[0].skills || [];
     // console.log('XX', this.selectedAreasOfInterest)
     // console.log('YY', this.userProfile?.profileDetails?.areaOfInterest[0].skills)
   }
 
   add(event: MatChipInputEvent): void {
-    const value = (event.value || "").trim();
     const value = (event.value || "").trim();
 
     // Add our fruit
@@ -277,7 +187,6 @@ export class PersonalDetailsComponent implements OnInit {
 
   selected(event: any): void {
     this.areas.push(event.option.viewValue);
-    this.areaInput.nativeElement.value = "";
     this.areaInput.nativeElement.value = "";
     this.areasOfIntrestCtrl.setValue(null);
   }
@@ -349,13 +258,17 @@ export class PersonalDetailsComponent implements OnInit {
         ...this.userProfile.profileDetails,
         ...profileDetails,
       };
-
       this.profileService.updatePrivateProfile(this.payload).subscribe(
         (res) => {
           this.toasterService.success(
             _.get(this.resourceService, "messages.smsg.m0059")
           );
-          this.router.navigate(['/profile'], { queryParams: { channel: this.activatedRoute.snapshot.queryParams.channel}, relativeTo: this.activatedRoute });
+          // this.router.navigate(["/profile"], {
+          //   queryParams: {
+          //     channel: this.activatedRoute.snapshot.queryParams.channel,
+          //   },
+          //   relativeTo: this.activatedRoute,
+          // });
         },
         (error) => {
           if (
