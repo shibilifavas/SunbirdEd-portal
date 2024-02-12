@@ -86,22 +86,22 @@ export class CoursesSearchComponent implements OnInit {
           }
         })
       })
-    this.checkUserProfileDetails();
+    // this.checkUserProfileDetails();
   }
 
-  checkUserProfileDetails() {
-    this.userService.userData$.subscribe((user: IUserData) => {
-      if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
-        if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
-          this.toasterService.warning("Please update your designation to proceed.");
-          this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
-        }
-      } else {
-        this.toasterService.warning("Please update your designation to proceed.");
-        this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
-      }
-    });
-  }
+  // checkUserProfileDetails() {
+  //   this.userService.userData$.subscribe((user: IUserData) => {
+  //     if (user.userProfile['profileDetails']['professionalDetails'].length > 0) {
+  //       if (user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == null || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == undefined || user.userProfile['profileDetails']['professionalDetails'][0]['designation'] == '') {
+  //         this.toasterService.warning("Please update your designation to proceed.");
+  //         this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+  //       }
+  //     } else {
+  //       this.toasterService.warning("Please update your designation to proceed.");
+  //       this.router.navigate(['/profile/edit'], { queryParams: { channel: user.userProfile['rootOrgId'] }, relativeTo: this.activatedRoute });
+  //     }
+  //   });
+  // }
 
   private getWishlisteddoids() {
     let payload = {
