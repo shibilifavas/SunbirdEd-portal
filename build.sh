@@ -74,6 +74,7 @@ build_server(){
     nvm use $NODE_VERSION
     echo "starting server yarn install"
     yarn install --no-progress --production=true
+    yarn install --ignore-engines --no-progress --production=true
     echo "completed server yarn install"
     node helpers/resourceBundles/build.js -task="phraseAppPull"
 }
