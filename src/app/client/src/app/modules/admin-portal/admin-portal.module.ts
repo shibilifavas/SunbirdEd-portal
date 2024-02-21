@@ -14,6 +14,8 @@ import { UserOrgManagementComponent } from './components/user-org-management/use
 import { UserRoleAssignComponent } from './components/user-role-assign/user-role-assign.component';
 import { ManageService } from './services/manage/manage.service';
 import { TelemetryModule } from '@sunbird/telemetry';
+import { CompetencyPassbookComponent } from './components/competency-passbook/competency-passbook.component';
+import { BatchParticipantService } from './services/course-batch/batch.service'
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { TelemetryModule } from '@sunbird/telemetry';
     CourseAssessmentProgressComponent,
     BatchProgressDetailsComponent,
     UserOrgManagementComponent,
-    UserRoleAssignComponent
+    UserRoleAssignComponent,
+    CompetencyPassbookComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +38,8 @@ import { TelemetryModule } from '@sunbird/telemetry';
     TelemetryModule
   ],
   providers: [
-    ManageService
+    ManageService,
+    BatchParticipantService
   ]
 })
 export class AdminPortalModule { }
