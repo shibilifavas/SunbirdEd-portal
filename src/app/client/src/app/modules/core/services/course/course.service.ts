@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoursesService {
   private enrolledCourses: Array<ICourses>;
+  private recommendedCourses: Array<any>;
   /**
    * To get details about user profile.
    */
@@ -35,6 +36,7 @@ export class CoursesService {
    * BehaviorSubject Containing enrolled courses.
    */
   _enrolledCourseData$ = new BehaviorSubject<IEnrolledCourses>(undefined);
+  private recommendedCoursesSubject = new BehaviorSubject<any>(null);
   /**
    * Read only observable Containing enrolled courses.
    */
@@ -75,6 +77,32 @@ export class CoursesService {
         this._enrolledCourseData$.next({ err: err, enrolledCourses: undefined });
         return err;
       }));
+  }
+  getRecommendedCourses() {
+    const RECOMMENDED_COURSES_URL = `${this.config.urlConFig.URLS.COURSE.GET_RECOMMENDED_COURSES}`;
+    const requestBody = {
+      request: {
+        competency: 'targetTaxonomyCategory4Ids',
+        limit: 100
+      }
+    };
+
+    return this.http.post(RECOMMENDED_COURSES_URL, requestBody).pipe(
+      map((apiResponse: any) => {
+        console.log('API Response:', apiResponse);
+        this.recommendedCoursesSubject.next(apiResponse); // Emitting data through BehaviorSubject
+        return apiResponse;
+      }),
+      catchError((error) => {
+        console.error('Error fetching recommended courses:', error);
+        throw error; // Rethrow the error to be handled by the caller
+      })
+    );
+  }
+
+  // Getter for accessing the recommendedCourses$ observable
+  get recommendedCourses$() {
+    return this.recommendedCoursesSubject.asObservable();
   }
   /**
    *  call enroll course api and subscribe. Behavior subject will emit enrolled course data

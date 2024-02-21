@@ -95,7 +95,8 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
     public enrolledCourses: Array<any>;
     public enrolledSection: any;
     public selectedCourseBatches: any;
-    public configContent: any = {}
+    public configContent: any = {};
+    recommendedCourses: any;
     private myCoursesSearchQuery = JSON.stringify({
         'request': { 'filters': { 'contentType': ['Course'], 'objectType': ['Content'], 'status': ['Live'] }, 'sort_by': { 'lastPublishedOn': 'desc' }, 'limit': 10, 'organisationId': _.get(this.userService.userProfile, 'organisationIds') }
     });
@@ -398,9 +399,31 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if(this.configService.appConfig.isProfileupdateMandatory){
             this.checkUserProfileDetails();
         }
-       
+        this.getCourses()
     }
-
+    getCourses() {
+      // Subscribe to the recommendedCourses$ observable to receive the emitted data
+      this.coursesService.recommendedCourses$.subscribe((data) => {
+          if (data && data.result && data.result.content) {
+              // Assign the content array to the property
+              this.recommendedCourses = data.result.content;
+              
+              // // Filter out the desired properties for each course
+              // this.recommendedCourses = this.recommendedCourses.map(course => ({
+              //     appIcon: course.appIcon,
+              //     name: course.name,
+              //     batches: course.batches.map(batch => ({
+              //         competencyIds: batch.competencyIds
+              //     }))
+              // }));
+              
+              console.log('Recommended Courses:', this.recommendedCourses); // Log the filtered courses
+          }
+      });
+  
+      // Trigger the API call to get recommended courses
+      this.coursesService.getRecommendedCourses().subscribe();
+    }
     public getWishlisteddoIds() {
         let payload = {
             "request": {
