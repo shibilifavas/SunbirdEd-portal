@@ -45,23 +45,29 @@ export class CertificationAndSkillsComponent implements OnInit {
         },
       ],
     },
-    colTwo: {
-      fields: [
-        { label: "Professional interests", value: "professionalInterests" },
-        { label: "Hobbies", value: "hobbies" },
-      ],
-    },
+    // colTwo: {
+    //   fields: [
+    //     { label: "Professional interests", value: "professionalInterests" },
+    //     { label: "Hobbies", value: "hobbies" },
+    //   ],
+    // },
   };
   userProfile: any;
   payload: any = {};
   frameworkId: any;
   positions: any = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  areasOfIntrestCtrl = new FormControl("");
-  filteredAreas: Observable<string[]>;
-  areas: string[] = [];
+  professionalIntrestCtrl = new FormControl("");
+  filteredProfessional: Observable<string[]>;
+  professional: string[] = [];
 
-  @ViewChild("areaInput") areaInput: ElementRef<HTMLInputElement>;
+  hobbiesCtrl = new FormControl("");
+  filteredHobbies: Observable<string[]>;
+  hobbies: string[] = [];
+
+  @ViewChild("professionalInput") professionalInput: ElementRef<HTMLInputElement>;
+  @ViewChild("hobbiesInput") hobbiesInput: ElementRef<HTMLInputElement>;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -105,32 +111,89 @@ export class CertificationAndSkillsComponent implements OnInit {
       item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
     });
 
-    if (this.formData.colTwo && this.formData.colTwo.fields) {
-      this.formData.colTwo.fields.map((item) => {
-        item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
-      });
-    }
+    // if (this.formData.colTwo && this.formData.colTwo.fields) {
+    //   this.formData.colTwo.fields.map((item) => {
+    //     item.label = this.resourceService.frmelmnts.lbl.editProfile[item.value];
+    //   });
+    // }
 
     this.form = this.formBuilder.group({
       // First Column
       additionalSkillCourse: [
-        this.userProfile?.profileDetails?.certificateSkills
-          ?.additionalSkillCourse || "",
+        this.userProfile?.profileDetails?.skills
+          ?.additionalSkills || "",
       ],
       certificationDetails: [
-        this.userProfile?.profileDetails?.certificateSkills
-          ?.certificationDetails || "",
+        this.userProfile?.profileDetails?.skills
+          ?.certificateDetails || "",
       ],
 
       // Second Column
-      professionalInterests: [
-        this.userProfile?.profileDetails?.certificateSkills
-          ?.professionalInterests || "",
-      ],
-      hobbies: [
-        this.userProfile?.profileDetails?.certificateSkills?.hobbies || "",
-      ],
+      // professionalInterests: [
+      //   this.userProfile?.profileDetails?.interests
+      //     ?.professionalInterests || "",
+      // ],
+      // hobbies: [
+      //   this.userProfile?.profileDetails?.interests?.hobbies || "",
+      // ],
     });
+    this.professional =
+      this.userProfile?.profileDetails?.interests?.professional || [];
+    this.hobbies =
+      this.userProfile?.profileDetails?.interests?.hobbies || [];
+  }
+
+  addProfessional(event: MatChipInputEvent): void {
+    const value = (event.value || "").trim();
+
+    // Add our fruit
+    if (value) {
+      this.professional.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.professionalIntrestCtrl.setValue(null);
+  }
+  addHobbies(event: MatChipInputEvent): void {
+    const value = (event.value || "").trim();
+
+    // Add our fruit
+    if (value) {
+      this.hobbies.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.hobbiesCtrl.setValue(null);
+  }
+
+  removeProfessional(fruit: string): void {
+    const index = this.professional.indexOf(fruit);
+
+    if (index >= 0) {
+      this.professional.splice(index, 1);
+    }
+  }
+  removeHobbies(lan: string): void {
+    const index = this.hobbies.indexOf(lan);
+
+    if (index >= 0) {
+      this.hobbies.splice(index, 1);
+    }
+  }
+
+  selectedProfessionals(event: any): void {
+    this.professional.push(event.option.viewValue);
+    this.professionalInput.nativeElement.value = "";
+    this.professionalIntrestCtrl.setValue(null);
+  }
+  selectedHobbies(event: any): void {
+    this.hobbies.push(event.option.viewValue);
+    this.hobbiesInput.nativeElement.value = "";
+    this.hobbiesCtrl.setValue(null);
   }
 
   onSubmit(request) {
@@ -141,18 +204,24 @@ export class CertificationAndSkillsComponent implements OnInit {
         if (user && user.userProfile) {
           this.userProfile = user.userProfile;
 
-          let certificationSkills: any = {
-            additionalSkillCourse: this.payload.additionalSkillCourse,
-            certificationDetails: this.payload.certificationDetails,
-            professionalInterests: this.payload.professionalInterests,
-            hobbies: this.payload.hobbies,
+          let skills: any = {
+            additionalSkills: this.payload.additionalSkillCourse,
+            certificateDetails: this.payload.certificationDetails,
+          };
+          let interests: any = {
+            professional: this.professional,
+            hobbies: this.hobbies,
           };
 
           this.userProfile.profileDetails = {
             ...this.userProfile.profileDetails,
-            certificateSkills: {
-              ...this.userProfile.profileDetails.certificateSkills,
-              ...certificationSkills,
+            interests: {
+              ...this.userProfile.profileDetails.interests,
+              ...interests,
+            },
+            skills: {
+              ...this.userProfile.profileDetails.skills,
+              ...skills,
             },
           };
 
@@ -166,6 +235,7 @@ export class CertificationAndSkillsComponent implements OnInit {
                 _.get(this.resourceService, "messages.smsg.m0059")
               );
             });
+          // console.log(payloadWithProfileDetails)
         }
       });
     }

@@ -34,7 +34,7 @@
         <div class="form-container">
           <div class="form-column">
             <p>Skills</p>
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
               <mat-label>Professional interests</mat-label>
               <textarea
                 matInput
@@ -43,8 +43,41 @@
                 placeholder="Type here"
                 rows="5"
               ></textarea>
+            </mat-form-field> -->
+            <mat-form-field class="example-chip-list" appearance="outline">
+              <mat-label>Professional interests</mat-label>
+              <mat-chip-list #professionalChipList aria-label="Professional selection">
+                <mat-chip
+                  *ngFor="let language of professional"
+                  (removed)="removeProfessional(language)"
+                >
+                  {{ language }}
+                  <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input
+                  placeholder="Type here"
+                  #languageInput
+                  [formControl]="professionalIntrestCtrl"
+                  [matChipInputFor]="professionalChipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  (matChipInputTokenEnd)="addProfessional($event)"
+                />
+              </mat-chip-list>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectedProfessionals($event)"
+              >
+                <mat-option
+                  *ngFor="let language of filteredProfessional | async"
+                  [value]="language"
+                >
+                  {{ language }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
               <mat-label>Hobbies</mat-label>
               <textarea
                 matInput
@@ -53,6 +86,39 @@
                 placeholder="Type here"
                 rows="5"
               ></textarea>
+            </mat-form-field> -->
+            <mat-form-field class="example-chip-list" appearance="outline">
+              <mat-label>Hobbies</mat-label>
+              <mat-chip-list #hobbiesChipList aria-label="Hobbies selection">
+                <mat-chip
+                  *ngFor="let language of hobbies"
+                  (removed)="removeHobbies(language)"
+                >
+                  {{ language }}
+                  <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input
+                  placeholder="Type here"
+                  #languageInput
+                  [formControl]="hobbiesCtrl"
+                  [matChipInputFor]="hobbiesChipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  (matChipInputTokenEnd)="addHobbies($event)"
+                />
+              </mat-chip-list>
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectedHobbies($event)"
+              >
+                <mat-option
+                  *ngFor="let language of filteredHobbies | async"
+                  [value]="language"
+                >
+                  {{ language }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
         </div>

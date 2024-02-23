@@ -48,7 +48,6 @@ export class PersonalDetailsComponent implements OnInit {
     colTwo: {
       fields: [
         { label: "Domicile", value: "domicileMedium" },
-        { label: "Other languages known", value: "otherLanguages" },
         { label: "Telephone Number", value: "telephone" },
         { label: "Date of joining", value: "doj" },
         { label: "Postal address", value: "postalAddress" },
@@ -66,8 +65,14 @@ export class PersonalDetailsComponent implements OnInit {
   areasOfIntrestCtrl = new FormControl("");
   filteredAreas: Observable<string[]>;
   areas: string[] = [];
+  knownLanguagesCtrl = new FormControl("");
+  filteredLanguages: Observable<string[]>;
+  languages: string[] = [];
+
+  
 
   @ViewChild("areaInput") areaInput: ElementRef<HTMLInputElement>;
+  @ViewChild("languageInput") languageInput: ElementRef<HTMLInputElement>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -122,7 +127,7 @@ export class PersonalDetailsComponent implements OnInit {
       firstName: [{ value: this.userProfile?.firstName, disabled: true }],
       lastName: [{ value: this.userProfile?.lastName, disabled: true }],
       countryCode: [this.userProfile?.countryCode],
-      phone: [this.userProfile?.phone],
+      phone: [{value:this.userProfile?.phone,disabled: true} ],
       primaryEmail: [{ value: this.userProfile?.email, disabled: true }],
       secondaryEmail: [
         this.userProfile?.profileDetails?.personalDetails?.secondaryEmail,
@@ -137,7 +142,7 @@ export class PersonalDetailsComponent implements OnInit {
         this.userProfile?.profileDetails?.personalDetails?.postalAddress || "",
       ],
       pinCode: [
-        this.userProfile?.profileDetails?.personalDetails?.pinCode || "",
+        this.userProfile?.profileDetails?.personalDetails?.pincode || "",
       ],
       departmentName: [
         this.userProfile?.profileDetails?.employmentDetails?.departmentName ||
@@ -152,12 +157,11 @@ export class PersonalDetailsComponent implements OnInit {
       doj: [
         this.userProfile?.profileDetails?.professionalDetails[0]?.doj || "",
       ],
-      telephone: [
-        this.userProfile?.profileDetails?.personalDetails?.telephone || "",
-      ],
     });
     this.areas =
-      this.userProfile?.profileDetails?.areaOfInterest[0].skills || [];
+      this.userProfile?.profileDetails?.personalDetails.areasOfInterest || [];
+    this.languages =
+      this.userProfile?.profileDetails?.personalDetails.knownLanguages || [];
     // console.log('XX', this.selectedAreasOfInterest)
     // console.log('YY', this.userProfile?.profileDetails?.areaOfInterest[0].skills)
   }
@@ -175,6 +179,19 @@ export class PersonalDetailsComponent implements OnInit {
 
     this.areasOfIntrestCtrl.setValue(null);
   }
+  addLanguages(event: MatChipInputEvent): void {
+    const value = (event.value || "").trim();
+
+    // Add our fruit
+    if (value) {
+      this.languages.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.knownLanguagesCtrl.setValue(null);
+  }
 
   remove(fruit: string): void {
     const index = this.areas.indexOf(fruit);
@@ -183,12 +200,25 @@ export class PersonalDetailsComponent implements OnInit {
       this.areas.splice(index, 1);
     }
   }
+  removeLanguage(lan: string): void {
+    const index = this.languages.indexOf(lan);
+
+    if (index >= 0) {
+      this.languages.splice(index, 1);
+    }
+  }
 
   selected(event: any): void {
     this.areas.push(event.option.viewValue);
     this.areaInput.nativeElement.value = "";
     this.areasOfIntrestCtrl.setValue(null);
   }
+  selectedLanguages(event: any): void {
+    this.languages.push(event.option.viewValue);
+    this.languageInput.nativeElement.value = "";
+    this.knownLanguagesCtrl.setValue(null);
+  }
+
 
   onSubmit(request) {
     if (this.form.valid) {
@@ -226,27 +256,27 @@ export class PersonalDetailsComponent implements OnInit {
 
       let profileDetails: any = {
         personalDetails: {
-          secondaryEmail: null,
+          firstname:this.userProfile?.firstName,
+          lastname:this.userProfile?.lastName,
+          mobile:this.userProfile?.phone,
+          secondaryEmail: this.payload.secondaryEmail || "",
           domicileMedium: this.payload.domicileMedium || "",
-          otherLanguages: this.payload.otherLanguages || "",
-          telephone: this.payload.telephone || "",
           postalAddress: this.payload.postalAddress || "",
-          pinCode: this.payload.pinCode || "",
+          pincode: this.payload.pinCode || "",
+          areasOfInterest: this.areas || [],
+          knownLanguages: this.languages || [],
+
         },
         employmentDetails: {
           departmentName: this.payload.departmentName,
         },
         professionalDetails: updatedProfessionalDetails,
-        areaOfInterest: [
-          {
-            skills: this.areas,
-          },
-        ],
+        
+        
       };
 
       delete this.payload.domicileMedium;
       delete this.payload.otherLanguages;
-      delete this.payload.telephone;
       delete this.payload.postalAddress;
       delete this.payload.pinCode;
       delete this.payload.departmentName;
@@ -257,7 +287,7 @@ export class PersonalDetailsComponent implements OnInit {
         ...this.userProfile.profileDetails,
         ...profileDetails,
       };
-
+      // console.log(this.payload.profileDetails)
       this.profileService.updatePrivateProfile(this.payload).subscribe(
         (res) => {
           this.toasterService.success(
