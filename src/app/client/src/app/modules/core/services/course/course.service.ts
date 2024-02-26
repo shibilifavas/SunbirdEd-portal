@@ -78,26 +78,12 @@ export class CoursesService {
         return err;
       }));
   }
-  getRecommendedCourses() {
-    const RECOMMENDED_COURSES_URL = `${this.config.urlConFig.URLS.COURSE.GET_RECOMMENDED_COURSES}`;
-    const requestBody = {
-      request: {
-        competency: 'targetTaxonomyCategory4Ids',
-        limit: 100
-      }
+  getRecommendedCourses(data): Observable<ServerResponse>{
+    const option = {
+      url: this.config.urlConFig.URLS.COURSE.GET_RECOMMENDED_COURSES,
+      data: data
     };
-
-    return this.http.post(RECOMMENDED_COURSES_URL, requestBody).pipe(
-      map((apiResponse: any) => {
-        console.log('API Response:', apiResponse);
-        this.recommendedCoursesSubject.next(apiResponse); // Emitting data through BehaviorSubject
-        return apiResponse;
-      }),
-      catchError((error) => {
-        console.error('Error fetching recommended courses:', error);
-        throw error; // Rethrow the error to be handled by the caller
-      })
-    );
+    return this.learnerService.post(option)
   }
 
   // Getter for accessing the recommendedCourses$ observable

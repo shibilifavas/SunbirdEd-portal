@@ -399,31 +399,27 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
         if(this.configService.appConfig.isProfileupdateMandatory){
             this.checkUserProfileDetails();
         }
-        this.getCourses()
+        this.fetchRecommendedCourses()
     }
-    getCourses() {
-      // Subscribe to the recommendedCourses$ observable to receive the emitted data
-      this.coursesService.recommendedCourses$.subscribe((data) => {
-          if (data && data.result && data.result.content) {
-              // Assign the content array to the property
+    fetchRecommendedCourses() {
+        const request = {
+            request: {
+              competency: 'targetTaxonomyCategory4Ids',
+              limit: 100,
+            }
+          };   
+        this.coursesService.getRecommendedCourses(request).subscribe(
+          (data) => { 
+            if (data && data.result && data.result.content) {
               this.recommendedCourses = data.result.content;
-              
-              // // Filter out the desired properties for each course
-              // this.recommendedCourses = this.recommendedCourses.map(course => ({
-              //     appIcon: course.appIcon,
-              //     name: course.name,
-              //     batches: course.batches.map(batch => ({
-              //         competencyIds: batch.competencyIds
-              //     }))
-              // }));
-              
-              console.log('Recommended Courses:', this.recommendedCourses); // Log the filtered courses
+            }
+          },
+          (err) => {
+            console.error('Error fetching recommended courses:', err);
           }
-      });
-  
-      // Trigger the API call to get recommended courses
-      this.coursesService.getRecommendedCourses().subscribe();
-    }
+        );
+      }
+      
     public getWishlisteddoIds() {
         let payload = {
             "request": {
