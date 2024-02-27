@@ -17,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoursesService {
   private enrolledCourses: Array<ICourses>;
-  private recommendedCourses: Array<any>;
+  private recommendedCourses: Array<ICourses>;
   /**
    * To get details about user profile.
    */
