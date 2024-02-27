@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params } from '@angular/router';
 import { first } from 'rxjs/operators';
 import {
   OrgDetailsService,
@@ -44,6 +44,7 @@ export class CompassHeaderComponent implements OnInit {
   totalUsersCount: number;
   searchText: string = '';
   keyParam: string;
+  isAdminPortal: boolean = false;
 
   constructor(private managedUserService: ManagedUserService, public orgDetailsService: OrgDetailsService,
     public formService: FormService, public router: Router, public toasterService: ToasterService,
@@ -53,9 +54,15 @@ export class CompassHeaderComponent implements OnInit {
     this.route.queryParams.subscribe((param: Params) => {
       this.keyParam = param['key'];
     });
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.checkRoute();
+      }
+    });
   }
 
   ngOnInit() {
+    this.checkRoute();
     if (this.userService.loggedIn) {
       this.searchText = this.keyParam ?? '';
       this.userService.userData$.subscribe((user: any) => {
@@ -82,6 +89,14 @@ export class CompassHeaderComponent implements OnInit {
         const el = document.getElementById('compass-logo') as HTMLElement;
         el.setAttribute('src', this.tenantInfo.logo);
       }, 1000);
+    }
+  }
+
+  checkRoute() {
+    if(this.router.url.split('/')[1] == 'admin-portal') {
+      this.isAdminPortal = true
+    } else {
+      this.isAdminPortal = false
     }
   }
 
